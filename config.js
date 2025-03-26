@@ -14,7 +14,13 @@ const CONFIG = {
         subject: 'Nova resposta - Formulário de Pesquisa sobre Autismo',
         autoresponse: 'Obrigado por participar da nossa pesquisa! Suas respostas foram recebidas com sucesso.',
         cc: 'andre.scrummaster@gmail.com',
-        replyto: 'andre.scrummaster@gmail.com'
+        replyto: 'andre.scrummaster@gmail.com',
+        // Adicionar configurações específicas para garantir o funcionamento
+        honeypot: false,
+        disableCORS: true,
+        headers: {
+            'Accept': 'application/json'
+        }
     },
     
     // Tempo máximo de tentativas de envio (em segundos)

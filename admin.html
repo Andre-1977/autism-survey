@@ -733,12 +733,27 @@
             
             // Função para inicializar e atualizar os gráficos
             function initializeStats() {
+                // Limpar eventos existentes
+                removeChartEventListeners();
+                
                 // Criar todos os gráficos inicialmente
                 createCharts();
                 
                 // Configurar atualizações baseadas no filtro
                 const filterType = document.getElementById('statsFilterType').value;
                 updateAllCharts(filterType);
+            }
+            
+            // Remove listeners de eventos que podem causar atualização dos gráficos
+            function removeChartEventListeners() {
+                // Remove eventos da janela que podem ser chamados repetidamente
+                window.removeEventListener('resize', Chart.resize);
+                
+                // Registra evento uma única vez
+                if (!window.chartEventsCleared) {
+                    window.chartEventsCleared = true;
+                    console.log('Eventos de gráficos anteriores removidos');
+                }
             }
             
             // Atualizar todos os gráficos com base no filtro
@@ -854,7 +869,12 @@
                         maintainAspectRatio: false,
                         scales: {
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                suggestedMax: 10,
+                                ticks: {
+                                    precision: 0,
+                                    stepSize: 1
+                                }
                             }
                         },
                         plugins: {
@@ -885,8 +905,16 @@
                         maintainAspectRatio: false,
                         scales: {
                             y: {
-                                beginAtZero: true
+                                beginAtZero: true,
+                                suggestedMax: 10,
+                                ticks: {
+                                    precision: 0,
+                                    stepSize: 1
+                                }
                             }
+                        },
+                        animation: {
+                            duration: 0 // Desativa animações para melhor performance
                         }
                     }
                 });
@@ -1160,6 +1188,24 @@
                         return;
                     }
                     
+                    // Determinar valores máximos para o eixo y
+                    const maxValue = Math.max(...data, 0);
+                    const suggestedMax = Math.ceil(maxValue * 1.2); // 20% maior que o valor máximo
+                    
+                    // Atualizar limites dos eixos
+                    if (chart.options && chart.options.scales && chart.options.scales.y) {
+                        chart.options.scales.y.suggestedMax = Math.max(suggestedMax, 5);
+                        
+                        // Ajustar stepSize baseado no valor máximo
+                        if (maxValue <= 5) {
+                            chart.options.scales.y.ticks.stepSize = 1;
+                        } else if (maxValue <= 20) {
+                            chart.options.scales.y.ticks.stepSize = 2;
+                        } else {
+                            chart.options.scales.y.ticks.stepSize = 5;
+                        }
+                    }
+                    
                     // Se não houver dados, mostrar mensagem
                     if (data.length === 0 || data.every(d => d === 0)) {
                         // Adicionar um dado fictício para mostrar mensagem
@@ -1167,12 +1213,22 @@
                         chart.data.datasets[0].data = [1];
                         chart.options.plugins.legend.display = false;
                     } else {
+                        // Limpar dados anteriores
+                        chart.data.labels = [];
+                        chart.data.datasets[0].data = [];
+                        
+                        // Adicionar novos dados
                         chart.data.labels = labels;
                         chart.data.datasets[0].data = data;
                         chart.options.plugins.legend.display = true;
                     }
                     
-                    chart.update();
+                    // Desativar animações para melhor performance
+                    chart.options.animation = {
+                        duration: 0
+                    };
+                    
+                    chart.update('none'); // Use 'none' para desativar todas as animações
                 } catch (error) {
                     console.error('Erro ao atualizar gráfico:', error);
                 }

@@ -125,69 +125,24 @@ function setupEventListeners() {
                     console.log('Enviando formulário para:', form.action);
                     
                     try {
-                        // Criar um formulário temporário para envio
-                        const tempForm = document.createElement('form');
-                        tempForm.method = 'POST';
-                        tempForm.action = form.action;
-                        tempForm.enctype = 'multipart/form-data';
-                        
                         // Processar campos do formulário
-                        const processedData = processFormFields(form);
-                        
-                        // Adicionar campos processados ao formulário temporário
-                        for (let [key, value] of processedData.entries()) {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = key;
-                            
-                            if (Array.isArray(value)) {
-                                input.value = value.join(', ');
-                            } else {
-                                input.value = value;
-                            }
-                            
-                            tempForm.appendChild(input);
-                            console.log(`Campo adicionado ao formulário temporário: ${key} = ${input.value}`);
-                        }
+                        const formData = processFormFields(form);
                         
                         // Adicionar campos necessários para o FormSubmit
-                        const formSubmitFields = {
-                            '_next': CONFIG.redirectUrl,
-                            '_captcha': CONFIG.formSubmitConfig.captcha,
-                            '_template': CONFIG.formSubmitConfig.template,
-                            '_subject': `${CONFIG.formSubmitConfig.subject} - ${identifyFormType()}`,
-                            '_cc': CONFIG.formSubmitConfig.cc,
-                            '_replyto': CONFIG.formSubmitConfig.replyto,
-                            '_autoresponse': CONFIG.formSubmitConfig.autoresponse,
-                            '_honeypot': CONFIG.formSubmitConfig.honeypot,
-                            '_disableCORS': CONFIG.formSubmitConfig.disableCORS
-                        };
-                        
-                        Object.entries(formSubmitFields).forEach(([name, value]) => {
-                            const input = document.createElement('input');
-                            input.type = 'hidden';
-                            input.name = name;
-                            input.value = value;
-                            tempForm.appendChild(input);
-                            console.log(`Campo FormSubmit adicionado: ${name} = ${value}`);
+                        Object.entries(CONFIG.formSubmitConfig).forEach(([key, value]) => {
+                            if (key.startsWith('_')) {
+                                formData.append(key, value);
+                                console.log(`Campo FormSubmit adicionado: ${key} = ${value}`);
+                            }
                         });
                         
-                        // Adicionar o formulário temporário ao documento
-                        document.body.appendChild(tempForm);
-                        
                         // Tentar enviar o formulário
-                        await retryFormSubmission(tempForm, originalButtonText);
+                        await retryFormSubmission(form, originalButtonText);
                         
                     } catch (error) {
                         console.error('Erro:', error);
                         hideLoading(this, originalButtonText);
                         showError('Houve um problema ao enviar suas respostas. Por favor, tente novamente.');
-                    } finally {
-                        // Remover formulário temporário
-                        const tempForm = document.querySelector('form:not([data-form-type])');
-                        if (tempForm) {
-                            document.body.removeChild(tempForm);
-                        }
                     }
                 } else {
                     hideLoading(this, originalButtonText);
@@ -498,118 +453,86 @@ function hideLoading(button, originalText) {
     button.innerHTML = originalText;
 }
 
-// Função para mostrar mensagem de erro
-function showError(message) {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.innerHTML = `
-        <i class="fas fa-exclamation-circle"></i>
-        <span>${message}</span>
-    `;
-    
-    const form = document.querySelector('form');
-    form.insertBefore(errorDiv, form.firstChild);
-    
-    // Remover mensagem após 5 segundos
-    setTimeout(() => {
-        errorDiv.remove();
-    }, 5000);
-}
-
-// Função para tentar reenviar o formulário
-async function retryFormSubmission(form, originalButtonText) {
-    let startTime = Date.now();
-    let attempts = 0;
-    
-    console.log('Iniciando tentativas de envio...');
-    
-    while (Date.now() - startTime < CONFIG.maxRetryTime * 1000) {
-        try {
-            console.log(`Tentativa ${attempts + 1} de envio...`);
-            
-            const formData = new FormData(form);
-            
-            // Log dos dados que serão enviados
-            console.log('Dados do formulário:');
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`);
-            }
-            
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            });
-            
-            console.log('Resposta do servidor:', response.status, response.statusText);
-            
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Resposta JSON:', result);
-                
-                updateResponseCount(identifyFormType());
-                window.location.href = CONFIG.redirectUrl;
-                return;
-            } else {
-                console.error('Erro na resposta:', response.status, response.statusText);
-                throw new Error(`Erro na resposta: ${response.status}`);
-            }
-        } catch (error) {
-            console.error('Erro na tentativa:', error);
-        }
-        
-        attempts++;
-        showError(`Tentativa ${attempts} falhou. Tentando novamente em ${CONFIG.retryInterval} segundos...`);
-        await new Promise(resolve => setTimeout(resolve, CONFIG.retryInterval * 1000));
-    }
-    
-    hideLoading(document.querySelector('.btn-submit'), originalButtonText);
-    showError('Não foi possível enviar o formulário após várias tentativas. Por favor, tente novamente mais tarde ou entre em contato se o problema persistir.');
-}
-
 // Função para processar campos do formulário
 function processFormFields(form) {
-    const formData = new FormData(form);
     const processedData = new FormData();
     
-    console.log('Processando campos do formulário...');
+    // Processar campos de texto, email, select e textarea
+    form.querySelectorAll('input[type="text"], input[type="email"], select, textarea').forEach(field => {
+        if (field.name && field.value) {
+            processedData.append(field.name, field.value);
+            console.log(`Campo processado: ${field.name} = ${field.value}`);
+        }
+    });
     
-    // Processar campos de checkbox e radio
-    form.querySelectorAll('input, select, textarea').forEach(element => {
-        if (element.name) {
-            console.log(`Processando campo: ${element.name}, tipo: ${element.type}`);
-            
-            if (element.type === 'checkbox') {
-                if (element.checked) {
-                    if (element.name.endsWith('[]')) {
-                        // Para campos de checkbox múltiplos
-                        const name = element.name.slice(0, -2);
-                        if (!processedData.has(name)) {
-                            processedData.append(name, []);
-                        }
-                        const values = processedData.get(name);
-                        values.push(element.value);
-                        processedData.set(name, values);
-                        console.log(`Checkbox múltiplo: ${name} = ${values.join(', ')}`);
-                    } else {
-                        processedData.append(element.name, element.value);
-                        console.log(`Checkbox simples: ${element.name} = ${element.value}`);
-                    }
-                }
-            } else if (element.type === 'radio') {
-                if (element.checked) {
-                    processedData.append(element.name, element.value);
-                    console.log(`Radio: ${element.name} = ${element.value}`);
-                }
-            } else {
-                processedData.append(element.name, element.value);
-                console.log(`Campo normal: ${element.name} = ${element.value}`);
+    // Processar checkboxes
+    form.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        if (checkbox.name) {
+            if (checkbox.checked) {
+                const value = checkbox.value || 'true';
+                processedData.append(checkbox.name, value);
+                console.log(`Checkbox processado: ${checkbox.name} = ${value}`);
             }
         }
     });
     
+    // Processar radio buttons
+    form.querySelectorAll('input[type="radio"]').forEach(radio => {
+        if (radio.name && radio.checked) {
+            processedData.append(radio.name, radio.value);
+            console.log(`Radio processado: ${radio.name} = ${radio.value}`);
+        }
+    });
+    
     return processedData;
+}
+
+// Função para tentar reenviar o formulário em caso de falha
+async function retryFormSubmission(form, originalButtonText) {
+    const startTime = Date.now();
+    let attempt = 0;
+    
+    while (Date.now() - startTime < CONFIG.maxRetryTime * 1000) {
+        attempt++;
+        console.log(`Tentativa de envio ${attempt}`);
+        
+        try {
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: CONFIG.formSubmitConfig.headers
+            });
+            
+            console.log('Resposta do servidor:', response);
+            
+            if (response.ok) {
+                console.log('Formulário enviado com sucesso!');
+                window.location.href = CONFIG.redirectUrl;
+                return;
+            }
+            
+            const responseText = await response.text();
+            console.log('Resposta do servidor:', responseText);
+            
+            // Se a resposta contiver uma mensagem de sucesso, redirecionar
+            if (responseText.includes('success') || responseText.includes('sucesso')) {
+                console.log('Formulário enviado com sucesso!');
+                window.location.href = CONFIG.redirectUrl;
+                return;
+            }
+            
+            // Se não foi bem sucedido, esperar antes da próxima tentativa
+            await new Promise(resolve => setTimeout(resolve, CONFIG.retryInterval * 1000));
+            
+        } catch (error) {
+            console.error('Erro na tentativa de envio:', error);
+            await new Promise(resolve => setTimeout(resolve, CONFIG.retryInterval * 1000));
+        }
+    }
+    
+    // Se chegou aqui, todas as tentativas falharam
+    console.error('Todas as tentativas de envio falharam');
+    hideLoading(document.querySelector('.btn-submit'), originalButtonText);
+    showError('Não foi possível enviar o formulário. Por favor, tente novamente mais tarde.');
 } 

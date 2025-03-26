@@ -284,9 +284,15 @@
             </div>
             
             <div class="card">
+                <h2>Gerenciamento de Dados</h2>
                 <div class="controls">
+                    <div>
+                        <button id="exportCSV" class="btn btn-success">Exportar para CSV</button>
+                        <button id="exportJSON" class="btn btn-success">Exportar JSON</button>
+                        <button id="deleteAll" class="btn btn-danger">Excluir Todos</button>
+                    </div>
                     <div class="filter-group">
-                        <span>Filtrar por: </span>
+                        <label>Filtrar por:</label>
                         <select id="filterType">
                             <option value="all">Todos</option>
                             <option value="parent">Pais</option>
@@ -294,15 +300,33 @@
                             <option value="professional">Profissionais</option>
                         </select>
                     </div>
-                    
-                    <div>
-                        <button id="exportCSV" class="btn btn-success">Exportar CSV</button>
-                        <button id="clearData" class="btn btn-danger">Apagar Dados</button>
-                    </div>
+                </div>
+                
+                <div class="import-section" style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; border: 1px dashed #ccc;">
+                    <h3>Importar Respostas</h3>
+                    <p>Selecione um arquivo JSON exportado por outro administrador para importar as respostas.</p>
+                    <input type="file" id="importFile" accept=".json" style="margin-bottom: 10px; width: 100%;">
+                    <button id="importJSON" class="btn">Importar Respostas</button>
                 </div>
                 
                 <div id="responsesContainer">
-                    <!-- As respostas serão inseridas aqui via JavaScript -->
+                    <table id="responsesTable">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Tipo</th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Os dados serão inseridos aqui -->
+                        </tbody>
+                    </table>
+                    <div id="noData" class="no-data" style="display: none;">
+                        <p>Não há respostas disponíveis.</p>
+                    </div>
                 </div>
             </div>
             
@@ -470,6 +494,165 @@
                 }
             });
             
+            // Configurar botões de exportação e importação
+            document.getElementById('exportCSV').addEventListener('click', exportCSV);
+            document.getElementById('exportJSON').addEventListener('click', exportJSON);
+            document.getElementById('importJSON').addEventListener('click', importJSON);
+            document.getElementById('deleteAll').addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja excluir TODAS as respostas? Esta ação não pode ser desfeita.')) {
+                    localStorage.removeItem('autismSurveyResponses');
+                    loadResponses('all');
+                    updateAllCharts('all');
+                }
+            });
+            
+            // Filtrar respostas quando mudar a seleção
+            document.getElementById('filterType').addEventListener('change', function() {
+                loadResponses(this.value);
+            });
+            
+            // Função para carregar respostas
+            function loadResponses(filterType) {
+                let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                
+                // Filtrar por tipo, se necessário
+                if (filterType !== 'all') {
+                    responses = responses.filter(r => r.formType === filterType);
+                }
+                
+                // Atualizar contadores
+                document.getElementById('totalResponses').textContent = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]').length;
+                document.getElementById('parentsResponses').textContent = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]').filter(r => r.formType === 'parent').length;
+                document.getElementById('teachersResponses').textContent = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]').filter(r => r.formType === 'teacher').length;
+                document.getElementById('professionalsResponses').textContent = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]').filter(r => r.formType === 'professional').length;
+                
+                // Mostrar tabela ou mensagem de 'sem dados'
+                const responsesTable = document.getElementById('responsesTable');
+                const noDataMessage = document.getElementById('noData');
+                
+                if (responses.length > 0) {
+                    responsesTable.style.display = 'table';
+                    noDataMessage.style.display = 'none';
+                    
+                    // Limpar tabela
+                    const tbody = responsesTable.querySelector('tbody');
+                    tbody.innerHTML = '';
+                    
+                    // Adicionar cada resposta à tabela
+                    responses.forEach(response => {
+                        const row = document.createElement('tr');
+                        
+                        // Data/Hora
+                        const dateCell = document.createElement('td');
+                        dateCell.textContent = response.submissionDate ? formatDate(response.submissionDate) : 'N/A';
+                        
+                        // Tipo
+                        const typeCell = document.createElement('td');
+                        typeCell.textContent = getFormTypeLabel(response.formType);
+                        
+                        // Nome
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = response.name || 'Anônimo';
+                        
+                        // Email
+                        const emailCell = document.createElement('td');
+                        emailCell.textContent = response.email || 'N/A';
+                        
+                        // Ações
+                        const actionsCell = document.createElement('td');
+                        
+                        // Botão Visualizar
+                        const viewButton = document.createElement('button');
+                        viewButton.className = 'btn';
+                        viewButton.textContent = 'Visualizar';
+                        viewButton.dataset.id = response.id;
+                        viewButton.addEventListener('click', function() {
+                            viewResponse(response.id);
+                        });
+                        
+                        // Botão Excluir
+                        const deleteButton = document.createElement('button');
+                        deleteButton.className = 'btn btn-danger';
+                        deleteButton.textContent = 'Excluir';
+                        deleteButton.dataset.id = response.id;
+                        deleteButton.addEventListener('click', function() {
+                            deleteResponse(response.id);
+                        });
+                        
+                        actionsCell.appendChild(viewButton);
+                        actionsCell.appendChild(document.createTextNode(' '));
+                        actionsCell.appendChild(deleteButton);
+                        
+                        // Adicionar células à linha
+                        row.appendChild(dateCell);
+                        row.appendChild(typeCell);
+                        row.appendChild(nameCell);
+                        row.appendChild(emailCell);
+                        row.appendChild(actionsCell);
+                        
+                        // Adicionar linha à tabela
+                        tbody.appendChild(row);
+                    });
+                } else {
+                    responsesTable.style.display = 'none';
+                    noDataMessage.style.display = 'block';
+                }
+            }
+            
+            // Função para visualizar detalhes de uma resposta
+            function viewResponse(id) {
+                const responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                const response = responses.find(r => r.id === id);
+                
+                if (response) {
+                    // Verifique se já existe um detalhe para esta resposta
+                    const existingDetail = document.getElementById(`detail-${id}`);
+                    if (existingDetail) {
+                        existingDetail.remove();
+                        return;
+                    }
+                    
+                    // Criar e adicionar o HTML de detalhes
+                    const detailHTML = generateDetailHTML(response);
+                    
+                    // Encontrar a linha da tabela
+                    const rows = document.querySelectorAll('#responsesTable tbody tr');
+                    let row;
+                    for (let i = 0; i < rows.length; i++) {
+                        const viewButton = rows[i].querySelector(`button[data-id="${id}"]`);
+                        if (viewButton) {
+                            row = rows[i];
+                            break;
+                        }
+                    }
+                    
+                    if (row) {
+                        // Criar uma nova linha para os detalhes
+                        const detailRow = document.createElement('tr');
+                        detailRow.id = `detail-${id}`;
+                        
+                        const detailCell = document.createElement('td');
+                        detailCell.colSpan = 5;
+                        detailCell.innerHTML = detailHTML;
+                        
+                        detailRow.appendChild(detailCell);
+                        
+                        // Inserir após a linha da resposta
+                        row.parentNode.insertBefore(detailRow, row.nextSibling);
+                    }
+                }
+            }
+            
+            // Função para excluir uma resposta
+            function deleteResponse(id) {
+                if (confirm('Tem certeza que deseja excluir esta resposta?')) {
+                    let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                    responses = responses.filter(r => r.id !== id);
+                    localStorage.setItem('autismSurveyResponses', JSON.stringify(responses));
+                    loadResponses(document.getElementById('filterType').value);
+                }
+            }
+            
             // Gerenciar as abas de estatísticas
             const statsTabs = document.querySelectorAll('.stats-tab');
             statsTabs.forEach(tab => {
@@ -493,361 +676,6 @@
             document.getElementById('statsFilterType').addEventListener('change', function() {
                 updateAllCharts(this.value);
             });
-            
-            // Função para carregar respostas
-            function loadResponses(filterType) {
-                const responsesContainer = document.getElementById('responsesContainer');
-                const responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
-                
-                // Atualizar estatísticas
-                updateStats(responses);
-                
-                // Filtrar respostas, se necessário
-                const filteredResponses = filterType === 'all' 
-                    ? responses 
-                    : responses.filter(r => r.formType === filterType);
-                
-                // Limpar container
-                responsesContainer.innerHTML = '';
-                
-                if (filteredResponses.length === 0) {
-                    responsesContainer.innerHTML = '<div class="no-data">Nenhuma resposta encontrada.</div>';
-                    return;
-                }
-                
-                // Criar tabela
-                const table = document.createElement('table');
-                const thead = document.createElement('thead');
-                const tbody = document.createElement('tbody');
-                
-                // Cabeçalho da tabela
-                const headerRow = document.createElement('tr');
-                ['ID', 'Tipo', 'Data', 'Nome', 'Email', 'Ações'].forEach(text => {
-                    const th = document.createElement('th');
-                    th.textContent = text;
-                    headerRow.appendChild(th);
-                });
-                thead.appendChild(headerRow);
-                table.appendChild(thead);
-                
-                // Linhas de dados
-                filteredResponses.forEach(response => {
-                    const row = document.createElement('tr');
-                    
-                    // ID
-                    const idCell = document.createElement('td');
-                    idCell.textContent = response.id.replace('response_', '').substring(0, 8) + '...';
-                    row.appendChild(idCell);
-                    
-                    // Tipo
-                    const typeCell = document.createElement('td');
-                    typeCell.textContent = getFormTypeLabel(response.formType);
-                    row.appendChild(typeCell);
-                    
-                    // Data
-                    const dateCell = document.createElement('td');
-                    dateCell.textContent = formatDate(response.submissionDate);
-                    row.appendChild(dateCell);
-                    
-                    // Nome
-                    const nameCell = document.createElement('td');
-                    nameCell.textContent = response.name || 'Não informado';
-                    row.appendChild(nameCell);
-                    
-                    // Email
-                    const emailCell = document.createElement('td');
-                    emailCell.textContent = response.email || 'Não informado';
-                    row.appendChild(emailCell);
-                    
-                    // Ações
-                    const actionsCell = document.createElement('td');
-                    
-                    // Botão Ver Detalhes
-                    const viewButton = document.createElement('button');
-                    viewButton.className = 'btn';
-                    viewButton.textContent = 'Ver Detalhes';
-                    viewButton.addEventListener('click', function() {
-                        toggleResponseDetails(response.id);
-                    });
-                    actionsCell.appendChild(viewButton);
-                    
-                    // Botão Excluir
-                    const deleteButton = document.createElement('button');
-                    deleteButton.className = 'btn btn-danger';
-                    deleteButton.textContent = 'Excluir';
-                    deleteButton.addEventListener('click', function() {
-                        deleteResponse(response.id);
-                    });
-                    actionsCell.appendChild(deleteButton);
-                    
-                    row.appendChild(actionsCell);
-                    tbody.appendChild(row);
-                    
-                    // Adicionar div para detalhes (oculta inicialmente)
-                    const detailRow = document.createElement('tr');
-                    detailRow.id = `details-${response.id}`;
-                    detailRow.style.display = 'none';
-                    
-                    const detailCell = document.createElement('td');
-                    detailCell.colSpan = 6;
-                    detailCell.innerHTML = generateDetailHTML(response);
-                    
-                    detailRow.appendChild(detailCell);
-                    tbody.appendChild(detailRow);
-                });
-                
-                table.appendChild(tbody);
-                responsesContainer.appendChild(table);
-            }
-            
-            function updateStats(responses) {
-                document.getElementById('totalResponses').textContent = responses.length;
-                document.getElementById('parentsResponses').textContent = 
-                    responses.filter(r => r.formType === 'parent').length;
-                document.getElementById('teachersResponses').textContent = 
-                    responses.filter(r => r.formType === 'teacher').length;
-                document.getElementById('professionalsResponses').textContent = 
-                    responses.filter(r => r.formType === 'professional').length;
-            }
-            
-            function toggleResponseDetails(id) {
-                const detailsRow = document.getElementById(`details-${id}`);
-                detailsRow.style.display = detailsRow.style.display === 'none' ? 'table-row' : 'none';
-            }
-            
-            function deleteResponse(id) {
-                if (confirm('Tem certeza que deseja excluir esta resposta?')) {
-                    let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
-                    responses = responses.filter(r => r.id !== id);
-                    localStorage.setItem('autismSurveyResponses', JSON.stringify(responses));
-                    loadResponses(document.getElementById('filterType').value);
-                }
-            }
-            
-            function generateDetailHTML(response) {
-                let html = '<div class="response-detail" style="display:block;">';
-                
-                // Agrupar dados por seção
-                const sections = {
-                    "Informações Gerais": ['name', 'email', 'formType', 'submissionDate'],
-                    "Perfil": ['profession', 'experience_time', 'location', 'school_type', 'specialized_training', 
-                              'tech_familiarity', 'autism_students', 'autism_children'],
-                    "Características": ['children_age', 'students_age', 'autism_level', 'characteristics', 
-                                      'development_needs', 'school_support'],
-                    "Aprendizagem": ['learning_difficulties', 'interests', 'teaching_methods', 'routine_changes', 
-                                   'curriculum_adaptations', 'therapeutic_approaches', 'professional_challenges',
-                                   'teacher_challenges', 'effective_interventions'],
-                    "Tecnologia": ['devices', 'tech_devices', 'tech_resources', 'tech_frequency', 'tech_purpose', 
-                                 'tech_efficacy', 'tech_aspects', 'tech_barriers', 'tech_effectiveness'],
-                    "Necessidades": ['important_features', 'concerns', 'desired_support', 'unmet_needs', 
-                                   'teacher_desired_tools', 'platform_essentials', 'suggestions', 'desired_tools',
-                                   'support_needed', 'improvement_suggestions']
-                };
-                
-                // Adicionar cada seção
-                for (const [section, fields] of Object.entries(sections)) {
-                    let sectionHasData = false;
-                    let sectionHTML = `<div class="detail-group"><h4>${section}</h4>`;
-                    
-                    for (const field of fields) {
-                        if (response[field] !== undefined && response[field] !== null && response[field] !== '') {
-                            sectionHasData = true;
-                            let value = response[field];
-                            
-                            // Formatar arrays
-                            if (Array.isArray(value)) {
-                                value = value.join(', ');
-                            }
-                            
-                            // Formatar data
-                            if (field === 'submissionDate') {
-                                value = formatDate(value);
-                            }
-                            
-                            // Formatar tipo de formulário
-                            if (field === 'formType') {
-                                value = getFormTypeLabel(value);
-                            }
-                            
-                            sectionHTML += `<p><strong>${getFieldLabel(field)}:</strong> ${value}</p>`;
-                        }
-                    }
-                    
-                    sectionHTML += '</div>';
-                    
-                    if (sectionHasData) {
-                        html += sectionHTML;
-                    }
-                }
-                
-                html += '</div>';
-                return html;
-            }
-            
-            function getFormTypeLabel(type) {
-                const labels = {
-                    'parent': 'Pais',
-                    'teacher': 'Professores',
-                    'professional': 'Profissionais'
-                };
-                return labels[type] || type;
-            }
-            
-            function getFieldLabel(field) {
-                const labels = {
-                    'name': 'Nome',
-                    'email': 'E-mail',
-                    'formType': 'Tipo de Formulário',
-                    'submissionDate': 'Data de Envio',
-                    'profession': 'Profissão',
-                    'experience_time': 'Tempo de Experiência',
-                    'location': 'Localização',
-                    'tech_familiarity': 'Familiaridade com Tecnologia',
-                    'autism_students': 'Qtd. Alunos com Autismo',
-                    'autism_children': 'Qtd. Crianças com Autismo',
-                    'school_type': 'Tipo de Escola',
-                    'specialized_training': 'Formação Especializada',
-                    'children_age': 'Faixa Etária das Crianças',
-                    'students_age': 'Faixa Etária dos Alunos',
-                    'autism_level': 'Nível de Autismo',
-                    'characteristics': 'Características',
-                    'development_needs': 'Necessidades de Desenvolvimento',
-                    'school_support': 'Apoio Escolar',
-                    'learning_difficulties': 'Dificuldades de Aprendizagem',
-                    'interests': 'Interesses',
-                    'teaching_methods': 'Métodos de Ensino',
-                    'routine_changes': 'Reação a Mudanças',
-                    'curriculum_adaptations': 'Adaptações Curriculares',
-                    'therapeutic_approaches': 'Abordagens Terapêuticas',
-                    'professional_challenges': 'Desafios Profissionais',
-                    'teacher_challenges': 'Desafios do Professor',
-                    'effective_interventions': 'Intervenções Eficazes',
-                    'devices': 'Dispositivos',
-                    'tech_devices': 'Dispositivos Tecnológicos',
-                    'tech_resources': 'Recursos Tecnológicos',
-                    'tech_frequency': 'Frequência de Uso',
-                    'tech_purpose': 'Objetivo do Uso',
-                    'tech_efficacy': 'Eficácia da Tecnologia',
-                    'tech_aspects': 'Aspectos da Tecnologia',
-                    'tech_barriers': 'Barreiras Tecnológicas',
-                    'tech_effectiveness': 'Efetividade da Tecnologia',
-                    'important_features': 'Recursos Importantes',
-                    'concerns': 'Preocupações',
-                    'desired_support': 'Apoio Desejado',
-                    'unmet_needs': 'Necessidades Não Atendidas',
-                    'teacher_desired_tools': 'Ferramentas Desejadas pelo Professor',
-                    'platform_essentials': 'Essenciais da Plataforma',
-                    'suggestions': 'Sugestões',
-                    'desired_tools': 'Ferramentas Desejadas',
-                    'support_needed': 'Suporte Necessário',
-                    'improvement_suggestions': 'Sugestões de Melhoria'
-                };
-                return labels[field] || field;
-            }
-            
-            function formatDate(dateString) {
-                try {
-                    const date = new Date(dateString);
-                    return date.toLocaleString('pt-BR', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                } catch (e) {
-                    return dateString;
-                }
-            }
-            
-            function exportCSV() {
-                const filterType = document.getElementById('filterType').value;
-                let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
-                
-                if (filterType !== 'all') {
-                    responses = responses.filter(r => r.formType === filterType);
-                }
-                
-                if (responses.length === 0) {
-                    alert('Não há respostas para exportar.');
-                    return;
-                }
-                
-                // Converter para CSV
-                const csv = convertToCSV(responses);
-                
-                // Criar blob e link de download
-                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.setAttribute('href', url);
-                link.setAttribute('download', `respostas_autismo_${filterType}_${formatDateForFilename(new Date())}.csv`);
-                link.style.visibility = 'hidden';
-                
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
-            
-            function convertToCSV(responses) {
-                if (!responses || responses.length === 0) return '';
-                
-                // Coletar todos os cabeçalhos possíveis
-                const headers = new Set();
-                responses.forEach(response => {
-                    Object.keys(response).forEach(key => headers.add(key));
-                });
-                
-                // Mapear para nomes mais amigáveis
-                const headerRow = Array.from(headers).map(header => getFieldLabel(header)).join(',');
-                
-                // Criar linhas de dados
-                const rows = responses.map(response => {
-                    return Array.from(headers).map(header => {
-                        const value = response[header];
-                        if (value === undefined || value === null) return '';
-                        
-                        // Lidar com arrays
-                        if (Array.isArray(value)) {
-                            return `"${value.join('; ')}"`;
-                        }
-                        
-                        // Formatar tipo de formulário
-                        if (header === 'formType') {
-                            return `"${getFormTypeLabel(value)}"`;
-                        }
-                        
-                        // Formatar data
-                        if (header === 'submissionDate') {
-                            return `"${formatDate(value)}"`;
-                        }
-                        
-                        // Escape strings for CSV
-                        if (typeof value === 'string') {
-                            return `"${value.replace(/"/g, '""')}"`;
-                        }
-                        
-                        return value;
-                    }).join(',');
-                });
-                
-                return headerRow + '\n' + rows.join('\n');
-            }
-            
-            function formatDateForFilename(date) {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                return `${year}${month}${day}`;
-            }
-            
-            function confirmClearData() {
-                if (confirm('ATENÇÃO: Esta ação excluirá TODAS as respostas salvas. Esta ação não pode ser desfeita. Deseja continuar?')) {
-                    localStorage.removeItem('autismSurveyResponses');
-                    loadResponses();
-                    alert('Todos os dados foram apagados.');
-                }
-            }
             
             // Função para inicializar e atualizar os gráficos
             function initializeStats() {
@@ -1317,6 +1145,111 @@
                 }
                 
                 updateChart(chart, chartLabels, chartData);
+            }
+            
+            // Função para formatar data para nome de arquivo
+            function formatDateForFilename(date) {
+                return date.toISOString().split('T')[0].replace(/-/g, '');
+            }
+            
+            // Função de exportação JSON
+            function exportJSON() {
+                const filterType = document.getElementById('filterType').value;
+                let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                
+                if (filterType !== 'all') {
+                    responses = responses.filter(r => r.formType === filterType);
+                }
+                
+                if (responses.length === 0) {
+                    alert('Não há respostas para exportar.');
+                    return;
+                }
+                
+                // Adicionar metadados
+                const exportData = {
+                    exportDate: new Date().toISOString(),
+                    exportedBy: 'Administrador',
+                    version: '1.0',
+                    responses: responses
+                };
+                
+                // Converter para JSON
+                const jsonString = JSON.stringify(exportData, null, 2);
+                
+                // Criar blob e link de download
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', `respostas_autismo_${filterType}_${formatDateForFilename(new Date())}.json`);
+                link.style.visibility = 'hidden';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            
+            // Função de importação JSON
+            function importJSON() {
+                const fileInput = document.getElementById('importFile');
+                const file = fileInput.files[0];
+                
+                if (!file) {
+                    alert('Por favor, selecione um arquivo JSON para importar.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        // Verificar se o arquivo tem o formato esperado
+                        if (!importedData.responses || !Array.isArray(importedData.responses)) {
+                            throw new Error('Formato de arquivo inválido. Não foi possível encontrar as respostas.');
+                        }
+                        
+                        // Obter respostas atuais
+                        let currentResponses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                        const currentIds = new Set(currentResponses.map(r => r.id));
+                        
+                        // Filtrar apenas novas respostas para evitar duplicações
+                        const newResponses = importedData.responses.filter(r => !currentIds.has(r.id));
+                        
+                        if (newResponses.length === 0) {
+                            alert('Nenhuma nova resposta para importar. Todas as respostas deste arquivo já existem na base de dados.');
+                            return;
+                        }
+                        
+                        // Adicionar novas respostas
+                        const updatedResponses = [...currentResponses, ...newResponses];
+                        
+                        // Salvar no localStorage
+                        localStorage.setItem('autismSurveyResponses', JSON.stringify(updatedResponses));
+                        
+                        // Recarregar dados
+                        loadResponses(document.getElementById('filterType').value);
+                        updateAllCharts(document.getElementById('statsFilterType').value);
+                        
+                        // Mensagem de sucesso
+                        alert(`Importação concluída com sucesso! ${newResponses.length} novas respostas foram adicionadas.`);
+                        
+                        // Limpar o campo de arquivo
+                        fileInput.value = '';
+                        
+                    } catch (error) {
+                        console.error('Erro na importação:', error);
+                        alert('Erro ao importar o arquivo: ' + error.message);
+                    }
+                };
+                
+                reader.onerror = function() {
+                    alert('Erro ao ler o arquivo. Por favor, tente novamente.');
+                };
+                
+                reader.readAsText(file);
             }
         });
     </script>

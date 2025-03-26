@@ -121,23 +121,31 @@ function setupEventListeners() {
                 if (form && form.action) {
                     console.log('Enviando formulário para:', form.action);
                     
-                    // Criar um formulário temporário para envio
-                    const tempForm = document.createElement('form');
-                    tempForm.method = 'POST';
-                    tempForm.action = form.action;
+                    // Coletar todos os dados do formulário
+                    const formData = new FormData(form);
                     
-                    // Copiar todos os campos do formulário original
-                    form.querySelectorAll('input, select, textarea').forEach(element => {
-                        if (element.name) {
-                            const clone = element.cloneNode(true);
-                            tempForm.appendChild(clone);
+                    // Enviar os dados usando fetch
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
                         }
+                    })
+                    .then(response => {
+                        console.log('Resposta do servidor:', response);
+                        if (response.ok) {
+                            // Redirecionar para a página de agradecimento
+                            const nextUrl = form.querySelector('input[name="_next"]').value;
+                            window.location.href = nextUrl;
+                        } else {
+                            throw new Error('Erro ao enviar formulário');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao enviar formulário:', error);
+                        alert('Erro ao enviar formulário. Por favor, tente novamente.');
                     });
-                    
-                    // Adicionar o formulário temporário ao documento e enviar
-                    document.body.appendChild(tempForm);
-                    tempForm.submit();
-                    document.body.removeChild(tempForm);
                 } else {
                     console.error('Formulário não encontrado ou sem action definido');
                     alert('Erro ao enviar formulário. Por favor, tente novamente.');

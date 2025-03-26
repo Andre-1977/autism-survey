@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administração da Pesquisa sobre Autismo</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .admin-container {
             max-width: 1200px;
@@ -164,6 +165,84 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
+        
+        .chart-container {
+            margin: 20px 0;
+            height: 300px;
+            max-width: 100%;
+        }
+        
+        .stats-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .stats-tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+        }
+        
+        .stats-tab.active {
+            background-color: #fff;
+            border-bottom: 1px solid #fff;
+            margin-bottom: -1px;
+            font-weight: bold;
+        }
+        
+        .stats-panel {
+            display: none;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+        
+        .stats-panel.active {
+            display: block;
+        }
+        
+        .chart-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .chart-box {
+            flex: 1;
+            min-width: 300px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .filter-stats {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .filter-stats select {
+            margin-left: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
 <body>
@@ -226,55 +305,197 @@
                     <!-- As respostas serão inseridas aqui via JavaScript -->
                 </div>
             </div>
+            
+            <div class="card">
+                <h2>Estatísticas</h2>
+                <div class="filter-stats">
+                    <label>Filtrar por:</label>
+                    <select id="statsFilterType">
+                        <option value="all">Todos</option>
+                        <option value="parent">Pais</option>
+                        <option value="teacher">Professores</option>
+                        <option value="professional">Profissionais</option>
+                    </select>
+                </div>
+                
+                <div class="stats-tabs">
+                    <div class="stats-tab active" data-tab="general">Geral</div>
+                    <div class="stats-tab" data-tab="profile">Perfil</div>
+                    <div class="stats-tab" data-tab="development">Aprendizagem</div>
+                    <div class="stats-tab" data-tab="technology">Tecnologia</div>
+                    <div class="stats-tab" data-tab="needs">Necessidades</div>
+                </div>
+                
+                <div class="stats-panels">
+                    <!-- Painel de estatísticas gerais -->
+                    <div class="stats-panel active" id="general-panel">
+                        <div class="chart-row">
+                            <div class="chart-box">
+                                <div class="chart-title">Distribuição de Respostas</div>
+                                <canvas id="responsesTypeChart"></canvas>
+                            </div>
+                            <div class="chart-box">
+                                <div class="chart-title">Respostas por Tempo</div>
+                                <canvas id="responsesByTimeChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Painel de perfil -->
+                    <div class="stats-panel" id="profile-panel">
+                        <div class="chart-row">
+                            <div class="chart-box">
+                                <div class="chart-title">Experiência com Autismo</div>
+                                <canvas id="experienceTimeChart"></canvas>
+                            </div>
+                            <div class="chart-box">
+                                <div class="chart-title">Localização</div>
+                                <canvas id="locationChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-box">
+                                <div class="chart-title">Familiaridade com Tecnologia</div>
+                                <canvas id="techFamiliarityChart"></canvas>
+                            </div>
+                            <div class="chart-box">
+                                <div class="chart-title">Nível de Autismo</div>
+                                <canvas id="autismLevelChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Painel de aprendizagem -->
+                    <div class="stats-panel" id="development-panel">
+                        <div class="chart-row">
+                            <div class="chart-box">
+                                <div class="chart-title">Dificuldades de Aprendizagem</div>
+                                <canvas id="learningDifficultiesChart"></canvas>
+                            </div>
+                            <div class="chart-box">
+                                <div class="chart-title">Áreas de Interesse</div>
+                                <canvas id="interestsChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-box">
+                                <div class="chart-title">Métodos de Ensino Eficazes</div>
+                                <canvas id="teachingMethodsChart"></canvas>
+                            </div>
+                            <div class="chart-box">
+                                <div class="chart-title">Reação a Mudanças</div>
+                                <canvas id="routineChangesChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Painel de tecnologia -->
+                    <div class="stats-panel" id="technology-panel">
+                        <div class="chart-row">
+                            <div class="chart-box">
+                                <div class="chart-title">Dispositivos Utilizados</div>
+                                <canvas id="devicesChart"></canvas>
+                            </div>
+                            <div class="chart-box">
+                                <div class="chart-title">Recursos Tecnológicos</div>
+                                <canvas id="techResourcesChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-box">
+                                <div class="chart-title">Frequência de Uso</div>
+                                <canvas id="techFrequencyChart"></canvas>
+                            </div>
+                            <div class="chart-box">
+                                <div class="chart-title">Eficácia da Tecnologia</div>
+                                <canvas id="techEfficacyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Painel de necessidades -->
+                    <div class="stats-panel" id="needs-panel">
+                        <div class="chart-row">
+                            <div class="chart-box">
+                                <div class="chart-title">Recursos Importantes</div>
+                                <canvas id="importantFeaturesChart"></canvas>
+                            </div>
+                            <div class="chart-box">
+                                <div class="chart-title">Preocupações</div>
+                                <canvas id="concernsChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-row">
+                            <div class="chart-box">
+                                <div class="chart-title">Suporte Desejado</div>
+                                <canvas id="desiredSupportChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
     <script>
-        // Senha de acesso (simples, apenas para demonstração)
-        const ACCESS_PASSWORD = "admin123";
-        
         document.addEventListener('DOMContentLoaded', function() {
             const passwordModal = document.getElementById('passwordModal');
+            const adminContent = document.getElementById('adminContent');
             const passwordInput = document.getElementById('passwordInput');
             const submitPasswordButton = document.getElementById('submitPassword');
-            const adminContent = document.getElementById('adminContent');
             
-            // Mostrar o modal de senha
+            // Mostrar modal de senha ao carregar
             passwordModal.style.display = 'flex';
             
-            // Verificar senha
-            submitPasswordButton.addEventListener('click', checkPassword);
-            passwordInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    checkPassword();
+            // Função para verificar senha
+            submitPasswordButton.addEventListener('click', function() {
+                const password = passwordInput.value;
+                // Senha fixa para demonstração - em um ambiente real, isso deveria ser mais seguro
+                if (password === 'admin123') {
+                    passwordModal.style.display = 'none';
+                    adminContent.style.display = 'block';
+                    loadResponses('all');
+                    
+                    // Inicializar os gráficos estatísticos após autenticação
+                    initializeStats();
+                } else {
+                    alert('Senha incorreta. Tente novamente.');
                 }
             });
             
-            function checkPassword() {
-                if (passwordInput.value === ACCESS_PASSWORD) {
-                    passwordModal.style.display = 'none';
-                    adminContent.style.display = 'block';
-                    initializeAdmin();
-                } else {
-                    alert('Senha incorreta. Tente novamente.');
-                    passwordInput.value = '';
-                    passwordInput.focus();
+            // Permitir pressionar Enter no campo de senha
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitPasswordButton.click();
                 }
-            }
+            });
             
-            function initializeAdmin() {
-                // Carregar respostas
-                loadResponses();
-                
-                // Configurar eventos
-                document.getElementById('exportCSV').addEventListener('click', exportCSV);
-                document.getElementById('clearData').addEventListener('click', confirmClearData);
-                document.getElementById('filterType').addEventListener('change', function() {
-                    loadResponses(this.value);
+            // Gerenciar as abas de estatísticas
+            const statsTabs = document.querySelectorAll('.stats-tab');
+            statsTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remover classe ativa de todas as abas
+                    statsTabs.forEach(t => t.classList.remove('active'));
+                    // Adicionar classe ativa à aba clicada
+                    this.classList.add('active');
+                    
+                    // Mostrar o painel correspondente
+                    const tabName = this.getAttribute('data-tab');
+                    const panels = document.querySelectorAll('.stats-panel');
+                    panels.forEach(panel => {
+                        panel.classList.remove('active');
+                    });
+                    document.getElementById(`${tabName}-panel`).classList.add('active');
                 });
-            }
+            });
             
-            function loadResponses(filterType = 'all') {
+            // Atualizar estatísticas quando o filtro mudar
+            document.getElementById('statsFilterType').addEventListener('change', function() {
+                updateAllCharts(this.value);
+            });
+            
+            // Função para carregar respostas
+            function loadResponses(filterType) {
                 const responsesContainer = document.getElementById('responsesContainer');
                 const responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
                 
@@ -626,6 +847,476 @@
                     loadResponses();
                     alert('Todos os dados foram apagados.');
                 }
+            }
+            
+            // Função para inicializar e atualizar os gráficos
+            function initializeStats() {
+                // Criar todos os gráficos inicialmente
+                createCharts();
+                
+                // Configurar atualizações baseadas no filtro
+                const filterType = document.getElementById('statsFilterType').value;
+                updateAllCharts(filterType);
+            }
+            
+            // Atualizar todos os gráficos com base no filtro
+            function updateAllCharts(filterType) {
+                // Obter as respostas filtradas
+                let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                
+                if (filterType !== 'all') {
+                    responses = responses.filter(r => r.formType === filterType);
+                }
+                
+                // Atualizar cada gráfico
+                updateGeneralStats(responses);
+                updateProfileStats(responses);
+                updateDevelopmentStats(responses);
+                updateTechnologyStats(responses);
+                updateNeedsStats(responses);
+            }
+            
+            // Função para criar os objetos de gráficos inicialmente
+            function createCharts() {
+                // Objetos para armazenar as instâncias de gráficos
+                window.charts = {};
+                
+                // Gráficos gerais
+                charts.responsesType = createPieChart('responsesTypeChart', 'Distribuição por Tipo');
+                charts.responsesByTime = createLineChart('responsesByTimeChart', 'Respostas ao Longo do Tempo');
+                
+                // Gráficos de perfil
+                charts.experienceTime = createBarChart('experienceTimeChart', 'Tempo de Experiência');
+                charts.location = createBarChart('locationChart', 'Localização');
+                charts.techFamiliarity = createBarChart('techFamiliarityChart', 'Familiaridade com Tecnologia');
+                charts.autismLevel = createBarChart('autismLevelChart', 'Nível de Autismo');
+                
+                // Gráficos de aprendizagem
+                charts.learningDifficulties = createBarChart('learningDifficultiesChart', 'Dificuldades de Aprendizagem');
+                charts.interests = createBarChart('interestsChart', 'Áreas de Interesse');
+                charts.teachingMethods = createBarChart('teachingMethodsChart', 'Métodos de Ensino');
+                charts.routineChanges = createPieChart('routineChangesChart', 'Reação a Mudanças');
+                
+                // Gráficos de tecnologia
+                charts.devices = createBarChart('devicesChart', 'Dispositivos');
+                charts.techResources = createBarChart('techResourcesChart', 'Recursos');
+                charts.techFrequency = createPieChart('techFrequencyChart', 'Frequência');
+                charts.techEfficacy = createPieChart('techEfficacyChart', 'Eficácia');
+                
+                // Gráficos de necessidades
+                charts.importantFeatures = createBarChart('importantFeaturesChart', 'Recursos Importantes');
+                charts.concerns = createBarChart('concernsChart', 'Preocupações');
+                charts.desiredSupport = createBarChart('desiredSupportChart', 'Suporte Desejado');
+            }
+            
+            // Funções auxiliares para criar gráficos
+            function createPieChart(canvasId, label) {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                return new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            data: [],
+                            backgroundColor: [
+                                '#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6',
+                                '#1abc9c', '#d35400', '#34495e', '#16a085', '#c0392b'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right'
+                            },
+                            title: {
+                                display: false,
+                                text: label
+                            }
+                        }
+                    }
+                });
+            }
+            
+            function createBarChart(canvasId, label) {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                return new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: label,
+                            data: [],
+                            backgroundColor: '#3498db'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+            
+            function createLineChart(canvasId, label) {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+                return new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: label,
+                            data: [],
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Funções para atualizar os gráficos com dados reais
+            function updateGeneralStats(responses) {
+                // Distribuição por tipo
+                const typeCounts = {
+                    'parent': 0,
+                    'teacher': 0,
+                    'professional': 0
+                };
+                
+                responses.forEach(r => {
+                    if (r.formType in typeCounts) {
+                        typeCounts[r.formType]++;
+                    }
+                });
+                
+                const typeLabels = {
+                    'parent': 'Pais',
+                    'teacher': 'Professores',
+                    'professional': 'Profissionais'
+                };
+                
+                updateChart(
+                    charts.responsesType,
+                    Object.keys(typeCounts).map(k => typeLabels[k]),
+                    Object.values(typeCounts)
+                );
+                
+                // Respostas ao longo do tempo
+                const timeData = {};
+                responses.forEach(r => {
+                    if (r.submissionDate) {
+                        // Converter para data e agrupar por dia
+                        const date = new Date(r.submissionDate);
+                        const dateStr = date.toLocaleDateString('pt-BR');
+                        timeData[dateStr] = (timeData[dateStr] || 0) + 1;
+                    }
+                });
+                
+                // Ordenar por data
+                const sortedDates = Object.keys(timeData).sort((a, b) => {
+                    return new Date(a.split('/').reverse().join('-')) - new Date(b.split('/').reverse().join('-'));
+                });
+                
+                updateChart(
+                    charts.responsesByTime,
+                    sortedDates,
+                    sortedDates.map(date => timeData[date])
+                );
+            }
+            
+            function updateProfileStats(responses) {
+                // Tempo de experiência
+                const experienceLabels = {
+                    'menos_1': 'Menos de 1 ano',
+                    '1-3': '1-3 anos',
+                    '3-5': '3-5 anos',
+                    'mais_5': 'Mais de 5 anos'
+                };
+                updateChartFromField(charts.experienceTime, responses, 'experience_time', experienceLabels);
+                
+                // Localização (pegando os top 10)
+                const locationCounts = countResponses(responses, 'location');
+                const topLocations = Object.entries(locationCounts)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10);
+                
+                updateChart(
+                    charts.location,
+                    topLocations.map(item => item[0]),
+                    topLocations.map(item => item[1])
+                );
+                
+                // Familiaridade com tecnologia
+                const techFamiliarityLabels = {
+                    'beginner': 'Iniciante',
+                    'intermediate': 'Intermediário',
+                    'advanced': 'Avançado',
+                    'expert': 'Especialista'
+                };
+                updateChartFromField(charts.techFamiliarity, responses, 'tech_familiarity', techFamiliarityLabels);
+                
+                // Nível de autismo
+                const autismLevelLabels = {
+                    'level1': 'Nível 1',
+                    'level2': 'Nível 2',
+                    'level3': 'Nível 3',
+                    'mixed': 'Variados',
+                    'unknown': 'Não especificado',
+                    'no_specific': 'Não especificado'
+                };
+                updateChartFromField(charts.autismLevel, responses, 'autism_level', autismLevelLabels);
+            }
+            
+            function updateDevelopmentStats(responses) {
+                // Dificuldades de aprendizagem
+                const learningLabels = {
+                    'communication': 'Comunicação',
+                    'math': 'Matemática',
+                    'reading_writing': 'Leitura/Escrita',
+                    'social_skills': 'Habilidades sociais',
+                    'concentration': 'Concentração',
+                    'organization': 'Organização',
+                    'following_instructions': 'Seguir instruções'
+                };
+                updateChartFromArrayField(charts.learningDifficulties, responses, 'learning_difficulties', learningLabels);
+                
+                // Áreas de interesse
+                const interestsLabels = {
+                    'technology': 'Tecnologia',
+                    'music': 'Música',
+                    'arts': 'Artes',
+                    'science': 'Ciências',
+                    'sports': 'Esportes',
+                    'math': 'Matemática',
+                    'games': 'Jogos'
+                };
+                updateChartFromArrayField(charts.interests, responses, 'interests', interestsLabels);
+                
+                // Métodos de ensino
+                const methodsLabels = {
+                    'visual': 'Visual',
+                    'auditory': 'Auditivo',
+                    'hands_on': 'Prático',
+                    'verbal': 'Verbal',
+                    'routine': 'Rotinas',
+                    'individual': 'Individualizado',
+                    'peer_learning': 'Entre pares',
+                    'aac': 'Comunicação alternativa'
+                };
+                
+                const methodField = responses[0]?.teaching_methods ? 'teaching_methods' : 'learning_method';
+                updateChartFromArrayField(charts.teachingMethods, responses, methodField, methodsLabels);
+                
+                // Reação a mudanças
+                const routineLabels = {
+                    'very_adaptable': 'Muito adaptável',
+                    'adapts_with_time': 'Adapta com tempo',
+                    'difficult_adaptation': 'Difícil adaptação',
+                    'negative_reaction': 'Reação negativa',
+                    'varied': 'Variado'
+                };
+                updateChartFromField(charts.routineChanges, responses, 'routine_changes', routineLabels);
+            }
+            
+            function updateTechnologyStats(responses) {
+                // Dispositivos
+                const devicesLabels = {
+                    'tablet': 'Tablet',
+                    'computer': 'Computador',
+                    'smartphone': 'Smartphone',
+                    'smartboard': 'Lousa digital',
+                    'projector': 'Projetor',
+                    'aac_device': 'Comunicação alternativa',
+                    'smarttv': 'Smart TV',
+                    'none': 'Nenhum'
+                };
+                updateChartFromArrayField(charts.devices, responses, 'devices', devicesLabels);
+                
+                // Recursos tecnológicos
+                const resourcesLabels = {
+                    'educational_games': 'Jogos educativos',
+                    'learning_apps': 'Apps de aprendizagem',
+                    'educational_videos': 'Vídeos educativos',
+                    'online_platforms': 'Plataformas online',
+                    'virtual_reality': 'Realidade virtual',
+                    'communication_apps': 'Apps de comunicação',
+                    'none': 'Nenhum'
+                };
+                updateChartFromArrayField(charts.techResources, responses, 'tech_resources', resourcesLabels);
+                
+                // Frequência de uso
+                const frequencyLabels = {
+                    'daily': 'Diariamente',
+                    'several_week': 'Várias vezes por semana',
+                    'once_week': 'Uma vez por semana',
+                    'occasionally': 'Ocasionalmente',
+                    'rarely': 'Raramente',
+                    'never': 'Nunca'
+                };
+                updateChartFromField(charts.techFrequency, responses, 'tech_frequency', frequencyLabels);
+                
+                // Eficácia
+                const efficacyLabels = {
+                    'very_effective': 'Muito eficaz',
+                    'moderately_effective': 'Moderadamente eficaz',
+                    'slightly_effective': 'Pouco eficaz',
+                    'not_effective': 'Não eficaz',
+                    'do_not_use': 'Não utiliza'
+                };
+                updateChartFromField(charts.techEfficacy, responses, 'tech_efficacy', efficacyLabels);
+            }
+            
+            function updateNeedsStats(responses) {
+                // Recursos importantes
+                const featuresLabels = {
+                    'personalization': 'Personalização',
+                    'adaptive': 'Interface adaptativa',
+                    'feedback': 'Feedback em tempo real',
+                    'progress_reports': 'Relatórios de progresso',
+                    'visuals': 'Recursos visuais',
+                    'interactivity': 'Interatividade',
+                    'different_levels': 'Diferentes níveis',
+                    'lesson_plans': 'Planos de aula',
+                    'teacher_guides': 'Guias para professores',
+                    'parent_connection': 'Conexão com pais'
+                };
+                updateChartFromArrayField(charts.importantFeatures, responses, 'important_features', featuresLabels);
+                
+                // Preocupações
+                const concernsLabels = {
+                    'screen_time': 'Tempo de tela',
+                    'usability': 'Usabilidade',
+                    'teacher_learning': 'Aprendizado do professor',
+                    'cost': 'Custo',
+                    'content_quality': 'Qualidade do conteúdo',
+                    'online_safety': 'Segurança online',
+                    'distraction': 'Distração',
+                    'curriculum_alignment': 'Alinhamento curricular',
+                    'child_adaptation': 'Adaptação da criança',
+                    'none': 'Nenhuma preocupação'
+                };
+                updateChartFromArrayField(charts.concerns, responses, 'concerns', concernsLabels);
+                
+                // Suporte desejado
+                const supportLabels = {
+                    'training': 'Treinamento',
+                    'resources': 'Recursos',
+                    'tech_tools': 'Ferramentas tecnológicas',
+                    'smaller_classes': 'Turmas menores',
+                    'assistant': 'Assistente',
+                    'specialist_support': 'Suporte especializado',
+                    'parent_collaboration': 'Colaboração com pais',
+                    'curriculum_guidelines': 'Diretrizes curriculares',
+                    'technical_support': 'Suporte técnico',
+                    'guidelines': 'Manuais/Diretrizes',
+                    'specialized_tools': 'Ferramentas especializadas',
+                    'research': 'Mais pesquisas',
+                    'community': 'Comunidade de prática'
+                };
+                
+                // Verificar qual campo existe nos dados
+                const supportField = responses.some(r => r.desired_support) ? 'desired_support' : 'support_needed';
+                updateChartFromArrayField(charts.desiredSupport, responses, supportField, supportLabels);
+            }
+            
+            // Funções utilitárias para atualização dos gráficos
+            function updateChart(chart, labels, data) {
+                chart.data.labels = labels;
+                chart.data.datasets[0].data = data;
+                chart.update();
+            }
+            
+            function countResponses(responses, field) {
+                const counts = {};
+                responses.forEach(response => {
+                    const value = response[field];
+                    if (value) {
+                        counts[value] = (counts[value] || 0) + 1;
+                    }
+                });
+                return counts;
+            }
+            
+            function updateChartFromField(chart, responses, field, labels = null) {
+                const counts = countResponses(responses, field);
+                
+                // Preparar dados para o gráfico
+                let chartLabels = [];
+                let chartData = [];
+                
+                if (labels) {
+                    // Usar rótulos predefinidos, se fornecidos
+                    for (const [key, label] of Object.entries(labels)) {
+                        if (key in counts) {
+                            chartLabels.push(label);
+                            chartData.push(counts[key]);
+                        }
+                    }
+                } else {
+                    // Usar valores diretamente como rótulos
+                    chartLabels = Object.keys(counts);
+                    chartData = Object.values(counts);
+                }
+                
+                updateChart(chart, chartLabels, chartData);
+            }
+            
+            function countArrayResponses(responses, field) {
+                const counts = {};
+                responses.forEach(response => {
+                    const values = response[field];
+                    if (Array.isArray(values)) {
+                        values.forEach(value => {
+                            counts[value] = (counts[value] || 0) + 1;
+                        });
+                    }
+                });
+                return counts;
+            }
+            
+            function updateChartFromArrayField(chart, responses, field, labels = null) {
+                const counts = countArrayResponses(responses, field);
+                
+                // Preparar dados para o gráfico
+                let chartLabels = [];
+                let chartData = [];
+                
+                if (labels) {
+                    // Usar rótulos predefinidos, se fornecidos
+                    for (const [key, label] of Object.entries(labels)) {
+                        if (key in counts) {
+                            chartLabels.push(label);
+                            chartData.push(counts[key]);
+                        }
+                    }
+                } else {
+                    // Usar valores diretamente como rótulos
+                    chartLabels = Object.keys(counts);
+                    chartData = Object.values(counts);
+                }
+                
+                updateChart(chart, chartLabels, chartData);
             }
         });
     </script>

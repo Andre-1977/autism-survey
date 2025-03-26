@@ -444,34 +444,7 @@ function hideLoading(button, originalText) {
 
 // Função para processar campos do formulário
 function processFormFields(form) {
-    const formData = new FormData();
-    
-    // Processar campos de texto, email, select e textarea
-    form.querySelectorAll('input[type="text"], input[type="email"], select, textarea').forEach(field => {
-        if (field.name && field.value) {
-            formData.append(field.name, field.value);
-            console.log(`Campo processado: ${field.name} = ${field.value}`);
-        }
-    });
-    
-    // Processar checkboxes
-    form.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        if (checkbox.name) {
-            if (checkbox.checked) {
-                const value = checkbox.value || 'true';
-                formData.append(checkbox.name, value);
-                console.log(`Checkbox processado: ${checkbox.name} = ${value}`);
-            }
-        }
-    });
-    
-    // Processar radio buttons
-    form.querySelectorAll('input[type="radio"]').forEach(radio => {
-        if (radio.name && radio.checked) {
-            formData.append(radio.name, radio.value);
-            console.log(`Radio processado: ${radio.name} = ${radio.value}`);
-        }
-    });
+    const formData = new FormData(form);
     
     // Adicionar campos de configuração do FormSubmit
     Object.entries(CONFIG.formSubmitConfig).forEach(([key, value]) => {
@@ -481,37 +454,38 @@ function processFormFields(form) {
         }
     });
     
+    // Log dos dados que serão enviados
+    console.log('Dados do formulário:');
+    for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+    }
+    
     return formData;
 }
 
 // Função para enviar o formulário
 async function submitForm(form, formData) {
-    const response = await fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: CONFIG.formSubmitConfig.headers
-    });
-    
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData
+        });
+        
+        console.log('Status da resposta:', response.status);
+        const result = await response.text();
+        console.log('Resposta do servidor:', result);
+        
+        return response.ok;
+    } catch (error) {
+        console.error('Erro ao enviar formulário:', error);
+        return false;
     }
-    
-    const result = await response.text();
-    console.log('Resposta do servidor:', result);
-    
-    // Verificar se a resposta indica sucesso
-    if (result.includes('success') || result.includes('sucesso') || response.ok) {
-        return true;
-    }
-    
-    return false;
 }
 
 // Função para tentar reenviar o formulário em caso de falha
 async function retryFormSubmission(form, originalButtonText) {
-    const startTime = Date.now();
     let attempt = 0;
-    const maxRetries = CONFIG.formSubmitConfig.maxRetries;
+    const maxRetries = 3;
     
     while (attempt < maxRetries) {
         attempt++;
@@ -519,13 +493,6 @@ async function retryFormSubmission(form, originalButtonText) {
         
         try {
             const formData = processFormFields(form);
-            
-            // Log dos dados que serão enviados
-            console.log('Dados do formulário:');
-            for (let [key, value] of formData.entries()) {
-                console.log(`${key}: ${value}`);
-            }
-            
             const success = await submitForm(form, formData);
             
             if (success) {
@@ -535,12 +502,12 @@ async function retryFormSubmission(form, originalButtonText) {
             }
             
             // Se não foi bem sucedido, esperar antes da próxima tentativa
-            await new Promise(resolve => setTimeout(resolve, CONFIG.formSubmitConfig.retryDelay));
+            await new Promise(resolve => setTimeout(resolve, 2000));
             
         } catch (error) {
             console.error('Erro na tentativa de envio:', error);
             if (attempt < maxRetries) {
-                await new Promise(resolve => setTimeout(resolve, CONFIG.formSubmitConfig.retryDelay));
+                await new Promise(resolve => setTimeout(resolve, 2000));
             }
         }
     }

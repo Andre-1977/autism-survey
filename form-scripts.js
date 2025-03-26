@@ -12,6 +12,7 @@ function identifyFormType() {
 
 // Configuração inicial da página
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM carregado, iniciando configuração...');
     setupFormSections();
     setupEventListeners();
     setupConditionalQuestions();
@@ -29,14 +30,17 @@ document.addEventListener('DOMContentLoaded', function() {
 // Configura as seções do formulário e botões de navegação
 function setupFormSections() {
     const formSections = document.querySelectorAll('.form-section');
+    console.log('Número de seções encontradas:', formSections.length);
+    
     const progressBar = document.querySelector('.progress');
     const progressText = document.querySelector('.progress-text');
     
     // Esconder todas as seções, exceto a primeira
     formSections.forEach((section, index) => {
-        section.style.display = 'none';
+        section.classList.remove('active');
         if (index === 0) {
-            section.style.display = 'block';
+            section.classList.add('active');
+            console.log('Primeira seção ativada:', section.id);
         }
     });
     
@@ -49,22 +53,33 @@ function setupFormSections() {
 // Configura listeners de eventos para os elementos do formulário
 function setupEventListeners() {
     // Configurar botões de próximo e anterior
-    document.querySelectorAll('.btn-next').forEach(button => {
+    const nextButtons = document.querySelectorAll('.btn-next');
+    console.log('Botões "Próximo" encontrados:', nextButtons.length);
+    
+    nextButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('Botão próximo clicado');
+            
             const currentSection = this.closest('.form-section');
             const nextSection = currentSection.nextElementSibling;
             const currentIndex = Array.from(document.querySelectorAll('.form-section')).indexOf(currentSection);
             const totalSections = document.querySelectorAll('.form-section').length;
             
+            console.log('Seção atual:', currentSection.id);
+            console.log('Próxima seção:', nextSection ? nextSection.id : 'não encontrada');
+            
             // Validar campos da seção atual antes de avançar
             if (validateSection(currentSection)) {
-                currentSection.style.display = 'none';
+                console.log('Validação passou, avançando para próxima seção');
+                currentSection.classList.remove('active');
                 if (nextSection) {
-                    nextSection.style.display = 'block';
+                    nextSection.classList.add('active');
                     updateProgress(currentIndex + 1, totalSections);
                     window.scrollTo(0, 0);
                 }
+            } else {
+                console.log('Validação falhou, não avançando');
             }
         });
     });
@@ -78,8 +93,8 @@ function setupEventListeners() {
             const totalSections = document.querySelectorAll('.form-section').length;
             
             if (prevSection) {
-                currentSection.style.display = 'none';
-                prevSection.style.display = 'block';
+                currentSection.classList.remove('active');
+                prevSection.classList.add('active');
                 updateProgress(currentIndex - 1, totalSections);
                 window.scrollTo(0, 0);
             }

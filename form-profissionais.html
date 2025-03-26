@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa sobre Crianças com Autismo - Profissionais</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="survey-header">
+            <h1>Pesquisa sobre Experiências com Crianças com Autismo</h1>
+            <div class="role-indicator">
+                <h2>Formulário para Profissionais</h2>
+                <a href="index.html" class="back-link">← Voltar para a página inicial</a>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="progress-text">Seção 1 de 5</div>
+            </div>
+        </div>
+
+        <form id="professionalSurvey" class="survey-form">
+            <!-- SEÇÃO 1: PERFIL DO RESPONDENTE -->
+            <div id="section1" class="form-section active">
+                <h2>PERFIL DO RESPONDENTE</h2>
+                <p>Queremos conhecer um pouco sobre você e seu trabalho com crianças com autismo.</p>
+
+                <div class="form-group">
+                    <label for="name">Nome completo</label>
+                    <input type="text" id="name" name="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail para contato</label>
+                    <input type="email" id="email" name="email">
+                </div>
+
+                <div class="form-group">
+                    <label>Qual sua profissão?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="profession" value="psychologist"> Psicólogo(a)</label>
+                        <label><input type="radio" name="profession" value="speech_therapist"> Fonoaudiólogo(a)</label>
+                        <label><input type="radio" name="profession" value="occupational_therapist"> Terapeuta Ocupacional</label>
+                        <label><input type="radio" name="profession" value="aba_therapist"> Analista do Comportamento (ABA)</label>
+                        <label><input type="radio" name="profession" value="physiotherapist"> Fisioterapeuta</label>
+                        <label><input type="radio" name="profession" value="neurologist"> Neurologista</label>
+                        <label><input type="radio" name="profession" value="psychiatrist"> Psiquiatra</label>
+                        <label><input type="radio" name="profession" value="pediatrician"> Pediatra</label>
+                        <label><input type="radio" name="profession" value="other"> Outro</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="profession_other">Se outro, qual?</label>
+                        <input type="text" id="profession_other" name="profession_other">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Há quanto tempo você trabalha com crianças com autismo?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="experience_time" value="menos_1"> Menos de 1 ano</label>
+                        <label><input type="radio" name="experience_time" value="1-3"> 1-3 anos</label>
+                        <label><input type="radio" name="experience_time" value="3-5"> 3-5 anos</label>
+                        <label><input type="radio" name="experience_time" value="mais_5"> Mais de 5 anos</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Qual sua localização?</label>
+                    <select name="location">
+                        <option value="">Selecione uma opção</option>
+                        <option value="AC">Acre</option>
+                        <option value="AL">Alagoas</option>
+                        <option value="AP">Amapá</option>
+                        <option value="AM">Amazonas</option>
+                        <option value="BA">Bahia</option>
+                        <option value="CE">Ceará</option>
+                        <option value="DF">Distrito Federal</option>
+                        <option value="ES">Espírito Santo</option>
+                        <option value="GO">Goiás</option>
+                        <option value="MA">Maranhão</option>
+                        <option value="MT">Mato Grosso</option>
+                        <option value="MS">Mato Grosso do Sul</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="PA">Pará</option>
+                        <option value="PB">Paraíba</option>
+                        <option value="PR">Paraná</option>
+                        <option value="PE">Pernambuco</option>
+                        <option value="PI">Piauí</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="RN">Rio Grande do Norte</option>
+                        <option value="RS">Rio Grande do Sul</option>
+                        <option value="RO">Rondônia</option>
+                        <option value="RR">Roraima</option>
+                        <option value="SC">Santa Catarina</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="SE">Sergipe</option>
+                        <option value="TO">Tocantins</option>
+                        <option value="exterior">Exterior</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Qual seu nível de familiaridade com tecnologia educacional?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="tech_familiarity" value="beginner"> Iniciante</label>
+                        <label><input type="radio" name="tech_familiarity" value="intermediate"> Intermediário</label>
+                        <label><input type="radio" name="tech_familiarity" value="advanced"> Avançado</label>
+                        <label><input type="radio" name="tech_familiarity" value="expert"> Especialista</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Com quantas crianças com autismo você trabalha atualmente?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="autism_children" value="1"> 1 criança</label>
+                        <label><input type="radio" name="autism_children" value="2-5"> 2-5 crianças</label>
+                        <label><input type="radio" name="autism_children" value="6-10"> 6-10 crianças</label>
+                        <label><input type="radio" name="autism_children" value="more_10"> Mais de 10 crianças</label>
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="button" id="next1" class="btn-next">Próxima Seção</button>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 2: PERFIL DAS CRIANÇAS -->
+            <div id="section2" class="form-section">
+                <h2>PERFIL DAS CRIANÇAS</h2>
+                <p>Conte-nos sobre as crianças com autismo que você atende.</p>
+
+                <div class="form-group">
+                    <label>Qual a faixa etária predominante das crianças com autismo que você atende?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="children_age" value="2-5"> 2-5 anos</label>
+                        <label><input type="radio" name="children_age" value="6-10"> 6-10 anos</label>
+                        <label><input type="radio" name="children_age" value="11-14"> 11-14 anos</label>
+                        <label><input type="radio" name="children_age" value="15-18"> 15-18 anos</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Qual o nível de autismo mais comum entre as crianças que você atende?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="autism_level" value="level1"> Nível 1 (Suporte Requerido)</label>
+                        <label><input type="radio" name="autism_level" value="level2"> Nível 2 (Suporte Substancial)</label>
+                        <label><input type="radio" name="autism_level" value="level3"> Nível 3 (Suporte Muito Substancial)</label>
+                        <label><input type="radio" name="autism_level" value="unknown"> Não sei informar</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Quais são as principais necessidades de desenvolvimento que você identifica nas crianças com autismo que atende?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="development_needs[]" value="communication"> Comunicação verbal</label>
+                        <label><input type="checkbox" name="development_needs[]" value="social_interaction"> Interação social</label>
+                        <label><input type="checkbox" name="development_needs[]" value="behavior_regulation"> Regulação comportamental</label>
+                        <label><input type="checkbox" name="development_needs[]" value="sensory_processing"> Processamento sensorial</label>
+                        <label><input type="checkbox" name="development_needs[]" value="executive_function"> Funções executivas (organização, planejamento)</label>
+                        <label><input type="checkbox" name="development_needs[]" value="adl"> Atividades da vida diária</label>
+                        <label><input type="checkbox" name="development_needs[]" value="academic_skills"> Habilidades acadêmicas</label>
+                        <label><input type="checkbox" name="development_needs[]" value="fine_motor"> Motricidade fina</label>
+                        <label><input type="checkbox" name="development_needs[]" value="gross_motor"> Motricidade grossa</label>
+                        <label><input type="checkbox" name="development_needs[]" value="other" id="development_needs_other_checkbox"> Outro</label>
+                    </div>
+                    <input type="text" id="development_needs_other_text" name="development_needs_other">
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="button" id="prev2" class="btn-prev">Seção Anterior</button>
+                    <button type="button" id="next2" class="btn-next">Próxima Seção</button>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 3: PRÁTICAS PROFISSIONAIS -->
+            <div id="section3" class="form-section">
+                <h2>PRÁTICAS PROFISSIONAIS</h2>
+                <p>Conte-nos sobre suas práticas e abordagens terapêuticas.</p>
+
+                <div class="form-group">
+                    <label>Quais abordagens terapêuticas você utiliza no seu trabalho com crianças com autismo?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="therapeutic_approaches[]" value="aba"> Análise Aplicada do Comportamento (ABA)</label>
+                        <label><input type="checkbox" name="therapeutic_approaches[]" value="pecs"> Sistema de Comunicação por Troca de Figuras (PECS)</label>
+                        <label><input type="checkbox" name="therapeutic_approaches[]" value="teacch"> TEACCH</label>
+                        <label><input type="checkbox" name="therapeutic_approaches[]" value="floortime"> Floortime/DIR</label>
+                        <label><input type="checkbox" name="therapeutic_approaches[]" value="rdi"> RDI (Relationship Development Intervention)</label>
+                        <label><input type="checkbox" name="therapeutic_approaches[]" value="sensory_integration"> Integração Sensorial</label>
+                        <label><input type="checkbox" name="therapeutic_approaches[]" value="cognitive_behavioral"> Terapia Cognitivo-Comportamental</label>
+                        <label><input type="checkbox" name="therapeutic_approaches[]" value="play_therapy"> Terapia do Brincar</label>
+                        <label><input type="checkbox" name="therapeutic_approaches[]" value="social_skills"> Treinamento de Habilidades Sociais</label>
+                        <label><input type="checkbox" name="therapeutic_approaches[]" value="other" id="therapeutic_approaches_other_checkbox"> Outra</label>
+                    </div>
+                    <input type="text" id="therapeutic_approaches_other_text" name="therapeutic_approaches_other">
+                </div>
+
+                <div class="form-group">
+                    <label>Na sua experiência, quais intervenções têm se mostrado mais eficazes?</label>
+                    <textarea name="effective_interventions" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Quais são os maiores desafios que você enfrenta no trabalho com crianças com autismo?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="professional_challenges[]" value="family_engagement"> Engajamento familiar</label>
+                        <label><input type="checkbox" name="professional_challenges[]" value="behavioral_issues"> Questões comportamentais</label>
+                        <label><input type="checkbox" name="professional_challenges[]" value="communication_barriers"> Barreiras de comunicação</label>
+                        <label><input type="checkbox" name="professional_challenges[]" value="goal_setting"> Definição de metas terapêuticas</label>
+                        <label><input type="checkbox" name="professional_challenges[]" value="progress_monitoring"> Monitoramento de progresso</label>
+                        <label><input type="checkbox" name="professional_challenges[]" value="resources"> Falta de recursos</label>
+                        <label><input type="checkbox" name="professional_challenges[]" value="collaboration"> Colaboração interprofissional</label>
+                        <label><input type="checkbox" name="professional_challenges[]" value="training"> Necessidade de formação continuada</label>
+                        <label><input type="checkbox" name="professional_challenges[]" value="other" id="professional_challenges_other_checkbox"> Outro</label>
+                    </div>
+                    <input type="text" id="professional_challenges_other_text" name="professional_challenges_other">
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="button" id="prev3" class="btn-prev">Seção Anterior</button>
+                    <button type="button" id="next3" class="btn-next">Próxima Seção</button>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 4: TECNOLOGIA E RECURSOS -->
+            <div id="section4" class="form-section">
+                <h2>TECNOLOGIA E RECURSOS</h2>
+                <p>Queremos entender como você utiliza recursos tecnológicos no seu trabalho com crianças com autismo.</p>
+
+                <div class="form-group">
+                    <label>Quais dispositivos tecnológicos você utiliza em suas intervenções?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="tech_devices[]" value="tablet"> Tablet</label>
+                        <label><input type="checkbox" name="tech_devices[]" value="computer"> Computador</label>
+                        <label><input type="checkbox" name="tech_devices[]" value="smartphone"> Smartphone</label>
+                        <label><input type="checkbox" name="tech_devices[]" value="interactive_whiteboard"> Lousa Interativa</label>
+                        <label><input type="checkbox" name="tech_devices[]" value="augmented_reality"> Dispositivos de Realidade Aumentada</label>
+                        <label><input type="checkbox" name="tech_devices[]" value="communication_device"> Dispositivos de Comunicação Alternativa</label>
+                        <label><input type="checkbox" name="tech_devices[]" value="none"> Não utilizo tecnologia</label>
+                        <label><input type="checkbox" name="tech_devices[]" value="other" id="tech_devices_other_checkbox"> Outro</label>
+                    </div>
+                    <input type="text" id="tech_devices_other_text" name="tech_devices_other">
+                </div>
+
+                <div class="form-group">
+                    <label>Quais recursos tecnológicos você utiliza?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="tech_resources[]" value="educational_games"> Jogos educativos</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="learning_apps"> Aplicativos de aprendizagem</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="communication_apps"> Aplicativos de comunicação alternativa</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="sensory_apps"> Aplicativos de estimulação sensorial</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="emotion_apps"> Aplicativos de reconhecimento de emoções</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="schedule_apps"> Aplicativos de rotina visual</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="therapy_tracking"> Aplicativos de acompanhamento terapêutico</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="none"> Não utilizo recursos tecnológicos</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="other" id="tech_resources_other_checkbox"> Outro</label>
+                    </div>
+                    <input type="text" id="tech_resources_other_text" name="tech_resources_other">
+                </div>
+
+                <div class="form-group">
+                    <label>Com que frequência você utiliza tecnologia nas suas intervenções?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="tech_frequency" value="never"> Nunca</label>
+                        <label><input type="radio" name="tech_frequency" value="rarely"> Raramente</label>
+                        <label><input type="radio" name="tech_frequency" value="sometimes"> Às vezes</label>
+                        <label><input type="radio" name="tech_frequency" value="often"> Frequentemente</label>
+                        <label><input type="radio" name="tech_frequency" value="always"> Sempre</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Na sua opinião, quão eficazes são os recursos tecnológicos para apoiar o desenvolvimento de crianças com autismo?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="tech_effectiveness" value="not_effective"> Nada eficazes</label>
+                        <label><input type="radio" name="tech_effectiveness" value="slightly_effective"> Pouco eficazes</label>
+                        <label><input type="radio" name="tech_effectiveness" value="moderately_effective"> Moderadamente eficazes</label>
+                        <label><input type="radio" name="tech_effectiveness" value="very_effective"> Muito eficazes</label>
+                        <label><input type="radio" name="tech_effectiveness" value="extremely_effective"> Extremamente eficazes</label>
+                    </div>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="button" id="prev4" class="btn-prev">Seção Anterior</button>
+                    <button type="button" id="next4" class="btn-next">Próxima Seção</button>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 5: NECESSIDADES E EXPECTATIVAS -->
+            <div id="section5" class="form-section">
+                <h2>NECESSIDADES E EXPECTATIVAS</h2>
+                <p>Suas opiniões e sugestões são importantes para melhorar as ferramentas educacionais para crianças com autismo.</p>
+
+                <div class="form-group">
+                    <label>Quais recursos você considera mais importantes em uma plataforma educacional para crianças com autismo?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="important_features[]" value="customization"> Personalização de conteúdo</label>
+                        <label><input type="checkbox" name="important_features[]" value="visual_support"> Suporte visual (imagens, pictogramas)</label>
+                        <label><input type="checkbox" name="important_features[]" value="adaptive_interface"> Interface adaptativa para diferentes níveis</label>
+                        <label><input type="checkbox" name="important_features[]" value="progress_tracking"> Acompanhamento de progresso</label>
+                        <label><input type="checkbox" name="important_features[]" value="reward_system"> Sistema de recompensas</label>
+                        <label><input type="checkbox" name="important_features[]" value="multimedia"> Recursos multimídia (áudio, vídeo)</label>
+                        <label><input type="checkbox" name="important_features[]" value="parent_portal"> Portal para pais/cuidadores</label>
+                        <label><input type="checkbox" name="important_features[]" value="professional_tools"> Ferramentas para profissionais</label>
+                        <label><input type="checkbox" name="important_features[]" value="data_analysis"> Análise de dados de desempenho</label>
+                        <label><input type="checkbox" name="important_features[]" value="other" id="important_features_other_checkbox"> Outro</label>
+                    </div>
+                    <input type="text" id="important_features_other_text" name="important_features_other">
+                </div>
+
+                <div class="form-group">
+                    <label>Na sua opinião profissional, quais são as necessidades ainda não atendidas no desenvolvimento de recursos para crianças com autismo?</label>
+                    <textarea name="unmet_needs" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Quais ferramentas ou recursos tecnológicos você gostaria de ter disponíveis para melhorar suas intervenções?</label>
+                    <textarea name="desired_tools" rows="4"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Que tipo de suporte você considera essencial para implementar tecnologia de forma eficaz em suas intervenções?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="support_needed[]" value="training"> Mais capacitação técnica</label>
+                        <label><input type="checkbox" name="support_needed[]" value="technical_support"> Suporte técnico acessível</label>
+                        <label><input type="checkbox" name="support_needed[]" value="guidelines"> Diretrizes/manuais claros</label>
+                        <label><input type="checkbox" name="support_needed[]" value="specialized_tools"> Ferramentas especializadas</label>
+                        <label><input type="checkbox" name="support_needed[]" value="research"> Mais pesquisas sobre eficácia</label>
+                        <label><input type="checkbox" name="support_needed[]" value="resources"> Mais recursos financeiros</label>
+                        <label><input type="checkbox" name="support_needed[]" value="community"> Comunidade de prática</label>
+                        <label><input type="checkbox" name="support_needed[]" value="other" id="support_needed_other_checkbox"> Outro</label>
+                    </div>
+                    <input type="text" id="support_needed_other_text" name="support_needed_other">
+                </div>
+
+                <div class="form-group">
+                    <label>Alguma sugestão específica para melhorar ferramentas educacionais direcionadas a crianças com autismo?</label>
+                    <textarea name="improvement_suggestions" rows="4"></textarea>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="button" id="prev5" class="btn-prev">Seção Anterior</button>
+                    <button type="button" id="submit" class="btn-submit">Enviar Respostas</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="form-scripts.js"></script>
+</body>
+</html> 

@@ -69,7 +69,7 @@
 
                 <div class="form-group">
                     <label>Qual sua localização?</label>
-                    <select name="location">
+                    <select name="location" id="location_select">
                         <option value="">Selecione uma opção</option>
                         <option value="AC">Acre</option>
                         <option value="AL">Alagoas</option>
@@ -99,7 +99,13 @@
                         <option value="SE">Sergipe</option>
                         <option value="TO">Tocantins</option>
                         <option value="exterior">Exterior</option>
+                        <option value="outro">Outro (especifique abaixo)</option>
                     </select>
+                </div>
+                
+                <div class="form-group" id="location_other_group">
+                    <label for="location_other">Especifique sua localização:</label>
+                    <input type="text" id="location_other" name="location_other" placeholder="Digite sua cidade/estado/país">
                 </div>
 
                 <div class="form-group">

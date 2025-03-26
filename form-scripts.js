@@ -125,6 +125,7 @@ function setupEventListeners() {
                     const tempForm = document.createElement('form');
                     tempForm.method = 'POST';
                     tempForm.action = form.action;
+                    tempForm.enctype = 'multipart/form-data';
                     
                     // Copiar todos os campos do formulário original
                     form.querySelectorAll('input, select, textarea').forEach(element => {
@@ -176,8 +177,27 @@ function setupEventListeners() {
                     // Adicionar o formulário temporário ao documento e enviar
                     document.body.appendChild(tempForm);
                     console.log('Formulário temporário criado e pronto para envio');
-                    tempForm.submit();
-                    document.body.removeChild(tempForm);
+                    
+                    // Enviar o formulário usando fetch
+                    const formData = new FormData(tempForm);
+                    fetch(tempForm.action, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = 'agradecimento.html';
+                        } else {
+                            throw new Error('Erro ao enviar formulário');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        alert('Erro ao enviar formulário. Por favor, tente novamente.');
+                    })
+                    .finally(() => {
+                        document.body.removeChild(tempForm);
+                    });
                 } else {
                     console.error('Formulário não encontrado ou sem action definido');
                     alert('Erro ao enviar formulário. Por favor, tente novamente.');

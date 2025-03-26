@@ -147,6 +147,7 @@ function setupEventListeners() {
                             }
                             
                             tempForm.appendChild(input);
+                            console.log(`Campo adicionado ao formulário temporário: ${key} = ${input.value}`);
                         }
                         
                         // Adicionar campos necessários para o FormSubmit
@@ -157,7 +158,9 @@ function setupEventListeners() {
                             '_subject': `${CONFIG.formSubmitConfig.subject} - ${identifyFormType()}`,
                             '_cc': CONFIG.formSubmitConfig.cc,
                             '_replyto': CONFIG.formSubmitConfig.replyto,
-                            '_autoresponse': CONFIG.formSubmitConfig.autoresponse
+                            '_autoresponse': CONFIG.formSubmitConfig.autoresponse,
+                            '_honeypot': CONFIG.formSubmitConfig.honeypot,
+                            '_disableCORS': CONFIG.formSubmitConfig.disableCORS
                         };
                         
                         Object.entries(formSubmitFields).forEach(([name, value]) => {
@@ -166,6 +169,7 @@ function setupEventListeners() {
                             input.name = name;
                             input.value = value;
                             tempForm.appendChild(input);
+                            console.log(`Campo FormSubmit adicionado: ${name} = ${value}`);
                         });
                         
                         // Adicionar o formulário temporário ao documento
@@ -517,24 +521,44 @@ async function retryFormSubmission(form, originalButtonText) {
     let startTime = Date.now();
     let attempts = 0;
     
+    console.log('Iniciando tentativas de envio...');
+    
     while (Date.now() - startTime < CONFIG.maxRetryTime * 1000) {
         try {
+            console.log(`Tentativa ${attempts + 1} de envio...`);
+            
             const formData = new FormData(form);
+            
+            // Log dos dados que serão enviados
+            console.log('Dados do formulário:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+            
             const response = await fetch(form.action, {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'Accept': 'application/json'
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             });
             
+            console.log('Resposta do servidor:', response.status, response.statusText);
+            
             if (response.ok) {
+                const result = await response.json();
+                console.log('Resposta JSON:', result);
+                
                 updateResponseCount(identifyFormType());
                 window.location.href = CONFIG.redirectUrl;
                 return;
+            } else {
+                console.error('Erro na resposta:', response.status, response.statusText);
+                throw new Error(`Erro na resposta: ${response.status}`);
             }
         } catch (error) {
-            console.error('Tentativa falhou:', error);
+            console.error('Erro na tentativa:', error);
         }
         
         attempts++;
@@ -551,9 +575,13 @@ function processFormFields(form) {
     const formData = new FormData(form);
     const processedData = new FormData();
     
+    console.log('Processando campos do formulário...');
+    
     // Processar campos de checkbox e radio
     form.querySelectorAll('input, select, textarea').forEach(element => {
         if (element.name) {
+            console.log(`Processando campo: ${element.name}, tipo: ${element.type}`);
+            
             if (element.type === 'checkbox') {
                 if (element.checked) {
                     if (element.name.endsWith('[]')) {
@@ -565,16 +593,20 @@ function processFormFields(form) {
                         const values = processedData.get(name);
                         values.push(element.value);
                         processedData.set(name, values);
+                        console.log(`Checkbox múltiplo: ${name} = ${values.join(', ')}`);
                     } else {
                         processedData.append(element.name, element.value);
+                        console.log(`Checkbox simples: ${element.name} = ${element.value}`);
                     }
                 }
             } else if (element.type === 'radio') {
                 if (element.checked) {
                     processedData.append(element.name, element.value);
+                    console.log(`Radio: ${element.name} = ${element.value}`);
                 }
             } else {
                 processedData.append(element.name, element.value);
+                console.log(`Campo normal: ${element.name} = ${element.value}`);
             }
         }
     });

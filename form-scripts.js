@@ -103,12 +103,13 @@ function setupEventListeners() {
     
     // Botão de enviar
     document.querySelectorAll('.btn-submit').forEach(button => {
-        button.addEventListener('click', function(e) {
+        button.addEventListener('click', async function(e) {
             e.preventDefault();
             console.log('Botão de envio clicado');
             
             const form = this.closest('form');
             const currentSection = this.closest('.form-section');
+            const originalButtonText = this.innerHTML;
             
             // Validar a última seção antes de enviar
             if (validateSection(currentSection)) {
@@ -117,90 +118,66 @@ function setupEventListeners() {
                 // Salvar cópia local antes de enviar
                 saveLocalBackup(form);
                 
-                // Enviar o formulário
+                // Mostrar loading
+                showLoading(this);
+                
                 if (form && form.action) {
                     console.log('Enviando formulário para:', form.action);
                     
-                    // Criar um formulário temporário para envio
-                    const tempForm = document.createElement('form');
-                    tempForm.method = 'POST';
-                    tempForm.action = form.action;
-                    tempForm.enctype = 'multipart/form-data';
-                    
-                    // Copiar todos os campos do formulário original
-                    form.querySelectorAll('input, select, textarea').forEach(element => {
-                        if (element.name) {
-                            const clone = element.cloneNode(true);
-                            tempForm.appendChild(clone);
-                            console.log('Campo copiado:', element.name, '=', element.value);
-                        }
-                    });
-                    
-                    // Adicionar campos necessários para o FormSubmit
-                    const nextInput = document.createElement('input');
-                    nextInput.type = 'hidden';
-                    nextInput.name = '_next';
-                    nextInput.value = 'agradecimento.html';
-                    tempForm.appendChild(nextInput);
-                    
-                    const captchaInput = document.createElement('input');
-                    captchaInput.type = 'hidden';
-                    captchaInput.name = '_captcha';
-                    captchaInput.value = 'false';
-                    tempForm.appendChild(captchaInput);
-                    
-                    const templateInput = document.createElement('input');
-                    templateInput.type = 'hidden';
-                    templateInput.name = '_template';
-                    templateInput.value = 'table';
-                    tempForm.appendChild(templateInput);
-                    
-                    const subjectInput = document.createElement('input');
-                    subjectInput.type = 'hidden';
-                    subjectInput.name = '_subject';
-                    subjectInput.value = `Nova resposta - Formulário ${identifyFormType()}`;
-                    tempForm.appendChild(subjectInput);
-                    
-                    // Adicionar campo para garantir que o email seja enviado
-                    const ccInput = document.createElement('input');
-                    ccInput.type = 'hidden';
-                    ccInput.name = '_cc';
-                    ccInput.value = 'andre.scrummaster@gmail.com';
-                    tempForm.appendChild(ccInput);
-                    
-                    const replyToInput = document.createElement('input');
-                    replyToInput.type = 'hidden';
-                    replyToInput.name = '_replyto';
-                    replyToInput.value = 'andre.scrummaster@gmail.com';
-                    tempForm.appendChild(replyToInput);
-                    
-                    // Adicionar o formulário temporário ao documento e enviar
-                    document.body.appendChild(tempForm);
-                    console.log('Formulário temporário criado e pronto para envio');
-                    
-                    // Enviar o formulário usando fetch
-                    const formData = new FormData(tempForm);
-                    fetch(tempForm.action, {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            window.location.href = 'agradecimento.html';
-                        } else {
-                            throw new Error('Erro ao enviar formulário');
-                        }
-                    })
-                    .catch(error => {
+                    try {
+                        // Criar um formulário temporário para envio
+                        const tempForm = document.createElement('form');
+                        tempForm.method = 'POST';
+                        tempForm.action = form.action;
+                        tempForm.enctype = 'multipart/form-data';
+                        
+                        // Copiar todos os campos do formulário original
+                        form.querySelectorAll('input, select, textarea').forEach(element => {
+                            if (element.name) {
+                                const clone = element.cloneNode(true);
+                                tempForm.appendChild(clone);
+                                console.log('Campo copiado:', element.name, '=', element.value);
+                            }
+                        });
+                        
+                        // Adicionar campos necessários para o FormSubmit
+                        const formSubmitFields = {
+                            '_next': CONFIG.redirectUrl,
+                            '_captcha': CONFIG.formSubmitConfig.captcha,
+                            '_template': CONFIG.formSubmitConfig.template,
+                            '_subject': CONFIG.formSubmitConfig.subject,
+                            '_cc': CONFIG.email,
+                            '_replyto': CONFIG.email
+                        };
+                        
+                        Object.entries(formSubmitFields).forEach(([name, value]) => {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = name;
+                            input.value = value;
+                            tempForm.appendChild(input);
+                        });
+                        
+                        // Adicionar o formulário temporário ao documento
+                        document.body.appendChild(tempForm);
+                        
+                        // Tentar enviar o formulário
+                        await retryFormSubmission(tempForm, originalButtonText);
+                        
+                    } catch (error) {
                         console.error('Erro:', error);
-                        alert('Erro ao enviar formulário. Por favor, tente novamente.');
-                    })
-                    .finally(() => {
-                        document.body.removeChild(tempForm);
-                    });
+                        hideLoading(this, originalButtonText);
+                        showError('Houve um problema ao enviar suas respostas. Por favor, tente novamente.');
+                    } finally {
+                        // Remover formulário temporário
+                        const tempForm = document.querySelector('form:not([data-form-type])');
+                        if (tempForm) {
+                            document.body.removeChild(tempForm);
+                        }
+                    }
                 } else {
-                    console.error('Formulário não encontrado ou sem action definido');
-                    alert('Erro ao enviar formulário. Por favor, tente novamente.');
+                    hideLoading(this, originalButtonText);
+                    showError('Erro ao enviar formulário. Por favor, tente novamente.');
                 }
             } else {
                 console.log('Validação falhou, não enviando formulário');
@@ -446,4 +423,115 @@ function saveLocalBackup(form) {
     } catch (error) {
         console.error('Erro ao salvar dados localmente:', error);
     }
+}
+
+// Função para atualizar o contador de respostas
+function updateResponseCount(formType) {
+    // Recuperar contadores atuais do localStorage
+    let responseCounts = JSON.parse(localStorage.getItem('responseCounts') || '{"pais": 0, "profissionais": 0, "escolas": 0}');
+    
+    // Incrementar o contador do tipo de formulário específico
+    if (responseCounts[formType] !== undefined) {
+        responseCounts[formType]++;
+        localStorage.setItem('responseCounts', JSON.stringify(responseCounts));
+        
+        // Atualizar a exibição do contador na página
+        updateCounterDisplay();
+    }
+}
+
+// Função para atualizar a exibição do contador na página
+function updateCounterDisplay() {
+    const responseCounts = JSON.parse(localStorage.getItem('responseCounts') || '{"pais": 0, "profissionais": 0, "escolas": 0}');
+    const totalResponses = responseCounts.pais + responseCounts.profissionais + responseCounts.escolas;
+    
+    // Atualizar contadores na página inicial
+    const counterElements = {
+        'pais': document.getElementById('parent-counter'),
+        'profissionais': document.getElementById('professional-counter'),
+        'escolas': document.getElementById('school-counter'),
+        'total': document.getElementById('total-counter')
+    };
+    
+    if (counterElements.total) {
+        counterElements.total.textContent = totalResponses;
+    }
+    if (counterElements.pais) {
+        counterElements.pais.textContent = responseCounts.pais;
+    }
+    if (counterElements.profissionais) {
+        counterElements.profissionais.textContent = responseCounts.profissionais;
+    }
+    if (counterElements.escolas) {
+        counterElements.escolas.textContent = responseCounts.escolas;
+    }
+}
+
+// Chamar updateCounterDisplay quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    updateCounterDisplay();
+});
+
+// Função para mostrar indicador de loading
+function showLoading(button) {
+    button.disabled = true;
+    button.innerHTML = '<span class="spinner"></span> Enviando...';
+}
+
+// Função para esconder indicador de loading
+function hideLoading(button, originalText) {
+    button.disabled = false;
+    button.innerHTML = originalText;
+}
+
+// Função para mostrar mensagem de erro
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.innerHTML = `
+        <i class="fas fa-exclamation-circle"></i>
+        <span>${message}</span>
+    `;
+    
+    const form = document.querySelector('form');
+    form.insertBefore(errorDiv, form.firstChild);
+    
+    // Remover mensagem após 5 segundos
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 5000);
+}
+
+// Função para tentar reenviar o formulário
+async function retryFormSubmission(form, originalButtonText) {
+    let startTime = Date.now();
+    let attempts = 0;
+    
+    while (Date.now() - startTime < CONFIG.maxRetryTime * 1000) {
+        try {
+            const formData = new FormData(form);
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                updateResponseCount(identifyFormType());
+                window.location.href = CONFIG.redirectUrl;
+                return;
+            }
+        } catch (error) {
+            console.error('Tentativa falhou:', error);
+        }
+        
+        attempts++;
+        showError(`Tentativa ${attempts} falhou. Tentando novamente em ${CONFIG.retryInterval} segundos...`);
+        await new Promise(resolve => setTimeout(resolve, CONFIG.retryInterval * 1000));
+    }
+    
+    hideLoading(document.querySelector('.btn-submit'), originalButtonText);
+    showError('Não foi possível enviar o formulário após várias tentativas. Por favor, tente novamente mais tarde ou entre em contato se o problema persistir.');
 } 

@@ -134,6 +134,19 @@ function setupEventListeners() {
                         }
                     });
                     
+                    // Adicionar campos ocultos necessários para o FormSubmit
+                    const nextInput = document.createElement('input');
+                    nextInput.type = 'hidden';
+                    nextInput.name = '_next';
+                    nextInput.value = 'agradecimento.html';
+                    tempForm.appendChild(nextInput);
+                    
+                    const captchaInput = document.createElement('input');
+                    captchaInput.type = 'hidden';
+                    captchaInput.name = '_captcha';
+                    captchaInput.value = 'false';
+                    tempForm.appendChild(captchaInput);
+                    
                     // Adicionar o formulário temporário ao documento e enviar
                     document.body.appendChild(tempForm);
                     tempForm.submit();
@@ -187,6 +200,12 @@ function setupConditionalQuestions() {
 function validateSection(section) {
     let isValid = true;
     const requiredFields = section.querySelectorAll('[required]');
+    
+    // Se não houver campos obrigatórios, considerar válido
+    if (requiredFields.length === 0) {
+        console.log('Nenhum campo obrigatório encontrado na seção, considerando válido');
+        return true;
+    }
     
     requiredFields.forEach(field => {
         // Verificar se é um grupo de radio buttons
@@ -242,13 +261,11 @@ function validateSection(section) {
         }
     });
     
-    // Se não houver campos obrigatórios, considerar válido
-    if (requiredFields.length === 0) {
-        isValid = true;
-    }
-    
     if (!isValid) {
+        console.log('Validação falhou na seção:', section.id);
         alert('Por favor, preencha todos os campos obrigatórios antes de continuar.');
+    } else {
+        console.log('Validação passou na seção:', section.id);
     }
     
     return isValid;

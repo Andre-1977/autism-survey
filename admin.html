@@ -499,10 +499,15 @@
             document.getElementById('exportJSON').addEventListener('click', exportJSON);
             document.getElementById('importJSON').addEventListener('click', importJSON);
             document.getElementById('deleteAll').addEventListener('click', function() {
-                if (confirm('Tem certeza que deseja excluir TODAS as respostas? Esta ação não pode ser desfeita.')) {
+                // Confirmação mais rigorosa para excluir todos os dados
+                const confirmText = prompt('Esta ação excluirá TODAS as respostas. Digite "CONFIRMAR" (em maiúsculas) para prosseguir:');
+                if (confirmText === 'CONFIRMAR') {
                     localStorage.removeItem('autismSurveyResponses');
                     loadResponses('all');
                     updateAllCharts('all');
+                    alert('Todas as respostas foram excluídas com sucesso.');
+                } else {
+                    alert('Operação cancelada. Nenhuma resposta foi excluída.');
                 }
             });
             
@@ -645,11 +650,17 @@
             
             // Função para excluir uma resposta
             function deleteResponse(id) {
-                if (confirm('Tem certeza que deseja excluir esta resposta?')) {
+                // Confirmação mais rigorosa para excluir uma resposta
+                const confirmText = prompt('Digite "EXCLUIR" (em maiúsculas) para confirmar a exclusão desta resposta:');
+                if (confirmText === 'EXCLUIR') {
                     let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
                     responses = responses.filter(r => r.id !== id);
                     localStorage.setItem('autismSurveyResponses', JSON.stringify(responses));
                     loadResponses(document.getElementById('filterType').value);
+                    updateAllCharts(document.getElementById('statsFilterType').value);
+                    alert('Resposta excluída com sucesso.');
+                } else {
+                    alert('Operação cancelada. A resposta não foi excluída.');
                 }
             }
             
@@ -1250,6 +1261,236 @@
                 };
                 
                 reader.readAsText(file);
+            }
+            
+            // Adicionando função para gerar detalhes da resposta
+            function generateDetailHTML(response) {
+                let html = '<div class="response-detail" style="display:block;">';
+                
+                // Agrupar dados por seção
+                const sections = {
+                    "Informações Gerais": ['name', 'email', 'formType', 'submissionDate'],
+                    "Perfil": ['profession', 'experience_time', 'location', 'location_other', 'school_type', 'specialized_training', 
+                              'tech_familiarity', 'autism_students', 'autism_children'],
+                    "Características": ['children_age', 'students_age', 'autism_level', 'characteristics', 
+                                      'development_needs', 'school_support'],
+                    "Aprendizagem": ['learning_difficulties', 'interests', 'teaching_methods', 'routine_changes', 
+                                   'curriculum_adaptations', 'therapeutic_approaches', 'professional_challenges',
+                                   'teacher_challenges', 'effective_interventions'],
+                    "Tecnologia": ['devices', 'tech_devices', 'tech_resources', 'tech_frequency', 'tech_purpose', 
+                                 'tech_efficacy', 'tech_aspects', 'tech_barriers', 'tech_effectiveness'],
+                    "Necessidades": ['important_features', 'concerns', 'desired_support', 'unmet_needs', 
+                                   'teacher_desired_tools', 'platform_essentials', 'suggestions', 'desired_tools',
+                                   'support_needed', 'improvement_suggestions']
+                };
+                
+                // Adicionar cada seção
+                for (const [section, fields] of Object.entries(sections)) {
+                    let sectionHasData = false;
+                    let sectionHTML = `<div class="detail-group"><h4>${section}</h4>`;
+                    
+                    for (const field of fields) {
+                        if (response[field] !== undefined && response[field] !== null && response[field] !== '') {
+                            sectionHasData = true;
+                            let value = response[field];
+                            
+                            // Formatar arrays
+                            if (Array.isArray(value)) {
+                                value = value.join(', ');
+                            }
+                            
+                            // Formatar data
+                            if (field === 'submissionDate') {
+                                value = formatDate(value);
+                            }
+                            
+                            // Formatar tipo de formulário
+                            if (field === 'formType') {
+                                value = getFormTypeLabel(value);
+                            }
+                            
+                            sectionHTML += `<p><strong>${getFieldLabel(field)}:</strong> ${value}</p>`;
+                        }
+                    }
+                    
+                    sectionHTML += '</div>';
+                    
+                    if (sectionHasData) {
+                        html += sectionHTML;
+                    }
+                }
+                
+                html += '</div>';
+                return html;
+            }
+            
+            // Função para obter rótulo do tipo de formulário
+            function getFormTypeLabel(type) {
+                const labels = {
+                    'parent': 'Pais',
+                    'teacher': 'Professores',
+                    'professional': 'Profissionais'
+                };
+                return labels[type] || type;
+            }
+            
+            // Função para obter rótulo dos campos
+            function getFieldLabel(field) {
+                const labels = {
+                    'name': 'Nome',
+                    'email': 'E-mail',
+                    'formType': 'Tipo de Formulário',
+                    'submissionDate': 'Data de Envio',
+                    'profession': 'Profissão',
+                    'experience_time': 'Tempo de Experiência',
+                    'location': 'Localização',
+                    'location_other': 'Localização (Especificada)',
+                    'tech_familiarity': 'Familiaridade com Tecnologia',
+                    'autism_students': 'Qtd. Alunos com Autismo',
+                    'autism_children': 'Qtd. Crianças com Autismo',
+                    'school_type': 'Tipo de Escola',
+                    'specialized_training': 'Formação Especializada',
+                    'children_age': 'Faixa Etária das Crianças',
+                    'students_age': 'Faixa Etária dos Alunos',
+                    'autism_level': 'Nível de Autismo',
+                    'characteristics': 'Características',
+                    'development_needs': 'Necessidades de Desenvolvimento',
+                    'school_support': 'Apoio Escolar',
+                    'learning_difficulties': 'Dificuldades de Aprendizagem',
+                    'interests': 'Interesses',
+                    'teaching_methods': 'Métodos de Ensino',
+                    'routine_changes': 'Reação a Mudanças',
+                    'curriculum_adaptations': 'Adaptações Curriculares',
+                    'therapeutic_approaches': 'Abordagens Terapêuticas',
+                    'professional_challenges': 'Desafios Profissionais',
+                    'teacher_challenges': 'Desafios do Professor',
+                    'effective_interventions': 'Intervenções Eficazes',
+                    'devices': 'Dispositivos',
+                    'tech_devices': 'Dispositivos Tecnológicos',
+                    'tech_resources': 'Recursos Tecnológicos',
+                    'tech_frequency': 'Frequência de Uso',
+                    'tech_purpose': 'Objetivo do Uso',
+                    'tech_efficacy': 'Eficácia da Tecnologia',
+                    'tech_aspects': 'Aspectos da Tecnologia',
+                    'tech_barriers': 'Barreiras Tecnológicas',
+                    'tech_effectiveness': 'Efetividade da Tecnologia',
+                    'important_features': 'Recursos Importantes',
+                    'concerns': 'Preocupações',
+                    'desired_support': 'Apoio Desejado',
+                    'unmet_needs': 'Necessidades Não Atendidas',
+                    'teacher_desired_tools': 'Ferramentas Desejadas pelo Professor',
+                    'platform_essentials': 'Essenciais da Plataforma',
+                    'suggestions': 'Sugestões',
+                    'desired_tools': 'Ferramentas Desejadas',
+                    'support_needed': 'Suporte Necessário',
+                    'improvement_suggestions': 'Sugestões de Melhoria'
+                };
+                return labels[field] || field;
+            }
+            
+            // Função para formatar data
+            function formatDate(dateString) {
+                try {
+                    const date = new Date(dateString);
+                    return date.toLocaleString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                } catch (e) {
+                    return dateString;
+                }
+            }
+            
+            // Função para exportar CSV corrigida
+            function exportCSV() {
+                const filterType = document.getElementById('filterType').value;
+                let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                
+                if (filterType !== 'all') {
+                    responses = responses.filter(r => r.formType === filterType);
+                }
+                
+                if (responses.length === 0) {
+                    alert('Não há respostas para exportar.');
+                    return;
+                }
+                
+                try {
+                    // Converter para CSV
+                    const csv = convertToCSV(responses);
+                    
+                    // Criar blob e link de download
+                    const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', `respostas_autismo_${filterType}_${formatDateForFilename(new Date())}.csv`);
+                    
+                    // Adicionar link ao documento e clicar
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    // Remover o link após o download
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                    
+                    console.log('Exportação CSV concluída com sucesso.');
+                } catch (error) {
+                    console.error('Erro na exportação CSV:', error);
+                    alert('Ocorreu um erro ao exportar para CSV: ' + error.message);
+                }
+            }
+            
+            // Função para converter para CSV
+            function convertToCSV(responses) {
+                if (!responses || responses.length === 0) return '';
+                
+                // Coletar todos os cabeçalhos possíveis
+                const headers = new Set();
+                responses.forEach(response => {
+                    Object.keys(response).forEach(key => headers.add(key));
+                });
+                
+                // Mapear para nomes mais amigáveis
+                const headerLabels = Array.from(headers).map(header => getFieldLabel(header));
+                const headerRow = headerLabels.join(';');
+                
+                // Criar linhas de dados
+                const rows = responses.map(response => {
+                    return Array.from(headers).map(header => {
+                        const value = response[header];
+                        if (value === undefined || value === null) return '';
+                        
+                        // Lidar com arrays
+                        if (Array.isArray(value)) {
+                            return `"${value.join(' | ')}"`;
+                        }
+                        
+                        // Formatar tipo de formulário
+                        if (header === 'formType') {
+                            return `"${getFormTypeLabel(value)}"`;
+                        }
+                        
+                        // Formatar data
+                        if (header === 'submissionDate') {
+                            return `"${formatDate(value)}"`;
+                        }
+                        
+                        // Escapar texto para CSV
+                        if (typeof value === 'string') {
+                            return `"${value.replace(/"/g, '""')}"`;
+                        }
+                        
+                        return value;
+                    }).join(';');
+                });
+                
+                return headerRow + '\n' + rows.join('\n');
             }
         });
     </script>

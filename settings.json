@@ -1,0 +1,22 @@
+{
+    "editor.defaultFormatter": "ms-python.autopep8",
+    "editor.formatOnSave": true,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "none",
+    "editor.renderControlCharacters": false,
+    "editor.stickyScroll.enabled": false,
+    "[csharp]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    },
+    "codeium.enableCodeLens": "hide_x",
+    "workbench.colorTheme": "Dracula Theme",
+    "cmake.showOptionsMovedNotification": false,
+    "database-client.autoSync": true,
+    "diffEditor.maxComputationTime": 0,
+    "[latex]": {
+        "editor.defaultFormatter": "mathematic.vscode-latex"
+    },
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    }
+}

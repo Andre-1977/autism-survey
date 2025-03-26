@@ -131,23 +131,33 @@ function setupEventListeners() {
                         tempForm.action = form.action;
                         tempForm.enctype = 'multipart/form-data';
                         
-                        // Copiar todos os campos do formulário original
-                        form.querySelectorAll('input, select, textarea').forEach(element => {
-                            if (element.name) {
-                                const clone = element.cloneNode(true);
-                                tempForm.appendChild(clone);
-                                console.log('Campo copiado:', element.name, '=', element.value);
+                        // Processar campos do formulário
+                        const processedData = processFormFields(form);
+                        
+                        // Adicionar campos processados ao formulário temporário
+                        for (let [key, value] of processedData.entries()) {
+                            const input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = key;
+                            
+                            if (Array.isArray(value)) {
+                                input.value = value.join(', ');
+                            } else {
+                                input.value = value;
                             }
-                        });
+                            
+                            tempForm.appendChild(input);
+                        }
                         
                         // Adicionar campos necessários para o FormSubmit
                         const formSubmitFields = {
                             '_next': CONFIG.redirectUrl,
                             '_captcha': CONFIG.formSubmitConfig.captcha,
                             '_template': CONFIG.formSubmitConfig.template,
-                            '_subject': CONFIG.formSubmitConfig.subject,
-                            '_cc': CONFIG.email,
-                            '_replyto': CONFIG.email
+                            '_subject': `${CONFIG.formSubmitConfig.subject} - ${identifyFormType()}`,
+                            '_cc': CONFIG.formSubmitConfig.cc,
+                            '_replyto': CONFIG.formSubmitConfig.replyto,
+                            '_autoresponse': CONFIG.formSubmitConfig.autoresponse
                         };
                         
                         Object.entries(formSubmitFields).forEach(([name, value]) => {
@@ -534,4 +544,40 @@ async function retryFormSubmission(form, originalButtonText) {
     
     hideLoading(document.querySelector('.btn-submit'), originalButtonText);
     showError('Não foi possível enviar o formulário após várias tentativas. Por favor, tente novamente mais tarde ou entre em contato se o problema persistir.');
+}
+
+// Função para processar campos do formulário
+function processFormFields(form) {
+    const formData = new FormData(form);
+    const processedData = new FormData();
+    
+    // Processar campos de checkbox e radio
+    form.querySelectorAll('input, select, textarea').forEach(element => {
+        if (element.name) {
+            if (element.type === 'checkbox') {
+                if (element.checked) {
+                    if (element.name.endsWith('[]')) {
+                        // Para campos de checkbox múltiplos
+                        const name = element.name.slice(0, -2);
+                        if (!processedData.has(name)) {
+                            processedData.append(name, []);
+                        }
+                        const values = processedData.get(name);
+                        values.push(element.value);
+                        processedData.set(name, values);
+                    } else {
+                        processedData.append(element.name, element.value);
+                    }
+                }
+            } else if (element.type === 'radio') {
+                if (element.checked) {
+                    processedData.append(element.name, element.value);
+                }
+            } else {
+                processedData.append(element.name, element.value);
+            }
+        }
+    });
+    
+    return processedData;
 } 

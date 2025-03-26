@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração da Pesquisa sobre Autismo</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+        
+        .btn-success {
+            background-color: #2ecc71;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group select {
+            margin-left: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .response-detail {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .detail-group {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-group h4 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .stats-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            min-width: 200px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #3498db;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+        
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .password-content {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 350px;
+            max-width: 90%;
+        }
+        
+        .password-field {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal de senha -->
+    <div id="passwordModal" class="password-modal">
+        <div class="password-content">
+            <h3>Acesso Restrito</h3>
+            <p>Digite a senha para acessar a área administrativa:</p>
+            <input type="password" id="passwordInput" class="password-field" placeholder="Senha">
+            <button id="submitPassword" class="btn">Entrar</button>
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <h1>Administração da Pesquisa sobre Autismo</h1>
+        <div class="role-indicator">
+            <h2>Área Administrativa</h2>
+            <a href="index.html" class="back-link">← Voltar para a página inicial</a>
+        </div>
+        
+        <div id="adminContent" style="display: none;">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-label">Total de Respostas</div>
+                    <div id="totalResponses" class="stat-number">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pais</div>
+                    <div id="parentsResponses" class="stat-number">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Professores</div>
+                    <div id="teachersResponses" class="stat-number">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Profissionais</div>
+                    <div id="professionalsResponses" class="stat-number">0</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="controls">
+                    <div class="filter-group">
+                        <span>Filtrar por: </span>
+                        <select id="filterType">
+                            <option value="all">Todos</option>
+                            <option value="parent">Pais</option>
+                            <option value="teacher">Professores</option>
+                            <option value="professional">Profissionais</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <button id="exportCSV" class="btn btn-success">Exportar CSV</button>
+                        <button id="clearData" class="btn btn-danger">Apagar Dados</button>
+                    </div>
+                </div>
+                
+                <div id="responsesContainer">
+                    <!-- As respostas serão inseridas aqui via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Senha de acesso (simples, apenas para demonstração)
+        const ACCESS_PASSWORD = "admin123";
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const passwordModal = document.getElementById('passwordModal');
+            const passwordInput = document.getElementById('passwordInput');
+            const submitPasswordButton = document.getElementById('submitPassword');
+            const adminContent = document.getElementById('adminContent');
+            
+            // Mostrar o modal de senha
+            passwordModal.style.display = 'flex';
+            
+            // Verificar senha
+            submitPasswordButton.addEventListener('click', checkPassword);
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+            
+            function checkPassword() {
+                if (passwordInput.value === ACCESS_PASSWORD) {
+                    passwordModal.style.display = 'none';
+                    adminContent.style.display = 'block';
+                    initializeAdmin();
+                } else {
+                    alert('Senha incorreta. Tente novamente.');
+                    passwordInput.value = '';
+                    passwordInput.focus();
+                }
+            }
+            
+            function initializeAdmin() {
+                // Carregar respostas
+                loadResponses();
+                
+                // Configurar eventos
+                document.getElementById('exportCSV').addEventListener('click', exportCSV);
+                document.getElementById('clearData').addEventListener('click', confirmClearData);
+                document.getElementById('filterType').addEventListener('change', function() {
+                    loadResponses(this.value);
+                });
+            }
+            
+            function loadResponses(filterType = 'all') {
+                const responsesContainer = document.getElementById('responsesContainer');
+                const responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                
+                // Atualizar estatísticas
+                updateStats(responses);
+                
+                // Filtrar respostas, se necessário
+                const filteredResponses = filterType === 'all' 
+                    ? responses 
+                    : responses.filter(r => r.formType === filterType);
+                
+                // Limpar container
+                responsesContainer.innerHTML = '';
+                
+                if (filteredResponses.length === 0) {
+                    responsesContainer.innerHTML = '<div class="no-data">Nenhuma resposta encontrada.</div>';
+                    return;
+                }
+                
+                // Criar tabela
+                const table = document.createElement('table');
+                const thead = document.createElement('thead');
+                const tbody = document.createElement('tbody');
+                
+                // Cabeçalho da tabela
+                const headerRow = document.createElement('tr');
+                ['ID', 'Tipo', 'Data', 'Nome', 'Email', 'Ações'].forEach(text => {
+                    const th = document.createElement('th');
+                    th.textContent = text;
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+                
+                // Linhas de dados
+                filteredResponses.forEach(response => {
+                    const row = document.createElement('tr');
+                    
+                    // ID
+                    const idCell = document.createElement('td');
+                    idCell.textContent = response.id.replace('response_', '').substring(0, 8) + '...';
+                    row.appendChild(idCell);
+                    
+                    // Tipo
+                    const typeCell = document.createElement('td');
+                    typeCell.textContent = getFormTypeLabel(response.formType);
+                    row.appendChild(typeCell);
+                    
+                    // Data
+                    const dateCell = document.createElement('td');
+                    dateCell.textContent = formatDate(response.submissionDate);
+                    row.appendChild(dateCell);
+                    
+                    // Nome
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = response.name || 'Não informado';
+                    row.appendChild(nameCell);
+                    
+                    // Email
+                    const emailCell = document.createElement('td');
+                    emailCell.textContent = response.email || 'Não informado';
+                    row.appendChild(emailCell);
+                    
+                    // Ações
+                    const actionsCell = document.createElement('td');
+                    
+                    // Botão Ver Detalhes
+                    const viewButton = document.createElement('button');
+                    viewButton.className = 'btn';
+                    viewButton.textContent = 'Ver Detalhes';
+                    viewButton.addEventListener('click', function() {
+                        toggleResponseDetails(response.id);
+                    });
+                    actionsCell.appendChild(viewButton);
+                    
+                    // Botão Excluir
+                    const deleteButton = document.createElement('button');
+                    deleteButton.className = 'btn btn-danger';
+                    deleteButton.textContent = 'Excluir';
+                    deleteButton.addEventListener('click', function() {
+                        deleteResponse(response.id);
+                    });
+                    actionsCell.appendChild(deleteButton);
+                    
+                    row.appendChild(actionsCell);
+                    tbody.appendChild(row);
+                    
+                    // Adicionar div para detalhes (oculta inicialmente)
+                    const detailRow = document.createElement('tr');
+                    detailRow.id = `details-${response.id}`;
+                    detailRow.style.display = 'none';
+                    
+                    const detailCell = document.createElement('td');
+                    detailCell.colSpan = 6;
+                    detailCell.innerHTML = generateDetailHTML(response);
+                    
+                    detailRow.appendChild(detailCell);
+                    tbody.appendChild(detailRow);
+                });
+                
+                table.appendChild(tbody);
+                responsesContainer.appendChild(table);
+            }
+            
+            function updateStats(responses) {
+                document.getElementById('totalResponses').textContent = responses.length;
+                document.getElementById('parentsResponses').textContent = 
+                    responses.filter(r => r.formType === 'parent').length;
+                document.getElementById('teachersResponses').textContent = 
+                    responses.filter(r => r.formType === 'teacher').length;
+                document.getElementById('professionalsResponses').textContent = 
+                    responses.filter(r => r.formType === 'professional').length;
+            }
+            
+            function toggleResponseDetails(id) {
+                const detailsRow = document.getElementById(`details-${id}`);
+                detailsRow.style.display = detailsRow.style.display === 'none' ? 'table-row' : 'none';
+            }
+            
+            function deleteResponse(id) {
+                if (confirm('Tem certeza que deseja excluir esta resposta?')) {
+                    let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                    responses = responses.filter(r => r.id !== id);
+                    localStorage.setItem('autismSurveyResponses', JSON.stringify(responses));
+                    loadResponses(document.getElementById('filterType').value);
+                }
+            }
+            
+            function generateDetailHTML(response) {
+                let html = '<div class="response-detail" style="display:block;">';
+                
+                // Agrupar dados por seção
+                const sections = {
+                    "Informações Gerais": ['name', 'email', 'formType', 'submissionDate'],
+                    "Perfil": ['profession', 'experience_time', 'location', 'school_type', 'specialized_training', 
+                              'tech_familiarity', 'autism_students', 'autism_children'],
+                    "Características": ['children_age', 'students_age', 'autism_level', 'characteristics', 
+                                      'development_needs', 'school_support'],
+                    "Aprendizagem": ['learning_difficulties', 'interests', 'teaching_methods', 'routine_changes', 
+                                   'curriculum_adaptations', 'therapeutic_approaches', 'professional_challenges',
+                                   'teacher_challenges', 'effective_interventions'],
+                    "Tecnologia": ['devices', 'tech_devices', 'tech_resources', 'tech_frequency', 'tech_purpose', 
+                                 'tech_efficacy', 'tech_aspects', 'tech_barriers', 'tech_effectiveness'],
+                    "Necessidades": ['important_features', 'concerns', 'desired_support', 'unmet_needs', 
+                                   'teacher_desired_tools', 'platform_essentials', 'suggestions', 'desired_tools',
+                                   'support_needed', 'improvement_suggestions']
+                };
+                
+                // Adicionar cada seção
+                for (const [section, fields] of Object.entries(sections)) {
+                    let sectionHasData = false;
+                    let sectionHTML = `<div class="detail-group"><h4>${section}</h4>`;
+                    
+                    for (const field of fields) {
+                        if (response[field] !== undefined && response[field] !== null && response[field] !== '') {
+                            sectionHasData = true;
+                            let value = response[field];
+                            
+                            // Formatar arrays
+                            if (Array.isArray(value)) {
+                                value = value.join(', ');
+                            }
+                            
+                            // Formatar data
+                            if (field === 'submissionDate') {
+                                value = formatDate(value);
+                            }
+                            
+                            // Formatar tipo de formulário
+                            if (field === 'formType') {
+                                value = getFormTypeLabel(value);
+                            }
+                            
+                            sectionHTML += `<p><strong>${getFieldLabel(field)}:</strong> ${value}</p>`;
+                        }
+                    }
+                    
+                    sectionHTML += '</div>';
+                    
+                    if (sectionHasData) {
+                        html += sectionHTML;
+                    }
+                }
+                
+                html += '</div>';
+                return html;
+            }
+            
+            function getFormTypeLabel(type) {
+                const labels = {
+                    'parent': 'Pais',
+                    'teacher': 'Professores',
+                    'professional': 'Profissionais'
+                };
+                return labels[type] || type;
+            }
+            
+            function getFieldLabel(field) {
+                const labels = {
+                    'name': 'Nome',
+                    'email': 'E-mail',
+                    'formType': 'Tipo de Formulário',
+                    'submissionDate': 'Data de Envio',
+                    'profession': 'Profissão',
+                    'experience_time': 'Tempo de Experiência',
+                    'location': 'Localização',
+                    'tech_familiarity': 'Familiaridade com Tecnologia',
+                    'autism_students': 'Qtd. Alunos com Autismo',
+                    'autism_children': 'Qtd. Crianças com Autismo',
+                    'school_type': 'Tipo de Escola',
+                    'specialized_training': 'Formação Especializada',
+                    'children_age': 'Faixa Etária das Crianças',
+                    'students_age': 'Faixa Etária dos Alunos',
+                    'autism_level': 'Nível de Autismo',
+                    'characteristics': 'Características',
+                    'development_needs': 'Necessidades de Desenvolvimento',
+                    'school_support': 'Apoio Escolar',
+                    'learning_difficulties': 'Dificuldades de Aprendizagem',
+                    'interests': 'Interesses',
+                    'teaching_methods': 'Métodos de Ensino',
+                    'routine_changes': 'Reação a Mudanças',
+                    'curriculum_adaptations': 'Adaptações Curriculares',
+                    'therapeutic_approaches': 'Abordagens Terapêuticas',
+                    'professional_challenges': 'Desafios Profissionais',
+                    'teacher_challenges': 'Desafios do Professor',
+                    'effective_interventions': 'Intervenções Eficazes',
+                    'devices': 'Dispositivos',
+                    'tech_devices': 'Dispositivos Tecnológicos',
+                    'tech_resources': 'Recursos Tecnológicos',
+                    'tech_frequency': 'Frequência de Uso',
+                    'tech_purpose': 'Objetivo do Uso',
+                    'tech_efficacy': 'Eficácia da Tecnologia',
+                    'tech_aspects': 'Aspectos da Tecnologia',
+                    'tech_barriers': 'Barreiras Tecnológicas',
+                    'tech_effectiveness': 'Efetividade da Tecnologia',
+                    'important_features': 'Recursos Importantes',
+                    'concerns': 'Preocupações',
+                    'desired_support': 'Apoio Desejado',
+                    'unmet_needs': 'Necessidades Não Atendidas',
+                    'teacher_desired_tools': 'Ferramentas Desejadas pelo Professor',
+                    'platform_essentials': 'Essenciais da Plataforma',
+                    'suggestions': 'Sugestões',
+                    'desired_tools': 'Ferramentas Desejadas',
+                    'support_needed': 'Suporte Necessário',
+                    'improvement_suggestions': 'Sugestões de Melhoria'
+                };
+                return labels[field] || field;
+            }
+            
+            function formatDate(dateString) {
+                try {
+                    const date = new Date(dateString);
+                    return date.toLocaleString('pt-BR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                } catch (e) {
+                    return dateString;
+                }
+            }
+            
+            function exportCSV() {
+                const filterType = document.getElementById('filterType').value;
+                let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                
+                if (filterType !== 'all') {
+                    responses = responses.filter(r => r.formType === filterType);
+                }
+                
+                if (responses.length === 0) {
+                    alert('Não há respostas para exportar.');
+                    return;
+                }
+                
+                // Converter para CSV
+                const csv = convertToCSV(responses);
+                
+                // Criar blob e link de download
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', `respostas_autismo_${filterType}_${formatDateForFilename(new Date())}.csv`);
+                link.style.visibility = 'hidden';
+                
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            
+            function convertToCSV(responses) {
+                if (!responses || responses.length === 0) return '';
+                
+                // Coletar todos os cabeçalhos possíveis
+                const headers = new Set();
+                responses.forEach(response => {
+                    Object.keys(response).forEach(key => headers.add(key));
+                });
+                
+                // Mapear para nomes mais amigáveis
+                const headerRow = Array.from(headers).map(header => getFieldLabel(header)).join(',');
+                
+                // Criar linhas de dados
+                const rows = responses.map(response => {
+                    return Array.from(headers).map(header => {
+                        const value = response[header];
+                        if (value === undefined || value === null) return '';
+                        
+                        // Lidar com arrays
+                        if (Array.isArray(value)) {
+                            return `"${value.join('; ')}"`;
+                        }
+                        
+                        // Formatar tipo de formulário
+                        if (header === 'formType') {
+                            return `"${getFormTypeLabel(value)}"`;
+                        }
+                        
+                        // Formatar data
+                        if (header === 'submissionDate') {
+                            return `"${formatDate(value)}"`;
+                        }
+                        
+                        // Escape strings for CSV
+                        if (typeof value === 'string') {
+                            return `"${value.replace(/"/g, '""')}"`;
+                        }
+                        
+                        return value;
+                    }).join(',');
+                });
+                
+                return headerRow + '\n' + rows.join('\n');
+            }
+            
+            function formatDateForFilename(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}${month}${day}`;
+            }
+            
+            function confirmClearData() {
+                if (confirm('ATENÇÃO: Esta ação excluirá TODAS as respostas salvas. Esta ação não pode ser desfeita. Deseja continuar?')) {
+                    localStorage.removeItem('autismSurveyResponses');
+                    loadResponses();
+                    alert('Todos os dados foram apagados.');
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

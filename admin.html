@@ -610,16 +610,8 @@
                         deleteContainer.appendChild(moreButton);
                         deleteContainer.appendChild(dropdownMenu);
                         
-                        // Adicionar evento para mostrar/ocultar dropdown
-                        moreButton.addEventListener('click', function(e) {
-                            e.stopPropagation();
-                            dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
-                        });
-                        
-                        // Fechar dropdown quando clicar fora
-                        document.addEventListener('click', function() {
-                            dropdownMenu.style.display = 'none';
-                        });
+                        // Usar a função centralizada para configurar o dropdown
+                        setupDropdownButton(moreButton, dropdownMenu);
                         
                         actionsCell.appendChild(viewButton);
                         actionsCell.appendChild(deleteContainer);
@@ -704,10 +696,19 @@
             
             // Gerenciar as abas de estatísticas
             const statsTabs = document.querySelectorAll('.stats-tab');
+            
+            // Evitar registrar múltiplos event listeners em várias chamadas
             statsTabs.forEach(tab => {
+                // Remover event listeners antigos, se existirem
+                tab.replaceWith(tab.cloneNode(true));
+            });
+            
+            // Re-selecionar as abas após substituí-las
+            const refreshedTabs = document.querySelectorAll('.stats-tab');
+            refreshedTabs.forEach(tab => {
                 tab.addEventListener('click', function() {
                     // Remover classe ativa de todas as abas
-                    statsTabs.forEach(t => t.classList.remove('active'));
+                    refreshedTabs.forEach(t => t.classList.remove('active'));
                     // Adicionar classe ativa à aba clicada
                     this.classList.add('active');
                     
@@ -722,9 +723,13 @@
             });
             
             // Atualizar estatísticas quando o filtro mudar
-            document.getElementById('statsFilterType').addEventListener('change', function() {
+            const statsFilterType = document.getElementById('statsFilterType');
+            statsFilterType.removeEventListener('change', updateChartsFromFilter);
+            statsFilterType.addEventListener('change', updateChartsFromFilter);
+            
+            function updateChartsFromFilter() {
                 updateAllCharts(this.value);
-            });
+            }
             
             // Função para inicializar e atualizar os gráficos
             function initializeStats() {
@@ -755,6 +760,15 @@
             
             // Função para criar os objetos de gráficos inicialmente
             function createCharts() {
+                // Limpar gráficos anteriores, se existirem
+                if (window.charts) {
+                    Object.values(window.charts).forEach(chart => {
+                        if (chart && typeof chart.destroy === 'function') {
+                            chart.destroy();
+                        }
+                    });
+                }
+                
                 // Objetos para armazenar as instâncias de gráficos
                 window.charts = {};
                 
@@ -1579,6 +1593,40 @@
                     console.error('Erro ao converter para CSV:', error);
                     throw new Error('Falha ao converter dados para CSV: ' + error.message);
                 }
+            }
+
+            // Fechar dropdown quando clicar fora
+            document.addEventListener('click', function() {
+                const dropdowns = document.querySelectorAll('[data-dropdown-open="true"]');
+                dropdowns.forEach(menu => {
+                    menu.style.display = 'none';
+                    menu.removeAttribute('data-dropdown-open');
+                });
+            });
+
+            // Adicionar evento para mostrar/ocultar dropdown
+            function setupDropdownButton(moreButton, dropdownMenu) {
+                moreButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    
+                    // Fechar todos outros dropdowns
+                    const openDropdowns = document.querySelectorAll('[data-dropdown-open="true"]');
+                    openDropdowns.forEach(menu => {
+                        if (menu !== dropdownMenu) {
+                            menu.style.display = 'none';
+                            menu.removeAttribute('data-dropdown-open');
+                        }
+                    });
+                    
+                    // Alternar este dropdown
+                    if (dropdownMenu.style.display === 'none') {
+                        dropdownMenu.style.display = 'block';
+                        dropdownMenu.setAttribute('data-dropdown-open', 'true');
+                    } else {
+                        dropdownMenu.style.display = 'none';
+                        dropdownMenu.removeAttribute('data-dropdown-open');
+                    }
+                });
             }
         });
     </script>

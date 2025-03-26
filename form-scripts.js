@@ -167,6 +167,12 @@ function setupEventListeners() {
                     ccInput.value = 'andre.scrummaster@gmail.com';
                     tempForm.appendChild(ccInput);
                     
+                    const replyToInput = document.createElement('input');
+                    replyToInput.type = 'hidden';
+                    replyToInput.name = '_replyto';
+                    replyToInput.value = 'andre.scrummaster@gmail.com';
+                    tempForm.appendChild(replyToInput);
+                    
                     // Adicionar o formulário temporário ao documento e enviar
                     document.body.appendChild(tempForm);
                     console.log('Formulário temporário criado e pronto para envio');
@@ -215,6 +221,20 @@ function setupConditionalQuestions() {
             });
         }
     });
+
+    // Configurar campo de localização para respostas internacionais
+    const locationSelect = document.getElementById('location_select');
+    const locationOtherGroup = document.getElementById('location_other_group');
+    
+    if (locationSelect && locationOtherGroup) {
+        locationSelect.addEventListener('change', function() {
+            if (this.value === 'Outside Canada') {
+                locationOtherGroup.style.display = 'block';
+            } else {
+                locationOtherGroup.style.display = 'none';
+            }
+        });
+    }
 }
 
 // Valida campos obrigatórios em uma seção

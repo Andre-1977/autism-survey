@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administração da Pesquisa sobre Autismo</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .admin-container {
             max-width: 1200px;
@@ -243,6 +242,45 @@
             border-radius: 4px;
             border: 1px solid #ddd;
         }
+        
+        /* Estilo adicional para tabelas de estatísticas */
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        
+        .stats-table th, .stats-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .stats-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        
+        .stats-table td.count {
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .stats-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .stats-table tr:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .stats-panel h3 {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -353,108 +391,134 @@
                 <div class="stats-panels">
                     <!-- Painel de estatísticas gerais -->
                     <div class="stats-panel active" id="general-panel">
-                        <div class="chart-row">
-                            <div class="chart-box">
-                                <div class="chart-title">Distribuição de Respostas</div>
-                                <canvas id="responsesTypeChart"></canvas>
-                            </div>
-                            <div class="chart-box">
-                                <div class="chart-title">Respostas por Tempo</div>
-                                <canvas id="responsesByTimeChart"></canvas>
-                            </div>
-                        </div>
+                        <h3>Distribuição de Respostas</h3>
+                        <table class="stats-table" id="responsesTypeTable">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                     
                     <!-- Painel de perfil -->
                     <div class="stats-panel" id="profile-panel">
-                        <div class="chart-row">
-                            <div class="chart-box">
-                                <div class="chart-title">Experiência com Autismo</div>
-                                <canvas id="experienceTimeChart"></canvas>
-                            </div>
-                            <div class="chart-box">
-                                <div class="chart-title">Localização</div>
-                                <canvas id="locationChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="chart-row">
-                            <div class="chart-box">
-                                <div class="chart-title">Familiaridade com Tecnologia</div>
-                                <canvas id="techFamiliarityChart"></canvas>
-                            </div>
-                            <div class="chart-box">
-                                <div class="chart-title">Nível de Autismo</div>
-                                <canvas id="autismLevelChart"></canvas>
-                            </div>
-                        </div>
+                        <h3>Experiência com Autismo</h3>
+                        <table class="stats-table" id="experienceTimeTable">
+                            <thead>
+                                <tr>
+                                    <th>Tempo de Experiência</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+
+                        <h3>Familiaridade com Tecnologia</h3>
+                        <table class="stats-table" id="techFamiliarityTable">
+                            <thead>
+                                <tr>
+                                    <th>Nível</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                     
                     <!-- Painel de aprendizagem -->
                     <div class="stats-panel" id="development-panel">
-                        <div class="chart-row">
-                            <div class="chart-box">
-                                <div class="chart-title">Dificuldades de Aprendizagem</div>
-                                <canvas id="learningDifficultiesChart"></canvas>
-                            </div>
-                            <div class="chart-box">
-                                <div class="chart-title">Áreas de Interesse</div>
-                                <canvas id="interestsChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="chart-row">
-                            <div class="chart-box">
-                                <div class="chart-title">Métodos de Ensino Eficazes</div>
-                                <canvas id="teachingMethodsChart"></canvas>
-                            </div>
-                            <div class="chart-box">
-                                <div class="chart-title">Reação a Mudanças</div>
-                                <canvas id="routineChangesChart"></canvas>
-                            </div>
-                        </div>
+                        <h3>Dificuldades de Aprendizagem</h3>
+                        <table class="stats-table" id="learningDifficultiesTable">
+                            <thead>
+                                <tr>
+                                    <th>Dificuldade</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+
+                        <h3>Reação a Mudanças</h3>
+                        <table class="stats-table" id="routineChangesTable">
+                            <thead>
+                                <tr>
+                                    <th>Reação</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                     
                     <!-- Painel de tecnologia -->
                     <div class="stats-panel" id="technology-panel">
-                        <div class="chart-row">
-                            <div class="chart-box">
-                                <div class="chart-title">Dispositivos Utilizados</div>
-                                <canvas id="devicesChart"></canvas>
-                            </div>
-                            <div class="chart-box">
-                                <div class="chart-title">Recursos Tecnológicos</div>
-                                <canvas id="techResourcesChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="chart-row">
-                            <div class="chart-box">
-                                <div class="chart-title">Frequência de Uso</div>
-                                <canvas id="techFrequencyChart"></canvas>
-                            </div>
-                            <div class="chart-box">
-                                <div class="chart-title">Eficácia da Tecnologia</div>
-                                <canvas id="techEfficacyChart"></canvas>
-                            </div>
-                        </div>
+                        <h3>Dispositivos Utilizados</h3>
+                        <table class="stats-table" id="devicesTable">
+                            <thead>
+                                <tr>
+                                    <th>Dispositivo</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+
+                        <h3>Eficácia da Tecnologia</h3>
+                        <table class="stats-table" id="techEfficacyTable">
+                            <thead>
+                                <tr>
+                                    <th>Nível de Eficácia</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                     
                     <!-- Painel de necessidades -->
                     <div class="stats-panel" id="needs-panel">
-                        <div class="chart-row">
-                            <div class="chart-box">
-                                <div class="chart-title">Recursos Importantes</div>
-                                <canvas id="importantFeaturesChart"></canvas>
-                            </div>
-                            <div class="chart-box">
-                                <div class="chart-title">Preocupações</div>
-                                <canvas id="concernsChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="chart-row">
-                            <div class="chart-box">
-                                <div class="chart-title">Suporte Desejado</div>
-                                <canvas id="desiredSupportChart"></canvas>
-                            </div>
-                        </div>
+                        <h3>Recursos Importantes</h3>
+                        <table class="stats-table" id="importantFeaturesTable">
+                            <thead>
+                                <tr>
+                                    <th>Recurso</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
+
+                        <h3>Suporte Desejado</h3>
+                        <table class="stats-table" id="desiredSupportTable">
+                            <thead>
+                                <tr>
+                                    <th>Tipo de Suporte</th>
+                                    <th>Quantidade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Será preenchido via JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -504,7 +568,7 @@
                 if (confirmText === 'CONFIRMAR') {
                     localStorage.removeItem('autismSurveyResponses');
                     loadResponses('all');
-                    updateAllCharts('all');
+                    updateAllStats('all');
                     alert('Todas as respostas foram excluídas com sucesso.');
                 } else {
                     alert('Operação cancelada. Nenhuma resposta foi excluída.');
@@ -687,7 +751,7 @@
                     responses = responses.filter(r => r.id !== id);
                     localStorage.setItem('autismSurveyResponses', JSON.stringify(responses));
                     loadResponses(document.getElementById('filterType').value);
-                    updateAllCharts(document.getElementById('statsFilterType').value);
+                    updateAllStats(document.getElementById('statsFilterType').value);
                     alert('Resposta excluída com sucesso.');
                 } else {
                     alert('Operação cancelada. A resposta não foi excluída.');
@@ -724,40 +788,22 @@
             
             // Atualizar estatísticas quando o filtro mudar
             const statsFilterType = document.getElementById('statsFilterType');
-            statsFilterType.removeEventListener('change', updateChartsFromFilter);
-            statsFilterType.addEventListener('change', updateChartsFromFilter);
+            statsFilterType.removeEventListener('change', updateStatsFromFilter);
+            statsFilterType.addEventListener('change', updateStatsFromFilter);
             
-            function updateChartsFromFilter() {
-                updateAllCharts(this.value);
+            function updateStatsFromFilter() {
+                updateAllStats(this.value);
             }
             
             // Função para inicializar e atualizar os gráficos
             function initializeStats() {
-                // Limpar eventos existentes
-                removeChartEventListeners();
-                
-                // Criar todos os gráficos inicialmente
-                createCharts();
-                
                 // Configurar atualizações baseadas no filtro
                 const filterType = document.getElementById('statsFilterType').value;
-                updateAllCharts(filterType);
+                updateAllStats(filterType);
             }
             
-            // Remove listeners de eventos que podem causar atualização dos gráficos
-            function removeChartEventListeners() {
-                // Remove eventos da janela que podem ser chamados repetidamente
-                window.removeEventListener('resize', Chart.resize);
-                
-                // Registra evento uma única vez
-                if (!window.chartEventsCleared) {
-                    window.chartEventsCleared = true;
-                    console.log('Eventos de gráficos anteriores removidos');
-                }
-            }
-            
-            // Atualizar todos os gráficos com base no filtro
-            function updateAllCharts(filterType) {
+            // Atualizar todas as estatísticas com base no filtro
+            function updateAllStats(filterType) {
                 // Obter as respostas filtradas
                 let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
                 
@@ -765,7 +811,7 @@
                     responses = responses.filter(r => r.formType === filterType);
                 }
                 
-                // Atualizar cada gráfico
+                // Atualizar cada tabela de estatísticas
                 updateGeneralStats(responses);
                 updateProfileStats(responses);
                 updateDevelopmentStats(responses);
@@ -773,157 +819,10 @@
                 updateNeedsStats(responses);
             }
             
-            // Função para criar os objetos de gráficos inicialmente
-            function createCharts() {
-                // Limpar gráficos anteriores, se existirem
-                if (window.charts) {
-                    Object.values(window.charts).forEach(chart => {
-                        if (chart && typeof chart.destroy === 'function') {
-                            chart.destroy();
-                        }
-                    });
-                }
-                
-                // Objetos para armazenar as instâncias de gráficos
-                window.charts = {};
-                
-                try {
-                    // Gráficos gerais
-                    charts.responsesType = createPieChart('responsesTypeChart', 'Distribuição por Tipo');
-                    charts.responsesByTime = createLineChart('responsesByTimeChart', 'Respostas ao Longo do Tempo');
-                    
-                    // Gráficos de perfil
-                    charts.experienceTime = createBarChart('experienceTimeChart', 'Tempo de Experiência');
-                    charts.location = createBarChart('locationChart', 'Localização');
-                    charts.techFamiliarity = createBarChart('techFamiliarityChart', 'Familiaridade com Tecnologia');
-                    charts.autismLevel = createBarChart('autismLevelChart', 'Nível de Autismo');
-                    
-                    // Gráficos de aprendizagem
-                    charts.learningDifficulties = createBarChart('learningDifficultiesChart', 'Dificuldades de Aprendizagem');
-                    charts.interests = createBarChart('interestsChart', 'Áreas de Interesse');
-                    charts.teachingMethods = createBarChart('teachingMethodsChart', 'Métodos de Ensino');
-                    charts.routineChanges = createPieChart('routineChangesChart', 'Reação a Mudanças');
-                    
-                    // Gráficos de tecnologia
-                    charts.devices = createBarChart('devicesChart', 'Dispositivos');
-                    charts.techResources = createBarChart('techResourcesChart', 'Recursos');
-                    charts.techFrequency = createPieChart('techFrequencyChart', 'Frequência');
-                    charts.techEfficacy = createPieChart('techEfficacyChart', 'Eficácia');
-                    
-                    // Gráficos de necessidades
-                    charts.importantFeatures = createBarChart('importantFeaturesChart', 'Recursos Importantes');
-                    charts.concerns = createBarChart('concernsChart', 'Preocupações');
-                    charts.desiredSupport = createBarChart('desiredSupportChart', 'Suporte Desejado');
-                    
-                    console.log('Gráficos criados com sucesso');
-                } catch (error) {
-                    console.error('Erro ao criar gráficos:', error);
-                }
-            }
-            
-            // Funções auxiliares para criar gráficos
-            function createPieChart(canvasId, label) {
-                const ctx = document.getElementById(canvasId).getContext('2d');
-                return new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        labels: [],
-                        datasets: [{
-                            data: [],
-                            backgroundColor: [
-                                '#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6',
-                                '#1abc9c', '#d35400', '#34495e', '#16a085', '#c0392b'
-                            ]
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'right'
-                            },
-                            title: {
-                                display: false,
-                                text: label
-                            }
-                        }
-                    }
-                });
-            }
-            
-            function createBarChart(canvasId, label) {
-                const ctx = document.getElementById(canvasId).getContext('2d');
-                return new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: [],
-                        datasets: [{
-                            label: label,
-                            data: [],
-                            backgroundColor: '#3498db'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                suggestedMax: 10,
-                                ticks: {
-                                    precision: 0,
-                                    stepSize: 1
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        }
-                    }
-                });
-            }
-            
-            function createLineChart(canvasId, label) {
-                const ctx = document.getElementById(canvasId).getContext('2d');
-                return new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: [],
-                        datasets: [{
-                            label: label,
-                            data: [],
-                            borderColor: '#3498db',
-                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                suggestedMax: 10,
-                                ticks: {
-                                    precision: 0,
-                                    stepSize: 1
-                                }
-                            }
-                        },
-                        animation: {
-                            duration: 0 // Desativa animações para melhor performance
-                        }
-                    }
-                });
-            }
-            
-            // Funções para atualizar os gráficos com dados reais
+            // Funções para atualizar tabelas de estatísticas
             function updateGeneralStats(responses) {
                 try {
-                    // Distribuição por tipo
+                    // Contagem por tipo de formulário
                     const typeCounts = {
                         'parent': 0,
                         'teacher': 0,
@@ -942,44 +841,17 @@
                         'professional': 'Profissionais'
                     };
                     
-                    updateChart(
-                        charts.responsesType,
-                        Object.keys(typeCounts).map(k => typeLabels[k]),
-                        Object.values(typeCounts)
-                    );
-                    
-                    // Respostas ao longo do tempo
-                    const timeData = {};
-                    responses.forEach(r => {
-                        if (r.submissionDate) {
-                            // Converter para data e agrupar por dia
-                            const date = new Date(r.submissionDate);
-                            const dateStr = date.toLocaleDateString('pt-BR');
-                            timeData[dateStr] = (timeData[dateStr] || 0) + 1;
-                        }
-                    });
-                    
-                    // Caso não haja datas (respostas antigas podem não ter), criar um exemplo
-                    if (Object.keys(timeData).length === 0 && responses.length > 0) {
-                        const today = new Date().toLocaleDateString('pt-BR');
-                        timeData[today] = responses.length;
+                    const tableData = [];
+                    for (const [key, label] of Object.entries(typeLabels)) {
+                        tableData.push({
+                            label: label,
+                            value: typeCounts[key] || 0
+                        });
                     }
                     
-                    // Ordenar por data
-                    const sortedDates = Object.keys(timeData).sort((a, b) => {
-                        const partsA = a.split('/').map(Number);
-                        const partsB = b.split('/').map(Number);
-                        // Formato BR: dia/mês/ano
-                        const dateA = new Date(partsA[2], partsA[1] - 1, partsA[0]);
-                        const dateB = new Date(partsB[2], partsB[1] - 1, partsB[0]);
-                        return dateA - dateB;
-                    });
+                    // Atualizar tabela de tipos de resposta
+                    updateStatsTable('responsesTypeTable', tableData);
                     
-                    updateChart(
-                        charts.responsesByTime,
-                        sortedDates,
-                        sortedDates.map(date => timeData[date])
-                    );
                 } catch (error) {
                     console.error('Erro ao atualizar estatísticas gerais:', error);
                 }
@@ -993,19 +865,9 @@
                     '3-5': '3-5 anos',
                     'mais_5': 'Mais de 5 anos'
                 };
-                updateChartFromField(charts.experienceTime, responses, 'experience_time', experienceLabels);
                 
-                // Localização (pegando os top 10)
-                const locationCounts = countResponses(responses, 'location');
-                const topLocations = Object.entries(locationCounts)
-                    .sort((a, b) => b[1] - a[1])
-                    .slice(0, 10);
-                
-                updateChart(
-                    charts.location,
-                    topLocations.map(item => item[0]),
-                    topLocations.map(item => item[1])
-                );
+                const experienceTable = getCountsForTable(responses, 'experience_time', experienceLabels);
+                updateStatsTable('experienceTimeTable', experienceTable);
                 
                 // Familiaridade com tecnologia
                 const techFamiliarityLabels = {
@@ -1014,18 +876,9 @@
                     'advanced': 'Avançado',
                     'expert': 'Especialista'
                 };
-                updateChartFromField(charts.techFamiliarity, responses, 'tech_familiarity', techFamiliarityLabels);
                 
-                // Nível de autismo
-                const autismLevelLabels = {
-                    'level1': 'Nível 1',
-                    'level2': 'Nível 2',
-                    'level3': 'Nível 3',
-                    'mixed': 'Variados',
-                    'unknown': 'Não especificado',
-                    'no_specific': 'Não especificado'
-                };
-                updateChartFromField(charts.autismLevel, responses, 'autism_level', autismLevelLabels);
+                const familiarityTable = getCountsForTable(responses, 'tech_familiarity', techFamiliarityLabels);
+                updateStatsTable('techFamiliarityTable', familiarityTable);
             }
             
             function updateDevelopmentStats(responses) {
@@ -1039,34 +892,9 @@
                     'organization': 'Organização',
                     'following_instructions': 'Seguir instruções'
                 };
-                updateChartFromArrayField(charts.learningDifficulties, responses, 'learning_difficulties', learningLabels);
                 
-                // Áreas de interesse
-                const interestsLabels = {
-                    'technology': 'Tecnologia',
-                    'music': 'Música',
-                    'arts': 'Artes',
-                    'science': 'Ciências',
-                    'sports': 'Esportes',
-                    'math': 'Matemática',
-                    'games': 'Jogos'
-                };
-                updateChartFromArrayField(charts.interests, responses, 'interests', interestsLabels);
-                
-                // Métodos de ensino
-                const methodsLabels = {
-                    'visual': 'Visual',
-                    'auditory': 'Auditivo',
-                    'hands_on': 'Prático',
-                    'verbal': 'Verbal',
-                    'routine': 'Rotinas',
-                    'individual': 'Individualizado',
-                    'peer_learning': 'Entre pares',
-                    'aac': 'Comunicação alternativa'
-                };
-                
-                const methodField = responses[0]?.teaching_methods ? 'teaching_methods' : 'learning_method';
-                updateChartFromArrayField(charts.teachingMethods, responses, methodField, methodsLabels);
+                const learningTable = getArrayCountsForTable(responses, 'learning_difficulties', learningLabels);
+                updateStatsTable('learningDifficultiesTable', learningTable);
                 
                 // Reação a mudanças
                 const routineLabels = {
@@ -1076,7 +904,9 @@
                     'negative_reaction': 'Reação negativa',
                     'varied': 'Variado'
                 };
-                updateChartFromField(charts.routineChanges, responses, 'routine_changes', routineLabels);
+                
+                const routineTable = getCountsForTable(responses, 'routine_changes', routineLabels);
+                updateStatsTable('routineChangesTable', routineTable);
             }
             
             function updateTechnologyStats(responses) {
@@ -1091,30 +921,9 @@
                     'smarttv': 'Smart TV',
                     'none': 'Nenhum'
                 };
-                updateChartFromArrayField(charts.devices, responses, 'devices', devicesLabels);
                 
-                // Recursos tecnológicos
-                const resourcesLabels = {
-                    'educational_games': 'Jogos educativos',
-                    'learning_apps': 'Apps de aprendizagem',
-                    'educational_videos': 'Vídeos educativos',
-                    'online_platforms': 'Plataformas online',
-                    'virtual_reality': 'Realidade virtual',
-                    'communication_apps': 'Apps de comunicação',
-                    'none': 'Nenhum'
-                };
-                updateChartFromArrayField(charts.techResources, responses, 'tech_resources', resourcesLabels);
-                
-                // Frequência de uso
-                const frequencyLabels = {
-                    'daily': 'Diariamente',
-                    'several_week': 'Várias vezes por semana',
-                    'once_week': 'Uma vez por semana',
-                    'occasionally': 'Ocasionalmente',
-                    'rarely': 'Raramente',
-                    'never': 'Nunca'
-                };
-                updateChartFromField(charts.techFrequency, responses, 'tech_frequency', frequencyLabels);
+                const devicesTable = getArrayCountsForTable(responses, 'devices', devicesLabels);
+                updateStatsTable('devicesTable', devicesTable);
                 
                 // Eficácia
                 const efficacyLabels = {
@@ -1124,7 +933,9 @@
                     'not_effective': 'Não eficaz',
                     'do_not_use': 'Não utiliza'
                 };
-                updateChartFromField(charts.techEfficacy, responses, 'tech_efficacy', efficacyLabels);
+                
+                const efficacyTable = getCountsForTable(responses, 'tech_efficacy', efficacyLabels);
+                updateStatsTable('techEfficacyTable', efficacyTable);
             }
             
             function updateNeedsStats(responses) {
@@ -1141,22 +952,9 @@
                     'teacher_guides': 'Guias para professores',
                     'parent_connection': 'Conexão com pais'
                 };
-                updateChartFromArrayField(charts.importantFeatures, responses, 'important_features', featuresLabels);
                 
-                // Preocupações
-                const concernsLabels = {
-                    'screen_time': 'Tempo de tela',
-                    'usability': 'Usabilidade',
-                    'teacher_learning': 'Aprendizado do professor',
-                    'cost': 'Custo',
-                    'content_quality': 'Qualidade do conteúdo',
-                    'online_safety': 'Segurança online',
-                    'distraction': 'Distração',
-                    'curriculum_alignment': 'Alinhamento curricular',
-                    'child_adaptation': 'Adaptação da criança',
-                    'none': 'Nenhuma preocupação'
-                };
-                updateChartFromArrayField(charts.concerns, responses, 'concerns', concernsLabels);
+                const featuresTable = getArrayCountsForTable(responses, 'important_features', featuresLabels);
+                updateStatsTable('importantFeaturesTable', featuresTable);
                 
                 // Suporte desejado
                 const supportLabels = {
@@ -1176,65 +974,17 @@
                 };
                 
                 // Verificar qual campo existe nos dados
-                const supportField = responses.some(r => r.desired_support) ? 'desired_support' : 'support_needed';
-                updateChartFromArrayField(charts.desiredSupport, responses, supportField, supportLabels);
-            }
-            
-            // Funções utilitárias para atualização dos gráficos
-            function updateChart(chart, labels, data) {
-                try {
-                    if (!chart) {
-                        console.error('Gráfico não encontrado');
-                        return;
-                    }
-                    
-                    // Determinar valores máximos para o eixo y
-                    const maxValue = Math.max(...data, 0);
-                    const suggestedMax = Math.ceil(maxValue * 1.2); // 20% maior que o valor máximo
-                    
-                    // Atualizar limites dos eixos
-                    if (chart.options && chart.options.scales && chart.options.scales.y) {
-                        chart.options.scales.y.suggestedMax = Math.max(suggestedMax, 5);
-                        
-                        // Ajustar stepSize baseado no valor máximo
-                        if (maxValue <= 5) {
-                            chart.options.scales.y.ticks.stepSize = 1;
-                        } else if (maxValue <= 20) {
-                            chart.options.scales.y.ticks.stepSize = 2;
-                        } else {
-                            chart.options.scales.y.ticks.stepSize = 5;
-                        }
-                    }
-                    
-                    // Se não houver dados, mostrar mensagem
-                    if (data.length === 0 || data.every(d => d === 0)) {
-                        // Adicionar um dado fictício para mostrar mensagem
-                        chart.data.labels = ['Sem dados'];
-                        chart.data.datasets[0].data = [1];
-                        chart.options.plugins.legend.display = false;
-                    } else {
-                        // Limpar dados anteriores
-                        chart.data.labels = [];
-                        chart.data.datasets[0].data = [];
-                        
-                        // Adicionar novos dados
-                        chart.data.labels = labels;
-                        chart.data.datasets[0].data = data;
-                        chart.options.plugins.legend.display = true;
-                    }
-                    
-                    // Desativar animações para melhor performance
-                    chart.options.animation = {
-                        duration: 0
-                    };
-                    
-                    chart.update('none'); // Use 'none' para desativar todas as animações
-                } catch (error) {
-                    console.error('Erro ao atualizar gráfico:', error);
+                let supportField = 'support_needed';
+                if (responses.some(r => r.desired_support)) {
+                    supportField = 'desired_support';
                 }
+                
+                const supportTable = getArrayCountsForTable(responses, supportField, supportLabels);
+                updateStatsTable('desiredSupportTable', supportTable);
             }
             
-            function countResponses(responses, field) {
+            // Funções utilitárias para estatísticas
+            function getCountsForTable(responses, field, labels = null) {
                 const counts = {};
                 responses.forEach(response => {
                     const value = response[field];
@@ -1242,34 +992,35 @@
                         counts[value] = (counts[value] || 0) + 1;
                     }
                 });
-                return counts;
-            }
-            
-            function updateChartFromField(chart, responses, field, labels = null) {
-                const counts = countResponses(responses, field);
                 
-                // Preparar dados para o gráfico
-                let chartLabels = [];
-                let chartData = [];
+                // Preparar dados para a tabela
+                const tableData = [];
                 
                 if (labels) {
                     // Usar rótulos predefinidos, se fornecidos
                     for (const [key, label] of Object.entries(labels)) {
-                        if (key in counts) {
-                            chartLabels.push(label);
-                            chartData.push(counts[key]);
-                        }
+                        tableData.push({
+                            label: label,
+                            value: counts[key] || 0
+                        });
                     }
                 } else {
                     // Usar valores diretamente como rótulos
-                    chartLabels = Object.keys(counts);
-                    chartData = Object.values(counts);
+                    for (const [key, count] of Object.entries(counts)) {
+                        tableData.push({
+                            label: key,
+                            value: count
+                        });
+                    }
                 }
                 
-                updateChart(chart, chartLabels, chartData);
+                // Ordenar por contagem (maior primeiro)
+                tableData.sort((a, b) => b.value - a.value);
+                
+                return tableData;
             }
             
-            function countArrayResponses(responses, field) {
+            function getArrayCountsForTable(responses, field, labels = null) {
                 const counts = {};
                 responses.forEach(response => {
                     const values = response[field];
@@ -1279,31 +1030,71 @@
                         });
                     }
                 });
-                return counts;
-            }
-            
-            function updateChartFromArrayField(chart, responses, field, labels = null) {
-                const counts = countArrayResponses(responses, field);
                 
-                // Preparar dados para o gráfico
-                let chartLabels = [];
-                let chartData = [];
+                // Preparar dados para a tabela
+                const tableData = [];
                 
                 if (labels) {
                     // Usar rótulos predefinidos, se fornecidos
                     for (const [key, label] of Object.entries(labels)) {
                         if (key in counts) {
-                            chartLabels.push(label);
-                            chartData.push(counts[key]);
+                            tableData.push({
+                                label: label,
+                                value: counts[key] || 0
+                            });
                         }
                     }
                 } else {
                     // Usar valores diretamente como rótulos
-                    chartLabels = Object.keys(counts);
-                    chartData = Object.values(counts);
+                    for (const [key, count] of Object.entries(counts)) {
+                        tableData.push({
+                            label: key,
+                            value: count
+                        });
+                    }
                 }
                 
-                updateChart(chart, chartLabels, chartData);
+                // Ordenar por contagem (maior primeiro)
+                tableData.sort((a, b) => b.value - a.value);
+                
+                return tableData;
+            }
+            
+            function updateStatsTable(tableId, data) {
+                const table = document.getElementById(tableId);
+                if (!table) return;
+                
+                const tbody = table.querySelector('tbody');
+                tbody.innerHTML = '';
+                
+                if (data.length === 0) {
+                    const row = document.createElement('tr');
+                    const cell = document.createElement('td');
+                    cell.colSpan = 2;
+                    cell.textContent = 'Sem dados disponíveis';
+                    cell.style.textAlign = 'center';
+                    cell.style.fontStyle = 'italic';
+                    row.appendChild(cell);
+                    tbody.appendChild(row);
+                    return;
+                }
+                
+                // Adicionar cada linha à tabela
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    
+                    const labelCell = document.createElement('td');
+                    labelCell.textContent = item.label;
+                    
+                    const valueCell = document.createElement('td');
+                    valueCell.textContent = item.value;
+                    valueCell.className = 'count';
+                    valueCell.style.textAlign = 'center';
+                    
+                    row.appendChild(labelCell);
+                    row.appendChild(valueCell);
+                    tbody.appendChild(row);
+                });
             }
             
             // Função para formatar data para nome de arquivo
@@ -1390,7 +1181,7 @@
                         
                         // Recarregar dados
                         loadResponses(document.getElementById('filterType').value);
-                        updateAllCharts(document.getElementById('statsFilterType').value);
+                        updateAllStats(document.getElementById('statsFilterType').value);
                         
                         // Mensagem de sucesso
                         alert(`Importação concluída com sucesso! ${newResponses.length} novas respostas foram adicionadas.`);

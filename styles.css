@@ -1,0 +1,246 @@
+/* General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+h2 {
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 15px;
+}
+
+/* Form Sections */
+.form-section {
+    display: none;
+    margin-bottom: 20px;
+}
+
+.active {
+    display: block;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.radio-group,
+.checkbox-group {
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+.radio-group label,
+.checkbox-group label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: normal;
+    padding-left: 25px;
+    position: relative;
+    cursor: pointer;
+}
+
+.radio-group input[type="radio"],
+.checkbox-group input[type="checkbox"] {
+    margin-right: 8px;
+    position: absolute;
+    left: 0;
+    top: 3px;
+}
+
+/* Buttons */
+.navigation-buttons,
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button,
+.btn-next,
+.btn-prev,
+.btn-submit {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+button:hover,
+.btn-next:hover,
+.btn-prev:hover,
+.btn-submit:hover {
+    background-color: #2980b9;
+}
+
+.prev-btn,
+.btn-prev {
+    background-color: #95a5a6;
+}
+
+.prev-btn:hover,
+.btn-prev:hover {
+    background-color: #7f8c8d;
+}
+
+/* Required Fields */
+.required {
+    color: red;
+    margin-left: 3px;
+}
+
+/* Progress Bar */
+.progress-container {
+    margin: 20px 0;
+    background-color: #ecf0f1;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 10px;
+}
+
+.progress-bar {
+    height: 10px;
+    background-color: #ecf0f1;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background-color: #3498db;
+    width: 20%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 5px;
+}
+
+/* Role Indicator */
+.role-indicator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.back-link {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* Survey Header */
+.survey-header {
+    margin-bottom: 30px;
+}
+
+/* Error Messages */
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.error-highlight {
+    color: #e74c3c !important;
+    border-color: #e74c3c !important;
+}
+
+input.error-highlight, 
+select.error-highlight, 
+textarea.error-highlight {
+    border-color: #e74c3c !important;
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .container {
+        padding: 15px;
+    }
+    
+    button,
+    .btn-next,
+    .btn-prev,
+    .btn-submit {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .radio-group label,
+    .checkbox-group label {
+        font-size: 14px;
+        padding-left: 22px;
+    }
+} 

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa sobre Autismo - Pais/Responsáveis</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Pesquisa sobre Autismo</h1>
+        <div class="role-indicator">
+            <span>Formulário para: <strong>Pais/Responsáveis</strong></span>
+            <a href="index.html" class="back-link">Voltar à seleção</a>
+        </div>
+        
+        <form id="parentSurvey" action="#" method="post">
+            <!-- Section 1: Perfil do Respondente -->
+            <section id="section1" class="form-section active">
+                <h2>PERFIL DO RESPONDENTE</h2>
+                <p>Nesta seção, queremos conhecer um pouco sobre você e sua experiência como pai/mãe/responsável.</p>
+                
+                <div class="form-group">
+                    <label for="name">Nome completo</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail para contato <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Você é: <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="parent_role" value="pai" required> Pai</label>
+                        <label><input type="radio" name="parent_role" value="mae"> Mãe</label>
+                        <label><input type="radio" name="parent_role" value="outro_responsavel"> Outro responsável</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Há quanto tempo você lida com o autismo do seu filho/filha? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="experience_time" value="menos_1" required> Menos de 1 ano</label>
+                        <label><input type="radio" name="experience_time" value="1-3"> 1-3 anos</label>
+                        <label><input type="radio" name="experience_time" value="3-5"> 3-5 anos</label>
+                        <label><input type="radio" name="experience_time" value="mais_5"> Mais de 5 anos</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Qual sua localização? <span class="required">*</span></label>
+                    <select name="location" required>
+                        <option value="">Selecione uma opção</option>
+                        <option value="Alberta">Alberta</option>
+                        <option value="British Columbia">British Columbia</option>
+                        <option value="New Brunswick">New Brunswick</option>
+                        <option value="Newfoundland and Labrador">Newfoundland and Labrador</option>
+                        <option value="Nova Scotia">Nova Scotia</option>
+                        <option value="Ontario">Ontario</option>
+                        <option value="Prince Edward Island">Prince Edward Island</option>
+                        <option value="Quebec">Quebec</option>
+                        <option value="Saskatchewan">Saskatchewan</option>
+                        <option value="Northwest Territories">Northwest Territories</option>
+                        <option value="Nunavut">Nunavut</option>
+                        <option value="Yukon">Yukon</option>
+                        <option value="Outside Canada">Fora do Canadá</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Como você avalia seu conhecimento sobre autismo? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="autism_knowledge" value="beginner" required> Iniciante (Estou começando a aprender)</label>
+                        <label><input type="radio" name="autism_knowledge" value="intermediate"> Intermediário (Tenho conhecimento razoável)</label>
+                        <label><input type="radio" name="autism_knowledge" value="advanced"> Avançado (Tenho bastante conhecimento)</label>
+                        <label><input type="radio" name="autism_knowledge" value="expert"> Especialista (Domino o assunto)</label>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="next-btn" id="next1">Próxima Seção</button>
+                </div>
+            </section>
+
+            <!-- Section 2: Perfil da Criança -->
+            <section id="section2" class="form-section">
+                <h2>PERFIL DA CRIANÇA</h2>
+                <p>Nesta seção, queremos conhecer mais sobre seu filho/filha com autismo.</p>
+                
+                <div class="form-group">
+                    <label>Qual a idade da criança? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="child_age" value="2-5" required> 2-5 anos</label>
+                        <label><input type="radio" name="child_age" value="6-10"> 6-10 anos</label>
+                        <label><input type="radio" name="child_age" value="11-15"> 11-15 anos</label>
+                        <label><input type="radio" name="child_age" value="16-18"> 16-18 anos</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Qual o nível de autismo diagnosticado? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="autism_level" value="level1" required> Nível 1 (Suporte Requerido)</label>
+                        <label><input type="radio" name="autism_level" value="level2"> Nível 2 (Suporte Substancial)</label>
+                        <label><input type="radio" name="autism_level" value="level3"> Nível 3 (Suporte Muito Substancial)</label>
+                        <label><input type="radio" name="autism_level" value="no_specific"> Não tenho diagnóstico específico de nível</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais características você observa na criança? (Selecione todas que se aplicam) <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="characteristics[]" value="social_communication"> Dificuldade na comunicação social</label>
+                        <label><input type="checkbox" name="characteristics[]" value="restricted_interests"> Interesses restritos ou repetitivos</label>
+                        <label><input type="checkbox" name="characteristics[]" value="sensory_sensitivity"> Sensibilidade sensorial</label>
+                        <label><input type="checkbox" name="characteristics[]" value="routine_changes"> Dificuldade com mudanças na rotina</label>
+                        <label><input type="checkbox" name="characteristics[]" value="special_skills"> Habilidades especiais em áreas específicas</label>
+                        <label><input type="checkbox" name="characteristics[]" value="social_interaction"> Dificuldade com interação social</label>
+                        <label>
+                            <input type="checkbox" name="characteristics[]" value="other" id="characteristics_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="characteristics_other" id="characteristics_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Em qual ambiente educacional a criança está atualmente? <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="environment[]" value="regular_school"> Escola regular</label>
+                        <label><input type="checkbox" name="environment[]" value="special_school"> Escola especializada</label>
+                        <label><input type="checkbox" name="environment[]" value="homeschooling"> Educação domiciliar</label>
+                        <label><input type="checkbox" name="environment[]" value="no_education"> Ainda não está em ambiente educacional</label>
+                        <label>
+                            <input type="checkbox" name="environment[]" value="other" id="environment_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="environment_other" id="environment_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais terapias a criança recebe atualmente? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="therapies[]" value="occupational"> Terapia ocupacional</label>
+                        <label><input type="checkbox" name="therapies[]" value="speech"> Fonoaudiologia</label>
+                        <label><input type="checkbox" name="therapies[]" value="psychology"> Psicologia</label>
+                        <label><input type="checkbox" name="therapies[]" value="behavioral"> Terapia comportamental (ABA)</label>
+                        <label><input type="checkbox" name="therapies[]" value="none"> Nenhuma terapia no momento</label>
+                        <label>
+                            <input type="checkbox" name="therapies[]" value="other" id="therapies_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="therapies_other" id="therapies_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="prev-btn" id="prev2">Seção Anterior</button>
+                    <button type="button" class="next-btn" id="next2">Próxima Seção</button>
+                </div>
+            </section>
+
+            <!-- Section 3: Aprendizagem e Desenvolvimento -->
+            <section id="section3" class="form-section">
+                <h2>APRENDIZAGEM E DESENVOLVIMENTO</h2>
+                <p>Nesta seção, queremos entender melhor sobre o processo de aprendizagem da criança.</p>
+                
+                <div class="form-group">
+                    <label>Quais são as principais dificuldades de aprendizagem observadas? (Selecione todas que se aplicam) <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="learning_difficulties[]" value="communication"> Comunicação</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="math"> Matemática</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="reading_writing"> Leitura e escrita</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="social_skills"> Habilidades sociais</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="concentration"> Concentração</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="organization"> Organização</label>
+                        <label>
+                            <input type="checkbox" name="learning_difficulties[]" value="other" id="difficulties_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="difficulties_other" id="difficulties_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais são os principais interesses da criança? (Selecione todas que se aplicam) <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="interests[]" value="technology"> Tecnologia</label>
+                        <label><input type="checkbox" name="interests[]" value="music"> Música</label>
+                        <label><input type="checkbox" name="interests[]" value="arts"> Artes</label>
+                        <label><input type="checkbox" name="interests[]" value="science"> Ciências</label>
+                        <label><input type="checkbox" name="interests[]" value="sports"> Esportes</label>
+                        <label><input type="checkbox" name="interests[]" value="math"> Matemática</label>
+                        <label><input type="checkbox" name="interests[]" value="games"> Jogos</label>
+                        <label>
+                            <input type="checkbox" name="interests[]" value="other" id="interests_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="interests_other" id="interests_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Qual o método de aprendizagem mais eficaz para a criança? (Selecione todas que se aplicam) <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="learning_method[]" value="visual"> Visual (imagens, vídeos)</label>
+                        <label><input type="checkbox" name="learning_method[]" value="auditory"> Auditivo (músicas, sons)</label>
+                        <label><input type="checkbox" name="learning_method[]" value="hands_on"> Prático (mãos na massa)</label>
+                        <label><input type="checkbox" name="learning_method[]" value="verbal"> Verbal (explicações orais)</label>
+                        <label><input type="checkbox" name="learning_method[]" value="combined"> Combinação de métodos</label>
+                        <label>
+                            <input type="checkbox" name="learning_method[]" value="other" id="method_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="method_other" id="method_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Como a criança reage a mudanças na rotina de aprendizagem? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="routine_changes" value="very_adaptable" required> Muito bem adaptada</label>
+                        <label><input type="radio" name="routine_changes" value="adapts_with_time"> Adapta-se com algum tempo</label>
+                        <label><input type="radio" name="routine_changes" value="difficult_adaptation"> Tem dificuldade para se adaptar</label>
+                        <label><input type="radio" name="routine_changes" value="negative_reaction"> Reage negativamente</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Como você avalia o progresso atual da criança? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="progress" value="excellent" required> Excelente progresso</label>
+                        <label><input type="radio" name="progress" value="good"> Bom progresso</label>
+                        <label><input type="radio" name="progress" value="moderate"> Progresso moderado</label>
+                        <label><input type="radio" name="progress" value="slow"> Progresso lento</label>
+                        <label><input type="radio" name="progress" value="difficult"> Dificuldade de progresso</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais desafios específicos você enfrenta como pai/mãe no processo de aprendizagem da criança? <span class="required">*</span></label>
+                    <textarea name="parent_challenges" rows="4" required></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="prev-btn" id="prev3">Seção Anterior</button>
+                    <button type="button" class="next-btn" id="next3">Próxima Seção</button>
+                </div>
+            </section>
+
+            <!-- Section 4: Tecnologia e Recursos -->
+            <section id="section4" class="form-section">
+                <h2>TECNOLOGIA E RECURSOS</h2>
+                <p>Nesta seção, queremos entender como a tecnologia é utilizada no processo de aprendizagem.</p>
+                
+                <div class="form-group">
+                    <label>Quais dispositivos tecnológicos a criança utiliza para aprender? (Selecione todas que se aplicam) <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="devices[]" value="tablet"> Tablet</label>
+                        <label><input type="checkbox" name="devices[]" value="computer"> Computador</label>
+                        <label><input type="checkbox" name="devices[]" value="smartphone"> Smartphone</label>
+                        <label><input type="checkbox" name="devices[]" value="smarttv"> Smart TV</label>
+                        <label><input type="checkbox" name="devices[]" value="none"> Nenhum dispositivo</label>
+                        <label>
+                            <input type="checkbox" name="devices[]" value="other" id="devices_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="devices_other" id="devices_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais tipos de recursos tecnológicos são utilizados? (Selecione todas que se aplicam) <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="tech_resources[]" value="educational_games"> Jogos educativos</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="learning_apps"> Aplicativos de aprendizagem</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="educational_videos"> Vídeos educativos</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="online_platforms"> Plataformas de ensino online</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="none"> Nenhum recurso específico</label>
+                        <label>
+                            <input type="checkbox" name="tech_resources[]" value="other" id="resources_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="resources_other" id="resources_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quanto tempo a criança passa usando tecnologia para fins EDUCACIONAIS por dia? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="educational_tech_time" value="less_30" required> Menos de 30 minutos</label>
+                        <label><input type="radio" name="educational_tech_time" value="30-60"> 30 minutos a 1 hora</label>
+                        <label><input type="radio" name="educational_tech_time" value="1-2"> 1-2 horas</label>
+                        <label><input type="radio" name="educational_tech_time" value="more_2"> Mais de 2 horas</label>
+                        <label><input type="radio" name="educational_tech_time" value="none"> Não utiliza tecnologia</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quanto tempo a criança passa usando tecnologia para fins RECREACIONAIS por dia?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="recreational_tech_time" value="less_30"> Menos de 30 minutos</label>
+                        <label><input type="radio" name="recreational_tech_time" value="30-60"> 30 minutos a 1 hora</label>
+                        <label><input type="radio" name="recreational_tech_time" value="1-2"> 1-2 horas</label>
+                        <label><input type="radio" name="recreational_tech_time" value="more_2"> Mais de 2 horas</label>
+                        <label><input type="radio" name="recreational_tech_time" value="none"> Não utiliza tecnologia</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Como você avalia a eficácia dos recursos tecnológicos atuais? <span class="required">*</span></label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="tech_efficacy" value="very_effective" required> Muito eficazes</label>
+                        <label><input type="radio" name="tech_efficacy" value="moderately_effective"> Moderadamente eficazes</label>
+                        <label><input type="radio" name="tech_efficacy" value="slightly_effective"> Pouco eficazes</label>
+                        <label><input type="radio" name="tech_efficacy" value="not_effective"> Não são eficazes</label>
+                        <label><input type="radio" name="tech_efficacy" value="do_not_use"> Não utiliza recursos tecnológicos</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais aspectos da tecnologia a criança mais gosta? (Selecione todas que se aplicam) <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="tech_aspects[]" value="interactivity"> Interatividade</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="immediate_feedback"> Feedback imediato</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="visuals"> Elementos visuais</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="sounds"> Sons e músicas</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="rewards"> Desafios e recompensas</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="none"> Nenhum aspecto específico</label>
+                        <label>
+                            <input type="checkbox" name="tech_aspects[]" value="other" id="aspects_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="aspects_other" id="aspects_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="prev-btn" id="prev4">Seção Anterior</button>
+                    <button type="button" class="next-btn" id="next4">Próxima Seção</button>
+                </div>
+            </section>
+
+            <!-- Section 5: Necessidades e Expectativas -->
+            <section id="section5" class="form-section">
+                <h2>NECESSIDADES E EXPECTATIVAS</h2>
+                <p>Nesta seção, queremos entender suas necessidades e expectativas para melhorar o processo de aprendizagem.</p>
+                
+                <div class="form-group">
+                    <label>Quais recursos você considera mais importantes em uma plataforma educacional para seu filho/filha? (Selecione todas que se aplicam) <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="important_features[]" value="personalization"> Personalização do conteúdo</label>
+                        <label><input type="checkbox" name="important_features[]" value="adaptive"> Interface adaptativa</label>
+                        <label><input type="checkbox" name="important_features[]" value="feedback"> Feedback em tempo real</label>
+                        <label><input type="checkbox" name="important_features[]" value="progress_reports"> Relatórios de progresso</label>
+                        <label><input type="checkbox" name="important_features[]" value="visuals"> Recursos visuais</label>
+                        <label><input type="checkbox" name="important_features[]" value="interactivity"> Interatividade</label>
+                        <label><input type="checkbox" name="important_features[]" value="different_levels"> Suporte para diferentes níveis</label>
+                        <label>
+                            <input type="checkbox" name="important_features[]" value="other" id="features_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="features_other" id="features_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais são suas principais preocupações ao usar recursos tecnológicos educacionais? (Selecione todas que se aplicam) <span class="required">*</span></label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="concerns[]" value="screen_time"> Tempo excessivo de tela</label>
+                        <label><input type="checkbox" name="concerns[]" value="usability"> Dificuldade de uso</label>
+                        <label><input type="checkbox" name="concerns[]" value="cost"> Custo</label>
+                        <label><input type="checkbox" name="concerns[]" value="content_quality"> Qualidade do conteúdo</label>
+                        <label><input type="checkbox" name="concerns[]" value="online_safety"> Segurança online</label>
+                        <label><input type="checkbox" name="concerns[]" value="child_adaptation"> Adaptação da criança</label>
+                        <label><input type="checkbox" name="concerns[]" value="none"> Nenhuma preocupação específica</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Como pai/mãe, quais atividades você gostaria de realizar junto com seu filho através de uma plataforma educacional? <span class="required">*</span></label>
+                    <textarea name="parent_activities" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais necessidades específicas de seu filho não estão sendo atendidas pelos recursos educacionais atuais? <span class="required">*</span></label>
+                    <textarea name="unmet_needs" rows="4" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Você tem alguma sugestão específica para melhorar os recursos educacionais tecnológicos para crianças com autismo?</label>
+                    <textarea name="suggestions" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Embora nossa plataforma seja voltada para crianças, estamos avaliando a possibilidade de oferecer recursos para adultos autistas. Você teria interesse em utilizar essa plataforma para você ou outro adulto com autismo? Se sim, que tipo de suporte ou adaptação seria importante?</label>
+                    <textarea name="adult_resources" rows="4"></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="prev-btn" id="prev5">Seção Anterior</button>
+                    <button type="submit" class="submit-btn" id="submit">Enviar Pesquisa</button>
+                </div>
+            </section>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="progress-text">Seção 1 de 5</div>
+            </div>
+        </form>
+    </div>
+
+    <script src="form-scripts.js"></script>
+</body>
+</html> 

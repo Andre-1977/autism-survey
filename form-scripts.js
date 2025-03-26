@@ -27,6 +27,35 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSection = 1;
     const totalSections = 5;
 
+    // Configurar campo de localização para formulário de profissionais
+    if (formType === 'professional') {
+        const locationSelect = document.getElementById('location_select');
+        const locationOtherGroup = document.getElementById('location_other_group');
+        
+        // Esconder o campo de 'outra localização' inicialmente
+        if (locationOtherGroup) {
+            locationOtherGroup.style.display = 'none';
+        }
+        
+        // Adicionar evento para exibir o campo quando 'outro' for selecionado
+        if (locationSelect && locationOtherGroup) {
+            locationSelect.addEventListener('change', function() {
+                if (this.value === 'outro' || this.value === 'exterior') {
+                    locationOtherGroup.style.display = 'block';
+                } else {
+                    locationOtherGroup.style.display = 'none';
+                    // Limpar o campo de texto quando não estiver sendo usado
+                    document.getElementById('location_other').value = '';
+                }
+            });
+            
+            // Verificar estado inicial (importante para respostas carregadas)
+            if (locationSelect.value === 'outro' || locationSelect.value === 'exterior') {
+                locationOtherGroup.style.display = 'block';
+            }
+        }
+    }
+
     // Função para salvar respostas temporárias
     function saveTemporaryResponses() {
         const formData = new FormData(currentForm);
@@ -97,6 +126,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Verificar opções "Outro"
                     setupOtherOptions();
+                    
+                    // Verificar a opção de localização para formulário de profissionais
+                    if (formType === 'professional') {
+                        const locationSelect = document.getElementById('location_select');
+                        const locationOtherGroup = document.getElementById('location_other_group');
+                        
+                        if (locationSelect && locationOtherGroup && 
+                            (locationSelect.value === 'outro' || locationSelect.value === 'exterior')) {
+                            locationOtherGroup.style.display = 'block';
+                        }
+                    }
                 }
             } catch (e) {
                 console.error('Erro ao carregar dados temporários:', e);
@@ -441,4 +481,4 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Iniciar o formulário
     initForm();
-});
+}); 

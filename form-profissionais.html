@@ -3,26 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pesquisa sobre Crianças com Autismo - Profissionais</title>
+    <title>Pesquisa sobre Autismo - Profissionais</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <div class="survey-header">
-            <h1>Pesquisa sobre Experiências com Crianças com Autismo</h1>
-            <div class="role-indicator">
-                <h2>Formulário para Profissionais</h2>
-                <a href="index.html" class="back-link">← Voltar para a página inicial</a>
-            </div>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress"></div>
-                </div>
-                <div class="progress-text">Seção 1 de 5</div>
-            </div>
+        <h1>Pesquisa sobre Autismo</h1>
+        <div class="role-indicator">
+            <span>Formulário para: <strong>Profissionais</strong></span>
+            <a href="index.html" class="back-link">Voltar à seleção</a>
         </div>
-
-        <form id="professionalSurvey" class="survey-form">
+        
+        <form id="professionalSurvey" action="https://formsubmit.co/andre.scrummaster@gmail.com" method="POST" data-form-type="profissionais">
+            <!-- Campo honeypot para evitar spam -->
+            <input type="text" name="_honey" style="display:none">
+            
+            <!-- Desativar captcha -->
+            <input type="hidden" name="_captcha" value="false">
+            
+            <!-- Redirecionamento após envio -->
+            <input type="hidden" name="_next" value="https://seu-usuario.github.io/autism-survey/agradecimento.html">
+            
+            <!-- Identificação do tipo de formulário -->
+            <input type="hidden" name="tipoFormulario" value="profissionais">
+            
+            <!-- ID único para a resposta -->
+            <input type="hidden" name="id" id="form_unique_id">
+            
+            <!-- Data e hora do envio -->
+            <input type="hidden" name="dataEnvio" id="form_timestamp">
+            
             <!-- SEÇÃO 1: PERFIL DO RESPONDENTE -->
             <div id="section1" class="form-section active">
                 <h2>PERFIL DO RESPONDENTE</h2>
@@ -353,6 +363,14 @@
             </div>
         </form>
     </div>
+
+    <script>
+        // Gerar ID único para o formulário
+        document.getElementById('form_unique_id').value = 'resp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        
+        // Adicionar timestamp atual
+        document.getElementById('form_timestamp').value = new Date().toISOString();
+    </script>
     <script src="form-scripts.js"></script>
 </body>
 </html> 

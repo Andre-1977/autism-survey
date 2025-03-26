@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obrigado por Participar - Pesquisa sobre Autismo</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .thank-you-container {
+            text-align: center;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .thank-you-icon {
+            font-size: 72px;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        
+        .thank-you-title {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .thank-you-message {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .buttons {
+            margin-top: 30px;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 0 10px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .button:hover {
+            background-color: #2980b9;
+        }
+        
+        .button-outline {
+            background-color: transparent;
+            border: 2px solid #3498db;
+            color: #3498db;
+        }
+        
+        .button-outline:hover {
+            background-color: #f5f9ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="thank-you-container">
+            <div class="thank-you-icon">✓</div>
+            <h1 class="thank-you-title">Obrigado pela sua participação!</h1>
+            
+            <p class="thank-you-message">
+                Sua resposta foi enviada com sucesso e é muito importante para nossa pesquisa sobre educação e autismo. 
+                Juntos, podemos contribuir para um melhor entendimento das necessidades específicas de crianças com autismo.
+            </p>
+            
+            <p class="thank-you-message">
+                Suas informações foram enviadas para nossa equipe e também foram salvas localmente como backup.
+            </p>
+            
+            <div class="buttons">
+                <a href="index.html" class="button">Voltar ao Início</a>
+                <a href="https://github.com/seu-usuario/autism-survey" class="button button-outline" target="_blank">Ver Projeto no GitHub</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

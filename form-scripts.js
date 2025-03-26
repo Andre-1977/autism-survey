@@ -147,16 +147,42 @@ document.addEventListener('DOMContentLoaded', function() {
     // Funções para salvar e gerenciar respostas
     function saveResponses(responses) {
         // Obter respostas existentes ou criar nova lista
+        console.log('Salvando respostas...');
         let allResponses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+        console.log('Respostas existentes:', allResponses.length);
         
         // Adicionar ID único para esta resposta
         responses.id = 'response_' + Date.now();
+        console.log('ID gerado:', responses.id);
         
         // Adicionar às respostas existentes
         allResponses.push(responses);
+        console.log('Novas respostas total:', allResponses.length);
         
         // Salvar no localStorage
-        localStorage.setItem('autismSurveyResponses', JSON.stringify(allResponses));
+        try {
+            const jsonString = JSON.stringify(allResponses);
+            console.log('Tamanho do JSON:', jsonString.length, 'bytes');
+            localStorage.setItem('autismSurveyResponses', jsonString);
+            console.log('Resposta salva com sucesso');
+            
+            // Verificar se foi salvo corretamente
+            const verificacao = localStorage.getItem('autismSurveyResponses');
+            console.log('Verificação de salvamento:', verificacao ? 'OK' : 'Falha');
+            
+            // Estimativa do espaço utilizado no localStorage
+            let totalSize = 0;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                const value = localStorage.getItem(key);
+                totalSize += (key.length + value.length) * 2; // aproximado em bytes
+            }
+            console.log('Espaço total usado no localStorage:', (totalSize / 1024).toFixed(2), 'KB');
+            console.log('Limite típico do localStorage:', '5-10 MB');
+        } catch (e) {
+            console.error('Erro ao salvar no localStorage:', e);
+            alert('Erro ao salvar: ' + e.message);
+        }
         
         // Limpar dados temporários
         localStorage.removeItem('autismSurveyTempData');
@@ -397,11 +423,30 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (validateSection(`section${totalSections}`)) {
                     // Salvar respostas
                     const responses = saveTemporaryResponses();
-                    const responseId = saveResponses(responses);
                     
-                    // Alertar e redirecionar
-                    alert('Obrigado por participar da nossa pesquisa! Suas respostas foram salvas com sucesso.');
-                    window.location.href = 'index.html'; // Redirecionar para a página inicial
+                    try {
+                        // Salvar no localStorage
+                        const responseId = saveResponses(responses);
+                        console.log('Resposta salva com ID:', responseId);
+                        
+                        // Verificar se a resposta foi realmente salva
+                        const savedResponses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                        const saved = savedResponses.some(r => r.id === responseId);
+                        
+                        if (saved) {
+                            // Mostrar alerta de sucesso
+                            alert('Obrigado por participar da nossa pesquisa! Suas respostas foram salvas com sucesso.');
+                            // Redirecionar para a página inicial
+                            window.location.href = 'index.html';
+                        } else {
+                            alert('Houve um problema ao salvar suas respostas. Por favor, tente novamente.');
+                            console.error('Resposta não encontrada após salvamento');
+                        }
+                    } catch (error) {
+                        // Lidar com erros
+                        console.error('Erro ao salvar respostas:', error);
+                        alert('Houve um erro ao salvar suas respostas. Por favor, tente novamente.');
+                    }
                 }
             });
         }

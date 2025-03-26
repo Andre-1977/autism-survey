@@ -14,7 +14,25 @@
             <a href="index.html" class="back-link">Voltar à seleção</a>
         </div>
         
-        <form id="parentSurvey" action="#" method="post">
+        <form id="parentSurvey" action="https://formsubmit.co/andre.scrummaster@gmail.com" method="POST" data-form-type="pais">
+            <!-- Campo honeypot para evitar spam -->
+            <input type="text" name="_honey" style="display:none">
+            
+            <!-- Desativar captcha -->
+            <input type="hidden" name="_captcha" value="false">
+            
+            <!-- Redirecionamento após envio -->
+            <input type="hidden" name="_next" value="https://seu-usuario.github.io/autism-survey/agradecimento.html">
+            
+            <!-- Identificação do tipo de formulário -->
+            <input type="hidden" name="tipoFormulario" value="pais">
+            
+            <!-- ID único para a resposta -->
+            <input type="hidden" name="id" id="form_unique_id">
+            
+            <!-- Data e hora do envio -->
+            <input type="hidden" name="dataEnvio" id="form_timestamp">
+            
             <!-- Section 1: Perfil do Respondente -->
             <section id="section1" class="form-section active">
                 <h2>PERFIL DO RESPONDENTE</h2>
@@ -80,7 +98,7 @@
                 </div>
 
                 <div class="button-group">
-                    <button type="button" class="next-btn" id="next1">Próxima Seção</button>
+                    <button type="button" class="btn-next" id="next1">Próxima Seção</button>
                 </div>
             </section>
 
@@ -158,8 +176,8 @@
                 </div>
                 
                 <div class="button-group">
-                    <button type="button" class="prev-btn" id="prev2">Seção Anterior</button>
-                    <button type="button" class="next-btn" id="next2">Próxima Seção</button>
+                    <button type="button" class="btn-prev" id="prev2">Seção Anterior</button>
+                    <button type="button" class="btn-next" id="next2">Próxima Seção</button>
                 </div>
             </section>
 
@@ -246,8 +264,8 @@
                 </div>
                 
                 <div class="button-group">
-                    <button type="button" class="prev-btn" id="prev3">Seção Anterior</button>
-                    <button type="button" class="next-btn" id="next3">Próxima Seção</button>
+                    <button type="button" class="btn-prev" id="prev3">Seção Anterior</button>
+                    <button type="button" class="btn-next" id="next3">Próxima Seção</button>
                 </div>
             </section>
 
@@ -339,8 +357,8 @@
                 </div>
                 
                 <div class="button-group">
-                    <button type="button" class="prev-btn" id="prev4">Seção Anterior</button>
-                    <button type="button" class="next-btn" id="next4">Próxima Seção</button>
+                    <button type="button" class="btn-prev" id="prev4">Seção Anterior</button>
+                    <button type="button" class="btn-next" id="next4">Próxima Seção</button>
                 </div>
             </section>
 
@@ -415,6 +433,13 @@
         </form>
     </div>
 
+    <script>
+        // Gerar ID único para o formulário
+        document.getElementById('form_unique_id').value = 'resp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        
+        // Adicionar timestamp atual
+        document.getElementById('form_timestamp').value = new Date().toISOString();
+    </script>
     <script src="form-scripts.js"></script>
 </body>
 </html> 

@@ -105,16 +105,42 @@ function setupEventListeners() {
     document.querySelectorAll('.btn-submit').forEach(button => {
         button.addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('Botão de envio clicado');
+            
             const form = this.closest('form');
             const currentSection = this.closest('.form-section');
             
             // Validar a última seção antes de enviar
             if (validateSection(currentSection)) {
+                console.log('Validação passou, preparando envio');
+                
                 // Salvar cópia local antes de enviar
                 saveLocalBackup(form);
                 
+                // Preparar dados do formulário
+                const formData = new FormData(form);
+                
                 // Enviar o formulário
-                form.submit();
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    console.log('Resposta do servidor:', response);
+                    if (response.ok) {
+                        // Redirecionar para a página de agradecimento
+                        const nextUrl = form.querySelector('input[name="_next"]').value;
+                        window.location.href = nextUrl;
+                    } else {
+                        throw new Error('Erro ao enviar formulário');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao enviar formulário:', error);
+                    alert('Houve um erro ao enviar o formulário. Por favor, tente novamente.');
+                });
+            } else {
+                console.log('Validação falhou, não enviando formulário');
             }
         });
     });

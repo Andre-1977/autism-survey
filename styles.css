@@ -210,21 +210,29 @@ button:hover,
 
 /* Error Messages */
 .error-message {
-    color: #e74c3c;
-    font-size: 14px;
-    margin-top: 5px;
+    background-color: #fee2e2;
+    border: 1px solid #ef4444;
+    color: #991b1b;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.error-highlight {
-    color: #e74c3c !important;
-    border-color: #e74c3c !important;
+.error-message i {
+    font-size: 1.2em;
 }
 
-input.error-highlight, 
-select.error-highlight, 
-textarea.error-highlight {
-    border-color: #e74c3c !important;
-    background-color: rgba(231, 76, 60, 0.1);
+.error-message span {
+    flex: 1;
+}
+
+/* Estilos para botão desabilitado */
+.btn-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
 /* Responsive Design */
@@ -342,4 +350,21 @@ textarea.error-highlight {
 
 .text-muted {
     color: #6c757d;
+}
+
+/* Estilos para o spinner de loading */
+.spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 } 

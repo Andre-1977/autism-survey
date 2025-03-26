@@ -1,3 +1,18 @@
+// Função para identificar qual formulário está sendo exibido
+function identifyFormType() {
+    if (document.querySelector('form[data-form-type="pais"]')) {
+        return 'pais';
+    } else if (document.querySelector('form[data-form-type="professores"]')) {
+        return 'professores';
+    } else if (document.querySelector('form[data-form-type="profissionais"]')) {
+        return 'profissionais';
+    }
+    return 'desconhecido';
+}
+
+// Configuração inicial da página
+document.addEventListener('DOMContentLoaded', function() {
+    setupFormSections();
     setupEventListeners();
     setupConditionalQuestions();
     
@@ -19,13 +34,16 @@ function setupFormSections() {
     
     // Esconder todas as seções, exceto a primeira
     formSections.forEach((section, index) => {
-        if (index !== 0) {
-            section.style.display = 'none';
+        section.style.display = 'none';
+        if (index === 0) {
+            section.style.display = 'block';
         }
     });
     
     // Atualizar progresso se existir
-    updateProgress(0, formSections.length);
+    if (progressBar && progressText) {
+        updateProgress(0, formSections.length);
+    }
 }
 
 // Configura listeners de eventos para os elementos do formulário
@@ -42,9 +60,11 @@ function setupEventListeners() {
             // Validar campos da seção atual antes de avançar
             if (validateSection(currentSection)) {
                 currentSection.style.display = 'none';
-                nextSection.style.display = 'block';
-                updateProgress(currentIndex + 1, totalSections);
-                window.scrollTo(0, 0);
+                if (nextSection) {
+                    nextSection.style.display = 'block';
+                    updateProgress(currentIndex + 1, totalSections);
+                    window.scrollTo(0, 0);
+                }
             }
         });
     });
@@ -57,16 +77,19 @@ function setupEventListeners() {
             const currentIndex = Array.from(document.querySelectorAll('.form-section')).indexOf(currentSection);
             const totalSections = document.querySelectorAll('.form-section').length;
             
-            currentSection.style.display = 'none';
-            prevSection.style.display = 'block';
-            updateProgress(currentIndex - 1, totalSections);
-            window.scrollTo(0, 0);
+            if (prevSection) {
+                currentSection.style.display = 'none';
+                prevSection.style.display = 'block';
+                updateProgress(currentIndex - 1, totalSections);
+                window.scrollTo(0, 0);
+            }
         });
     });
     
     // Botão de enviar
     document.querySelectorAll('.btn-submit').forEach(button => {
         button.addEventListener('click', function(e) {
+            e.preventDefault();
             const form = this.closest('form');
             const currentSection = this.closest('.form-section');
             
@@ -77,8 +100,6 @@ function setupEventListeners() {
                 
                 // Enviar o formulário
                 form.submit();
-            } else {
-                e.preventDefault();
             }
         });
     });
@@ -133,8 +154,41 @@ function validateSection(section) {
             if (!isChecked) {
                 isValid = false;
                 showError(field, 'Por favor, selecione uma opção.');
+            } else {
+                removeError(field);
             }
         } 
+        // Verificar se é um grupo de checkboxes
+        else if (field.type === 'checkbox') {
+            const name = field.name;
+            const checkboxGroup = section.querySelectorAll(`input[name="${name}"]`);
+            const isChecked = Array.from(checkboxGroup).some(checkbox => checkbox.checked);
+            
+            if (!isChecked) {
+                isValid = false;
+                showError(field, 'Por favor, selecione pelo menos uma opção.');
+            } else {
+                removeError(field);
+            }
+        }
+        // Verificar campos de texto e email
+        else if (field.type === 'text' || field.type === 'email') {
+            if (!field.value.trim()) {
+                isValid = false;
+                showError(field, 'Este campo é obrigatório.');
+            } else {
+                removeError(field);
+            }
+        }
+        // Verificar campos select
+        else if (field.tagName === 'SELECT') {
+            if (!field.value) {
+                isValid = false;
+                showError(field, 'Por favor, selecione uma opção.');
+            } else {
+                removeError(field);
+            }
+        }
         // Verificar outros tipos de campos
         else if (!field.value.trim()) {
             isValid = false;

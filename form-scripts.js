@@ -121,36 +121,32 @@ function setupEventListeners() {
                 if (form && form.action) {
                     console.log('Enviando formulário para:', form.action);
                     
-                    // Criar um formulário temporário para envio
-                    const tempForm = document.createElement('form');
-                    tempForm.method = 'POST';
-                    tempForm.action = form.action;
+                    // Coletar todos os dados do formulário
+                    const formData = new FormData(form);
                     
-                    // Copiar todos os campos do formulário original
-                    form.querySelectorAll('input, select, textarea').forEach(element => {
-                        if (element.name) {
-                            const clone = element.cloneNode(true);
-                            tempForm.appendChild(clone);
+                    // Adicionar campos necessários para o FormSubmit
+                    formData.append('_next', 'agradecimento.html');
+                    formData.append('_captcha', 'false');
+                    formData.append('_template', 'table');
+                    formData.append('_subject', `Nova resposta - Formulário ${identifyFormType()}`);
+                    
+                    // Enviar usando fetch
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        console.log('Resposta do servidor:', response);
+                        if (response.ok) {
+                            window.location.href = 'agradecimento.html';
+                        } else {
+                            throw new Error('Erro ao enviar formulário');
                         }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        alert('Erro ao enviar formulário. Por favor, tente novamente.');
                     });
-                    
-                    // Adicionar campos ocultos necessários para o FormSubmit
-                    const nextInput = document.createElement('input');
-                    nextInput.type = 'hidden';
-                    nextInput.name = '_next';
-                    nextInput.value = 'agradecimento.html';
-                    tempForm.appendChild(nextInput);
-                    
-                    const captchaInput = document.createElement('input');
-                    captchaInput.type = 'hidden';
-                    captchaInput.name = '_captcha';
-                    captchaInput.value = 'false';
-                    tempForm.appendChild(captchaInput);
-                    
-                    // Adicionar o formulário temporário ao documento e enviar
-                    document.body.appendChild(tempForm);
-                    tempForm.submit();
-                    document.body.removeChild(tempForm);
                 } else {
                     console.error('Formulário não encontrado ou sem action definido');
                     alert('Erro ao enviar formulário. Por favor, tente novamente.');

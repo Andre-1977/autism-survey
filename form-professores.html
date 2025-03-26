@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa sobre Autismo - Professores</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Pesquisa sobre Autismo</h1>
+        <div class="role-indicator">
+            <span>Formulário para: <strong>Professores</strong></span>
+            <a href="index.html" class="back-link">Voltar à seleção</a>
+        </div>
+        
+        <form id="teacherSurvey" action="#" method="post">
+            <!-- Section 1: Perfil do Respondente -->
+            <section id="section1" class="form-section active">
+                <h2>PERFIL DO RESPONDENTE</h2>
+                <p>Nesta seção, queremos conhecer um pouco sobre você e sua experiência como professor(a).</p>
+                
+                <div class="form-group">
+                    <label for="name">Nome completo</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail para contato</label>
+                    <input type="email" id="email" name="email">
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de escola em que leciona:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="school_type" value="regular"> Escola regular</label>
+                        <label><input type="radio" name="school_type" value="special"> Escola especializada em educação especial</label>
+                        <label><input type="radio" name="school_type" value="inclusion"> Escola regular com programa de inclusão</label>
+                        <label><input type="radio" name="school_type" value="other"> Outro tipo de instituição</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Há quanto tempo você trabalha com crianças com autismo?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="experience_time" value="menos_1"> Menos de 1 ano</label>
+                        <label><input type="radio" name="experience_time" value="1-3"> 1-3 anos</label>
+                        <label><input type="radio" name="experience_time" value="3-5"> 3-5 anos</label>
+                        <label><input type="radio" name="experience_time" value="mais_5"> Mais de 5 anos</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Qual sua localização?</label>
+                    <select name="location">
+                        <option value="">Selecione uma opção</option>
+                        <option value="Alberta">Alberta</option>
+                        <option value="British Columbia">British Columbia</option>
+                        <option value="New Brunswick">New Brunswick</option>
+                        <option value="Newfoundland and Labrador">Newfoundland and Labrador</option>
+                        <option value="Nova Scotia">Nova Scotia</option>
+                        <option value="Ontario">Ontario</option>
+                        <option value="Prince Edward Island">Prince Edward Island</option>
+                        <option value="Quebec">Quebec</option>
+                        <option value="Saskatchewan">Saskatchewan</option>
+                        <option value="Northwest Territories">Northwest Territories</option>
+                        <option value="Nunavut">Nunavut</option>
+                        <option value="Yukon">Yukon</option>
+                        <option value="Outside Canada">Fora do Canadá</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Você tem formação específica para trabalhar com crianças com autismo?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="specialized_training" value="formal_degree"> Sim, tenho especialização/pós-graduação na área</label>
+                        <label><input type="radio" name="specialized_training" value="courses"> Sim, fiz cursos específicos</label>
+                        <label><input type="radio" name="specialized_training" value="workshops"> Sim, participei de workshops/treinamentos</label>
+                        <label><input type="radio" name="specialized_training" value="no_training"> Não tenho formação específica</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Qual seu nível de familiaridade com tecnologia educacional?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="tech_familiarity" value="beginner"> Iniciante</label>
+                        <label><input type="radio" name="tech_familiarity" value="intermediate"> Intermediário</label>
+                        <label><input type="radio" name="tech_familiarity" value="advanced"> Avançado</label>
+                        <label><input type="radio" name="tech_familiarity" value="expert"> Especialista</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Com quantas crianças com autismo você trabalha atualmente?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="autism_students" value="1"> 1 aluno</label>
+                        <label><input type="radio" name="autism_students" value="2-5"> 2-5 alunos</label>
+                        <label><input type="radio" name="autism_students" value="6-10"> 6-10 alunos</label>
+                        <label><input type="radio" name="autism_students" value="more_10"> Mais de 10 alunos</label>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="next-btn" id="next1">Próxima Seção</button>
+                </div>
+            </section>
+
+            <!-- Section 2: Perfil dos Alunos -->
+            <section id="section2" class="form-section">
+                <h2>PERFIL DOS ALUNOS</h2>
+                <p>Nesta seção, queremos conhecer mais sobre os alunos com autismo que você atende.</p>
+                
+                <div class="form-group">
+                    <label>Qual a faixa etária predominante dos alunos com autismo que você atende?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="students_age" value="2-5"> 2-5 anos</label>
+                        <label><input type="radio" name="students_age" value="6-10"> 6-10 anos</label>
+                        <label><input type="radio" name="students_age" value="11-15"> 11-15 anos</label>
+                        <label><input type="radio" name="students_age" value="16-18"> 16-18 anos</label>
+                        <label><input type="radio" name="students_age" value="mixed"> Idades variadas</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Qual o nível de autismo mais comum entre seus alunos?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="autism_level" value="level1"> Nível 1 (Suporte Requerido)</label>
+                        <label><input type="radio" name="autism_level" value="level2"> Nível 2 (Suporte Substancial)</label>
+                        <label><input type="radio" name="autism_level" value="level3"> Nível 3 (Suporte Muito Substancial)</label>
+                        <label><input type="radio" name="autism_level" value="mixed"> Níveis variados</label>
+                        <label><input type="radio" name="autism_level" value="no_specific"> Não sei os níveis específicos</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais características são mais comuns nos alunos com autismo que você atende? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="characteristics[]" value="social_communication"> Dificuldade na comunicação social</label>
+                        <label><input type="checkbox" name="characteristics[]" value="restricted_interests"> Interesses restritos ou repetitivos</label>
+                        <label><input type="checkbox" name="characteristics[]" value="sensory_sensitivity"> Sensibilidade sensorial</label>
+                        <label><input type="checkbox" name="characteristics[]" value="routine_changes"> Dificuldade com mudanças na rotina</label>
+                        <label><input type="checkbox" name="characteristics[]" value="special_skills"> Habilidades especiais em áreas específicas</label>
+                        <label><input type="checkbox" name="characteristics[]" value="social_interaction"> Dificuldade com interação social</label>
+                        <label>
+                            <input type="checkbox" name="characteristics[]" value="other" id="characteristics_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="characteristics_other" id="characteristics_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Que tipo de apoio seus alunos com autismo recebem na escola? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="school_support[]" value="specialized_teacher"> Professor de apoio/auxiliar</label>
+                        <label><input type="checkbox" name="school_support[]" value="adapted_curriculum"> Currículo adaptado</label>
+                        <label><input type="checkbox" name="school_support[]" value="resource_room"> Sala de recursos</label>
+                        <label><input type="checkbox" name="school_support[]" value="therapies"> Terapias na escola</label>
+                        <label><input type="checkbox" name="school_support[]" value="tech_tools"> Ferramentas tecnológicas específicas</label>
+                        <label><input type="checkbox" name="school_support[]" value="none"> Nenhum apoio específico</label>
+                        <label>
+                            <input type="checkbox" name="school_support[]" value="other" id="support_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="support_other" id="support_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="prev-btn" id="prev2">Seção Anterior</button>
+                    <button type="button" class="next-btn" id="next2">Próxima Seção</button>
+                </div>
+            </section>
+
+            <!-- Section 3: Aprendizagem e Desenvolvimento -->
+            <section id="section3" class="form-section">
+                <h2>APRENDIZAGEM E DESENVOLVIMENTO</h2>
+                <p>Nesta seção, queremos entender melhor sobre o processo de aprendizagem dos alunos com autismo.</p>
+                
+                <div class="form-group">
+                    <label>Quais são as principais dificuldades de aprendizagem que você observa nos seus alunos com autismo? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="learning_difficulties[]" value="communication"> Comunicação</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="math"> Matemática</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="reading_writing"> Leitura e escrita</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="social_skills"> Habilidades sociais</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="concentration"> Concentração</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="organization"> Organização</label>
+                        <label><input type="checkbox" name="learning_difficulties[]" value="following_instructions"> Seguir instruções</label>
+                        <label>
+                            <input type="checkbox" name="learning_difficulties[]" value="other" id="difficulties_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="difficulties_other" id="difficulties_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais áreas de interesse costumam gerar maior engajamento nos seus alunos com autismo? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="interests[]" value="technology"> Tecnologia</label>
+                        <label><input type="checkbox" name="interests[]" value="music"> Música</label>
+                        <label><input type="checkbox" name="interests[]" value="arts"> Artes</label>
+                        <label><input type="checkbox" name="interests[]" value="science"> Ciências</label>
+                        <label><input type="checkbox" name="interests[]" value="sports"> Esportes</label>
+                        <label><input type="checkbox" name="interests[]" value="math"> Matemática</label>
+                        <label><input type="checkbox" name="interests[]" value="games"> Jogos</label>
+                        <label>
+                            <input type="checkbox" name="interests[]" value="other" id="interests_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="interests_other" id="interests_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais métodos de ensino você considera mais eficazes para alunos com autismo? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="teaching_methods[]" value="visual"> Apoios visuais (imagens, vídeos)</label>
+                        <label><input type="checkbox" name="teaching_methods[]" value="auditory"> Estímulos auditivos (músicas, sons)</label>
+                        <label><input type="checkbox" name="teaching_methods[]" value="hands_on"> Atividades práticas (mãos na massa)</label>
+                        <label><input type="checkbox" name="teaching_methods[]" value="verbal"> Instruções verbais claras</label>
+                        <label><input type="checkbox" name="teaching_methods[]" value="routine"> Rotinas estruturadas</label>
+                        <label><input type="checkbox" name="teaching_methods[]" value="individual"> Ensino individualizado</label>
+                        <label><input type="checkbox" name="teaching_methods[]" value="peer_learning"> Aprendizagem entre pares</label>
+                        <label><input type="checkbox" name="teaching_methods[]" value="aac"> Comunicação alternativa</label>
+                        <label>
+                            <input type="checkbox" name="teaching_methods[]" value="other" id="methods_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="methods_other" id="methods_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Como seus alunos com autismo geralmente reagem a mudanças na rotina escolar?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="routine_changes" value="very_adaptable"> Muito bem adaptados</label>
+                        <label><input type="radio" name="routine_changes" value="adapts_with_time"> Adaptam-se com algum tempo</label>
+                        <label><input type="radio" name="routine_changes" value="difficult_adaptation"> Têm dificuldade para se adaptar</label>
+                        <label><input type="radio" name="routine_changes" value="negative_reaction"> Reagem negativamente</label>
+                        <label><input type="radio" name="routine_changes" value="varied"> Varia muito de aluno para aluno</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais estratégias você utiliza para adaptar o currículo para alunos com autismo? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="curriculum_adaptations[]" value="content_simplification"> Simplificação de conteúdo</label>
+                        <label><input type="checkbox" name="curriculum_adaptations[]" value="extra_time"> Tempo adicional para atividades</label>
+                        <label><input type="checkbox" name="curriculum_adaptations[]" value="visual_supports"> Apoios visuais</label>
+                        <label><input type="checkbox" name="curriculum_adaptations[]" value="alternate_assessments"> Avaliações alternativas</label>
+                        <label><input type="checkbox" name="curriculum_adaptations[]" value="interest_based"> Conteúdo baseado em interesses</label>
+                        <label><input type="checkbox" name="curriculum_adaptations[]" value="tech_tools"> Uso de ferramentas tecnológicas</label>
+                        <label><input type="checkbox" name="curriculum_adaptations[]" value="sensory_adaptations"> Adaptações sensoriais</label>
+                        <label>
+                            <input type="checkbox" name="curriculum_adaptations[]" value="other" id="adaptations_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="adaptations_other" id="adaptations_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais desafios específicos você enfrenta como professor(a) no processo de ensino de alunos com autismo?</label>
+                    <textarea name="teacher_challenges" rows="4"></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="prev-btn" id="prev3">Seção Anterior</button>
+                    <button type="button" class="next-btn" id="next3">Próxima Seção</button>
+                </div>
+            </section>
+
+            <!-- Section 4: Tecnologia e Recursos -->
+            <section id="section4" class="form-section">
+                <h2>TECNOLOGIA E RECURSOS</h2>
+                <p>Nesta seção, queremos entender como a tecnologia é utilizada no processo de ensino para alunos com autismo.</p>
+                
+                <div class="form-group">
+                    <label>Quais dispositivos tecnológicos você utiliza em sala de aula com alunos com autismo? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="devices[]" value="tablet"> Tablet</label>
+                        <label><input type="checkbox" name="devices[]" value="computer"> Computador</label>
+                        <label><input type="checkbox" name="devices[]" value="smartphone"> Smartphone</label>
+                        <label><input type="checkbox" name="devices[]" value="smartboard"> Lousa digital</label>
+                        <label><input type="checkbox" name="devices[]" value="projector"> Projetor</label>
+                        <label><input type="checkbox" name="devices[]" value="aac_device"> Dispositivos de comunicação alternativa</label>
+                        <label><input type="checkbox" name="devices[]" value="none"> Nenhum dispositivo</label>
+                        <label>
+                            <input type="checkbox" name="devices[]" value="other" id="devices_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="devices_other" id="devices_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais tipos de recursos tecnológicos você utiliza? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="tech_resources[]" value="educational_games"> Jogos educativos</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="learning_apps"> Aplicativos de aprendizagem</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="educational_videos"> Vídeos educativos</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="online_platforms"> Plataformas de ensino online</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="virtual_reality"> Realidade virtual ou aumentada</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="communication_apps"> Aplicativos de comunicação</label>
+                        <label><input type="checkbox" name="tech_resources[]" value="none"> Nenhum recurso específico</label>
+                        <label>
+                            <input type="checkbox" name="tech_resources[]" value="other" id="resources_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="resources_other" id="resources_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Com que frequência você utiliza tecnologia em suas aulas com alunos com autismo?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="tech_frequency" value="daily"> Diariamente</label>
+                        <label><input type="radio" name="tech_frequency" value="several_week"> Várias vezes por semana</label>
+                        <label><input type="radio" name="tech_frequency" value="once_week"> Uma vez por semana</label>
+                        <label><input type="radio" name="tech_frequency" value="occasionally"> Ocasionalmente</label>
+                        <label><input type="radio" name="tech_frequency" value="rarely"> Raramente</label>
+                        <label><input type="radio" name="tech_frequency" value="never"> Nunca</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Qual é o principal objetivo do uso de tecnologia em suas aulas? (Selecione as 3 opções mais importantes)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="tech_purpose[]" value="engagement"> Aumentar o engajamento</label>
+                        <label><input type="checkbox" name="tech_purpose[]" value="personalization"> Personalizar o aprendizado</label>
+                        <label><input type="checkbox" name="tech_purpose[]" value="communication"> Facilitar a comunicação</label>
+                        <label><input type="checkbox" name="tech_purpose[]" value="content_access"> Facilitar acesso ao conteúdo</label>
+                        <label><input type="checkbox" name="tech_purpose[]" value="attention"> Melhorar a atenção</label>
+                        <label><input type="checkbox" name="tech_purpose[]" value="independence"> Promover independência</label>
+                        <label><input type="checkbox" name="tech_purpose[]" value="skills_practice"> Praticar habilidades específicas</label>
+                        <label><input type="checkbox" name="tech_purpose[]" value="rewards"> Sistema de recompensas</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Como você avalia a eficácia dos recursos tecnológicos que você utiliza?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="tech_efficacy" value="very_effective"> Muito eficazes</label>
+                        <label><input type="radio" name="tech_efficacy" value="moderately_effective"> Moderadamente eficazes</label>
+                        <label><input type="radio" name="tech_efficacy" value="slightly_effective"> Pouco eficazes</label>
+                        <label><input type="radio" name="tech_efficacy" value="not_effective"> Não são eficazes</label>
+                        <label><input type="radio" name="tech_efficacy" value="do_not_use"> Não utilizo recursos tecnológicos</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais aspectos da tecnologia educacional parecem mais atrair seus alunos com autismo? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="tech_aspects[]" value="interactivity"> Interatividade</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="immediate_feedback"> Feedback imediato</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="visuals"> Elementos visuais</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="sounds"> Sons e músicas</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="rewards"> Desafios e recompensas</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="predictability"> Previsibilidade</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="independence"> Autonomia no uso</label>
+                        <label><input type="checkbox" name="tech_aspects[]" value="none"> Nenhum aspecto específico</label>
+                        <label>
+                            <input type="checkbox" name="tech_aspects[]" value="other" id="aspects_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="aspects_other" id="aspects_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais barreiras você enfrenta para utilizar tecnologia em sala de aula?</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="tech_barriers[]" value="equipment_access"> Falta de equipamentos</label>
+                        <label><input type="checkbox" name="tech_barriers[]" value="internet"> Acesso limitado à internet</label>
+                        <label><input type="checkbox" name="tech_barriers[]" value="training"> Falta de treinamento</label>
+                        <label><input type="checkbox" name="tech_barriers[]" value="time"> Falta de tempo para preparação</label>
+                        <label><input type="checkbox" name="tech_barriers[]" value="suitable_resources"> Falta de recursos adequados</label>
+                        <label><input type="checkbox" name="tech_barriers[]" value="cost"> Custo dos recursos</label>
+                        <label><input type="checkbox" name="tech_barriers[]" value="curriculum_integration"> Dificuldade de integração ao currículo</label>
+                        <label><input type="checkbox" name="tech_barriers[]" value="school_policy"> Políticas da escola</label>
+                        <label><input type="checkbox" name="tech_barriers[]" value="none"> Não enfrento barreiras</label>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="prev-btn" id="prev4">Seção Anterior</button>
+                    <button type="button" class="next-btn" id="next4">Próxima Seção</button>
+                </div>
+            </section>
+
+            <!-- Section 5: Necessidades e Expectativas -->
+            <section id="section5" class="form-section">
+                <h2>NECESSIDADES E EXPECTATIVAS</h2>
+                <p>Nesta seção, queremos entender suas necessidades e expectativas como professor(a) para melhorar o processo de ensino para alunos com autismo.</p>
+                
+                <div class="form-group">
+                    <label>Quais recursos você considera mais importantes em uma plataforma educacional para alunos com autismo? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="important_features[]" value="personalization"> Personalização do conteúdo</label>
+                        <label><input type="checkbox" name="important_features[]" value="adaptive"> Interface adaptativa</label>
+                        <label><input type="checkbox" name="important_features[]" value="feedback"> Feedback em tempo real</label>
+                        <label><input type="checkbox" name="important_features[]" value="progress_reports"> Relatórios de progresso</label>
+                        <label><input type="checkbox" name="important_features[]" value="visuals"> Recursos visuais</label>
+                        <label><input type="checkbox" name="important_features[]" value="interactivity"> Interatividade</label>
+                        <label><input type="checkbox" name="important_features[]" value="different_levels"> Suporte para diferentes níveis</label>
+                        <label><input type="checkbox" name="important_features[]" value="lesson_plans"> Planos de aula prontos</label>
+                        <label><input type="checkbox" name="important_features[]" value="teacher_guides"> Guias para professores</label>
+                        <label><input type="checkbox" name="important_features[]" value="parent_connection"> Conexão com os pais</label>
+                        <label>
+                            <input type="checkbox" name="important_features[]" value="other" id="features_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="features_other" id="features_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais são suas principais preocupações ao usar recursos tecnológicos educacionais com alunos autistas? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="concerns[]" value="screen_time"> Tempo excessivo de tela</label>
+                        <label><input type="checkbox" name="concerns[]" value="usability"> Dificuldade de uso para os alunos</label>
+                        <label><input type="checkbox" name="concerns[]" value="teacher_learning"> Curva de aprendizado para professores</label>
+                        <label><input type="checkbox" name="concerns[]" value="cost"> Custo</label>
+                        <label><input type="checkbox" name="concerns[]" value="content_quality"> Qualidade do conteúdo</label>
+                        <label><input type="checkbox" name="concerns[]" value="online_safety"> Segurança online</label>
+                        <label><input type="checkbox" name="concerns[]" value="distraction"> Distração dos alunos</label>
+                        <label><input type="checkbox" name="concerns[]" value="curriculum_alignment"> Alinhamento com o currículo</label>
+                        <label><input type="checkbox" name="concerns[]" value="none"> Nenhuma preocupação específica</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Que tipo de apoio você gostaria de receber para melhorar seu trabalho com alunos com autismo? (Selecione todas que se aplicam)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="desired_support[]" value="training"> Mais treinamento especializado</label>
+                        <label><input type="checkbox" name="desired_support[]" value="resources"> Mais recursos educacionais</label>
+                        <label><input type="checkbox" name="desired_support[]" value="tech_tools"> Mais ferramentas tecnológicas</label>
+                        <label><input type="checkbox" name="desired_support[]" value="smaller_classes"> Turmas menores</label>
+                        <label><input type="checkbox" name="desired_support[]" value="assistant"> Auxiliar em sala de aula</label>
+                        <label><input type="checkbox" name="desired_support[]" value="specialist_support"> Suporte de especialistas</label>
+                        <label><input type="checkbox" name="desired_support[]" value="parent_collaboration"> Maior colaboração com os pais</label>
+                        <label><input type="checkbox" name="desired_support[]" value="curriculum_guidelines"> Diretrizes curriculares adaptadas</label>
+                        <label>
+                            <input type="checkbox" name="desired_support[]" value="other" id="support_other_checkbox"> 
+                            Outro:
+                            <input type="text" name="support_desire_other" id="support_other_text" style="width: auto; display: inline-block;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Quais necessidades específicas de seus alunos com autismo você sente que não estão sendo atendidas pelos recursos educacionais atuais?</label>
+                    <textarea name="unmet_needs" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Como professor(a), quais ferramentas ou recursos você gostaria que estivessem disponíveis em uma plataforma educacional para alunos com autismo?</label>
+                    <textarea name="teacher_desired_tools" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Você tem alguma sugestão específica para melhorar os recursos educacionais tecnológicos para crianças com autismo, com base em sua experiência em sala de aula?</label>
+                    <textarea name="suggestions" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>O que você considera fundamental que uma plataforma educacional para crianças com autismo ofereça para ser realmente útil na sala de aula?</label>
+                    <textarea name="platform_essentials" rows="4"></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="prev-btn" id="prev5">Seção Anterior</button>
+                    <button type="submit" class="submit-btn" id="submit">Enviar Pesquisa</button>
+                </div>
+            </section>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="progress-text">Seção 1 de 5</div>
+            </div>
+        </form>
+    </div>
+
+    <script src="form-scripts.js"></script>
+</body>
+</html> 

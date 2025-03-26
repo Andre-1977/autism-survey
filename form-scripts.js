@@ -125,17 +125,6 @@ function setupEventListeners() {
                     console.log('Enviando formulário para:', form.action);
                     
                     try {
-                        // Processar campos do formulário
-                        const formData = processFormFields(form);
-                        
-                        // Adicionar campos necessários para o FormSubmit
-                        Object.entries(CONFIG.formSubmitConfig).forEach(([key, value]) => {
-                            if (key.startsWith('_')) {
-                                formData.append(key, value);
-                                console.log(`Campo FormSubmit adicionado: ${key} = ${value}`);
-                            }
-                        });
-                        
                         // Tentar enviar o formulário
                         await retryFormSubmission(form, originalButtonText);
                         
@@ -455,12 +444,12 @@ function hideLoading(button, originalText) {
 
 // Função para processar campos do formulário
 function processFormFields(form) {
-    const processedData = new FormData();
+    const formData = new FormData();
     
     // Processar campos de texto, email, select e textarea
     form.querySelectorAll('input[type="text"], input[type="email"], select, textarea').forEach(field => {
         if (field.name && field.value) {
-            processedData.append(field.name, field.value);
+            formData.append(field.name, field.value);
             console.log(`Campo processado: ${field.name} = ${field.value}`);
         }
     });
@@ -470,7 +459,7 @@ function processFormFields(form) {
         if (checkbox.name) {
             if (checkbox.checked) {
                 const value = checkbox.value || 'true';
-                processedData.append(checkbox.name, value);
+                formData.append(checkbox.name, value);
                 console.log(`Checkbox processado: ${checkbox.name} = ${value}`);
             }
         }
@@ -479,60 +468,85 @@ function processFormFields(form) {
     // Processar radio buttons
     form.querySelectorAll('input[type="radio"]').forEach(radio => {
         if (radio.name && radio.checked) {
-            processedData.append(radio.name, radio.value);
+            formData.append(radio.name, radio.value);
             console.log(`Radio processado: ${radio.name} = ${radio.value}`);
         }
     });
     
-    return processedData;
+    // Adicionar campos de configuração do FormSubmit
+    Object.entries(CONFIG.formSubmitConfig).forEach(([key, value]) => {
+        if (key.startsWith('_')) {
+            formData.append(key, value);
+            console.log(`Campo FormSubmit adicionado: ${key} = ${value}`);
+        }
+    });
+    
+    return formData;
+}
+
+// Função para enviar o formulário
+async function submitForm(form, formData) {
+    const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: CONFIG.formSubmitConfig.headers
+    });
+    
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const result = await response.text();
+    console.log('Resposta do servidor:', result);
+    
+    // Verificar se a resposta indica sucesso
+    if (result.includes('success') || result.includes('sucesso') || response.ok) {
+        return true;
+    }
+    
+    return false;
 }
 
 // Função para tentar reenviar o formulário em caso de falha
 async function retryFormSubmission(form, originalButtonText) {
     const startTime = Date.now();
     let attempt = 0;
+    const maxRetries = CONFIG.formSubmitConfig.maxRetries;
     
-    while (Date.now() - startTime < CONFIG.maxRetryTime * 1000) {
+    while (attempt < maxRetries) {
         attempt++;
-        console.log(`Tentativa de envio ${attempt}`);
+        console.log(`Tentativa de envio ${attempt} de ${maxRetries}`);
         
         try {
-            const formData = new FormData(form);
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData,
-                headers: CONFIG.formSubmitConfig.headers
-            });
+            const formData = processFormFields(form);
             
-            console.log('Resposta do servidor:', response);
-            
-            if (response.ok) {
-                console.log('Formulário enviado com sucesso!');
-                window.location.href = CONFIG.redirectUrl;
-                return;
+            // Log dos dados que serão enviados
+            console.log('Dados do formulário:');
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
             }
             
-            const responseText = await response.text();
-            console.log('Resposta do servidor:', responseText);
+            const success = await submitForm(form, formData);
             
-            // Se a resposta contiver uma mensagem de sucesso, redirecionar
-            if (responseText.includes('success') || responseText.includes('sucesso')) {
+            if (success) {
                 console.log('Formulário enviado com sucesso!');
                 window.location.href = CONFIG.redirectUrl;
                 return;
             }
             
             // Se não foi bem sucedido, esperar antes da próxima tentativa
-            await new Promise(resolve => setTimeout(resolve, CONFIG.retryInterval * 1000));
+            await new Promise(resolve => setTimeout(resolve, CONFIG.formSubmitConfig.retryDelay));
             
         } catch (error) {
             console.error('Erro na tentativa de envio:', error);
-            await new Promise(resolve => setTimeout(resolve, CONFIG.retryInterval * 1000));
+            if (attempt < maxRetries) {
+                await new Promise(resolve => setTimeout(resolve, CONFIG.formSubmitConfig.retryDelay));
+            }
         }
     }
     
     // Se chegou aqui, todas as tentativas falharam
     console.error('Todas as tentativas de envio falharam');
     hideLoading(document.querySelector('.btn-submit'), originalButtonText);
-    showError('Não foi possível enviar o formulário. Por favor, tente novamente mais tarde.');
+    showError('Não foi possível enviar o formulário. Por favor, tente novamente mais tarde ou entre em contato se o problema persistir.');
 } 

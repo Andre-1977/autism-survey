@@ -160,6 +160,13 @@ function setupEventListeners() {
                     subjectInput.value = `Nova resposta - Formulário ${identifyFormType()}`;
                     tempForm.appendChild(subjectInput);
                     
+                    // Adicionar campo para garantir que o email seja enviado
+                    const ccInput = document.createElement('input');
+                    ccInput.type = 'hidden';
+                    ccInput.name = '_cc';
+                    ccInput.value = 'andre.scrummaster@gmail.com';
+                    tempForm.appendChild(ccInput);
+                    
                     // Adicionar o formulário temporário ao documento e enviar
                     document.body.appendChild(tempForm);
                     console.log('Formulário temporário criado e pronto para envio');

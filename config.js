@@ -21,17 +21,8 @@ const CONFIG = {
         // Configurações de segurança
         _honeypot: false,
         _disableCORS: true,
-        
-        // Headers para requisição
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        
-        // Configurações de retry
-        maxRetries: 3,
-        retryDelay: 2000
+        _format: 'plain',
+        _gotcha: false
     },
     
     // Tempo máximo de tentativas de envio (em segundos)

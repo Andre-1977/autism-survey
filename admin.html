@@ -575,18 +575,54 @@
                             viewResponse(response.id);
                         });
                         
-                        // Botão Excluir
+                        // Botão Excluir - Mover para dentro de um menu dropdown para evitar cliques acidentais
+                        const deleteContainer = document.createElement('div');
+                        deleteContainer.style.display = 'inline-block';
+                        deleteContainer.style.position = 'relative';
+                        deleteContainer.style.marginLeft = '10px';
+                        
+                        const moreButton = document.createElement('button');
+                        moreButton.className = 'btn';
+                        moreButton.textContent = '⋮'; // Três pontos verticais para menu
+                        moreButton.style.padding = '5px 10px';
+                        
+                        const dropdownMenu = document.createElement('div');
+                        dropdownMenu.style.display = 'none';
+                        dropdownMenu.style.position = 'absolute';
+                        dropdownMenu.style.backgroundColor = 'white';
+                        dropdownMenu.style.boxShadow = '0px 8px 16px 0px rgba(0,0,0,0.2)';
+                        dropdownMenu.style.zIndex = '1';
+                        dropdownMenu.style.minWidth = '120px';
+                        dropdownMenu.style.right = '0';
+                        
                         const deleteButton = document.createElement('button');
                         deleteButton.className = 'btn btn-danger';
                         deleteButton.textContent = 'Excluir';
                         deleteButton.dataset.id = response.id;
+                        deleteButton.style.width = '100%';
+                        deleteButton.style.textAlign = 'left';
+                        deleteButton.style.borderRadius = '0';
                         deleteButton.addEventListener('click', function() {
                             deleteResponse(response.id);
                         });
                         
+                        dropdownMenu.appendChild(deleteButton);
+                        deleteContainer.appendChild(moreButton);
+                        deleteContainer.appendChild(dropdownMenu);
+                        
+                        // Adicionar evento para mostrar/ocultar dropdown
+                        moreButton.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
+                        });
+                        
+                        // Fechar dropdown quando clicar fora
+                        document.addEventListener('click', function() {
+                            dropdownMenu.style.display = 'none';
+                        });
+                        
                         actionsCell.appendChild(viewButton);
-                        actionsCell.appendChild(document.createTextNode(' '));
-                        actionsCell.appendChild(deleteButton);
+                        actionsCell.appendChild(deleteContainer);
                         
                         // Adicionar células à linha
                         row.appendChild(dateCell);
@@ -635,9 +671,11 @@
                         // Criar uma nova linha para os detalhes
                         const detailRow = document.createElement('tr');
                         detailRow.id = `detail-${id}`;
+                        detailRow.style.backgroundColor = '#f9f9f9';
                         
                         const detailCell = document.createElement('td');
                         detailCell.colSpan = 5;
+                        detailCell.style.padding = '15px';
                         detailCell.innerHTML = detailHTML;
                         
                         detailRow.appendChild(detailCell);
@@ -720,32 +758,38 @@
                 // Objetos para armazenar as instâncias de gráficos
                 window.charts = {};
                 
-                // Gráficos gerais
-                charts.responsesType = createPieChart('responsesTypeChart', 'Distribuição por Tipo');
-                charts.responsesByTime = createLineChart('responsesByTimeChart', 'Respostas ao Longo do Tempo');
-                
-                // Gráficos de perfil
-                charts.experienceTime = createBarChart('experienceTimeChart', 'Tempo de Experiência');
-                charts.location = createBarChart('locationChart', 'Localização');
-                charts.techFamiliarity = createBarChart('techFamiliarityChart', 'Familiaridade com Tecnologia');
-                charts.autismLevel = createBarChart('autismLevelChart', 'Nível de Autismo');
-                
-                // Gráficos de aprendizagem
-                charts.learningDifficulties = createBarChart('learningDifficultiesChart', 'Dificuldades de Aprendizagem');
-                charts.interests = createBarChart('interestsChart', 'Áreas de Interesse');
-                charts.teachingMethods = createBarChart('teachingMethodsChart', 'Métodos de Ensino');
-                charts.routineChanges = createPieChart('routineChangesChart', 'Reação a Mudanças');
-                
-                // Gráficos de tecnologia
-                charts.devices = createBarChart('devicesChart', 'Dispositivos');
-                charts.techResources = createBarChart('techResourcesChart', 'Recursos');
-                charts.techFrequency = createPieChart('techFrequencyChart', 'Frequência');
-                charts.techEfficacy = createPieChart('techEfficacyChart', 'Eficácia');
-                
-                // Gráficos de necessidades
-                charts.importantFeatures = createBarChart('importantFeaturesChart', 'Recursos Importantes');
-                charts.concerns = createBarChart('concernsChart', 'Preocupações');
-                charts.desiredSupport = createBarChart('desiredSupportChart', 'Suporte Desejado');
+                try {
+                    // Gráficos gerais
+                    charts.responsesType = createPieChart('responsesTypeChart', 'Distribuição por Tipo');
+                    charts.responsesByTime = createLineChart('responsesByTimeChart', 'Respostas ao Longo do Tempo');
+                    
+                    // Gráficos de perfil
+                    charts.experienceTime = createBarChart('experienceTimeChart', 'Tempo de Experiência');
+                    charts.location = createBarChart('locationChart', 'Localização');
+                    charts.techFamiliarity = createBarChart('techFamiliarityChart', 'Familiaridade com Tecnologia');
+                    charts.autismLevel = createBarChart('autismLevelChart', 'Nível de Autismo');
+                    
+                    // Gráficos de aprendizagem
+                    charts.learningDifficulties = createBarChart('learningDifficultiesChart', 'Dificuldades de Aprendizagem');
+                    charts.interests = createBarChart('interestsChart', 'Áreas de Interesse');
+                    charts.teachingMethods = createBarChart('teachingMethodsChart', 'Métodos de Ensino');
+                    charts.routineChanges = createPieChart('routineChangesChart', 'Reação a Mudanças');
+                    
+                    // Gráficos de tecnologia
+                    charts.devices = createBarChart('devicesChart', 'Dispositivos');
+                    charts.techResources = createBarChart('techResourcesChart', 'Recursos');
+                    charts.techFrequency = createPieChart('techFrequencyChart', 'Frequência');
+                    charts.techEfficacy = createPieChart('techEfficacyChart', 'Eficácia');
+                    
+                    // Gráficos de necessidades
+                    charts.importantFeatures = createBarChart('importantFeaturesChart', 'Recursos Importantes');
+                    charts.concerns = createBarChart('concernsChart', 'Preocupações');
+                    charts.desiredSupport = createBarChart('desiredSupportChart', 'Suporte Desejado');
+                    
+                    console.log('Gráficos criados com sucesso');
+                } catch (error) {
+                    console.error('Erro ao criar gráficos:', error);
+                }
             }
             
             // Funções auxiliares para criar gráficos
@@ -836,52 +880,67 @@
             
             // Funções para atualizar os gráficos com dados reais
             function updateGeneralStats(responses) {
-                // Distribuição por tipo
-                const typeCounts = {
-                    'parent': 0,
-                    'teacher': 0,
-                    'professional': 0
-                };
-                
-                responses.forEach(r => {
-                    if (r.formType in typeCounts) {
-                        typeCounts[r.formType]++;
+                try {
+                    // Distribuição por tipo
+                    const typeCounts = {
+                        'parent': 0,
+                        'teacher': 0,
+                        'professional': 0
+                    };
+                    
+                    responses.forEach(r => {
+                        if (r.formType in typeCounts) {
+                            typeCounts[r.formType]++;
+                        }
+                    });
+                    
+                    const typeLabels = {
+                        'parent': 'Pais',
+                        'teacher': 'Professores',
+                        'professional': 'Profissionais'
+                    };
+                    
+                    updateChart(
+                        charts.responsesType,
+                        Object.keys(typeCounts).map(k => typeLabels[k]),
+                        Object.values(typeCounts)
+                    );
+                    
+                    // Respostas ao longo do tempo
+                    const timeData = {};
+                    responses.forEach(r => {
+                        if (r.submissionDate) {
+                            // Converter para data e agrupar por dia
+                            const date = new Date(r.submissionDate);
+                            const dateStr = date.toLocaleDateString('pt-BR');
+                            timeData[dateStr] = (timeData[dateStr] || 0) + 1;
+                        }
+                    });
+                    
+                    // Caso não haja datas (respostas antigas podem não ter), criar um exemplo
+                    if (Object.keys(timeData).length === 0 && responses.length > 0) {
+                        const today = new Date().toLocaleDateString('pt-BR');
+                        timeData[today] = responses.length;
                     }
-                });
-                
-                const typeLabels = {
-                    'parent': 'Pais',
-                    'teacher': 'Professores',
-                    'professional': 'Profissionais'
-                };
-                
-                updateChart(
-                    charts.responsesType,
-                    Object.keys(typeCounts).map(k => typeLabels[k]),
-                    Object.values(typeCounts)
-                );
-                
-                // Respostas ao longo do tempo
-                const timeData = {};
-                responses.forEach(r => {
-                    if (r.submissionDate) {
-                        // Converter para data e agrupar por dia
-                        const date = new Date(r.submissionDate);
-                        const dateStr = date.toLocaleDateString('pt-BR');
-                        timeData[dateStr] = (timeData[dateStr] || 0) + 1;
-                    }
-                });
-                
-                // Ordenar por data
-                const sortedDates = Object.keys(timeData).sort((a, b) => {
-                    return new Date(a.split('/').reverse().join('-')) - new Date(b.split('/').reverse().join('-'));
-                });
-                
-                updateChart(
-                    charts.responsesByTime,
-                    sortedDates,
-                    sortedDates.map(date => timeData[date])
-                );
+                    
+                    // Ordenar por data
+                    const sortedDates = Object.keys(timeData).sort((a, b) => {
+                        const partsA = a.split('/').map(Number);
+                        const partsB = b.split('/').map(Number);
+                        // Formato BR: dia/mês/ano
+                        const dateA = new Date(partsA[2], partsA[1] - 1, partsA[0]);
+                        const dateB = new Date(partsB[2], partsB[1] - 1, partsB[0]);
+                        return dateA - dateB;
+                    });
+                    
+                    updateChart(
+                        charts.responsesByTime,
+                        sortedDates,
+                        sortedDates.map(date => timeData[date])
+                    );
+                } catch (error) {
+                    console.error('Erro ao atualizar estatísticas gerais:', error);
+                }
             }
             
             function updateProfileStats(responses) {
@@ -1081,9 +1140,28 @@
             
             // Funções utilitárias para atualização dos gráficos
             function updateChart(chart, labels, data) {
-                chart.data.labels = labels;
-                chart.data.datasets[0].data = data;
-                chart.update();
+                try {
+                    if (!chart) {
+                        console.error('Gráfico não encontrado');
+                        return;
+                    }
+                    
+                    // Se não houver dados, mostrar mensagem
+                    if (data.length === 0 || data.every(d => d === 0)) {
+                        // Adicionar um dado fictício para mostrar mensagem
+                        chart.data.labels = ['Sem dados'];
+                        chart.data.datasets[0].data = [1];
+                        chart.options.plugins.legend.display = false;
+                    } else {
+                        chart.data.labels = labels;
+                        chart.data.datasets[0].data = data;
+                        chart.options.plugins.legend.display = true;
+                    }
+                    
+                    chart.update();
+                } catch (error) {
+                    console.error('Erro ao atualizar gráfico:', error);
+                }
             }
             
             function countResponses(responses, field) {
@@ -1406,43 +1484,47 @@
             
             // Função para exportar CSV corrigida
             function exportCSV() {
-                const filterType = document.getElementById('filterType').value;
-                let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
-                
-                if (filterType !== 'all') {
-                    responses = responses.filter(r => r.formType === filterType);
-                }
-                
-                if (responses.length === 0) {
-                    alert('Não há respostas para exportar.');
-                    return;
-                }
-                
                 try {
+                    const filterType = document.getElementById('filterType').value;
+                    let responses = JSON.parse(localStorage.getItem('autismSurveyResponses') || '[]');
+                    
+                    if (filterType !== 'all') {
+                        responses = responses.filter(r => r.formType === filterType);
+                    }
+                    
+                    if (responses.length === 0) {
+                        alert('Não há respostas para exportar.');
+                        return;
+                    }
+                    
                     // Converter para CSV
                     const csv = convertToCSV(responses);
                     
-                    // Criar blob e link de download
-                    const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.setAttribute('href', url);
-                    link.setAttribute('download', `respostas_autismo_${filterType}_${formatDateForFilename(new Date())}.csv`);
+                    // Criar blob com BOM para UTF-8
+                    const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8' });
                     
-                    // Adicionar link ao documento e clicar
+                    // Usar URL.createObjectURL para criar um link para o blob
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Criar um elemento de link para download
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `respostas_autismo_${filterType}_${formatDateForFilename(new Date())}.csv`;
                     document.body.appendChild(link);
+                    
+                    // Simular clique para iniciar o download
                     link.click();
                     
-                    // Remover o link após o download
+                    // Limpar
                     setTimeout(() => {
                         document.body.removeChild(link);
                         URL.revokeObjectURL(url);
                     }, 100);
                     
-                    console.log('Exportação CSV concluída com sucesso.');
+                    console.log('Exportação CSV realizada com sucesso');
                 } catch (error) {
                     console.error('Erro na exportação CSV:', error);
-                    alert('Ocorreu um erro ao exportar para CSV: ' + error.message);
+                    alert(`Erro ao exportar para CSV: ${error.message}`);
                 }
             }
             
@@ -1450,47 +1532,53 @@
             function convertToCSV(responses) {
                 if (!responses || responses.length === 0) return '';
                 
-                // Coletar todos os cabeçalhos possíveis
-                const headers = new Set();
-                responses.forEach(response => {
-                    Object.keys(response).forEach(key => headers.add(key));
-                });
-                
-                // Mapear para nomes mais amigáveis
-                const headerLabels = Array.from(headers).map(header => getFieldLabel(header));
-                const headerRow = headerLabels.join(';');
-                
-                // Criar linhas de dados
-                const rows = responses.map(response => {
-                    return Array.from(headers).map(header => {
-                        const value = response[header];
-                        if (value === undefined || value === null) return '';
-                        
-                        // Lidar com arrays
-                        if (Array.isArray(value)) {
-                            return `"${value.join(' | ')}"`;
-                        }
-                        
-                        // Formatar tipo de formulário
-                        if (header === 'formType') {
-                            return `"${getFormTypeLabel(value)}"`;
-                        }
-                        
-                        // Formatar data
-                        if (header === 'submissionDate') {
-                            return `"${formatDate(value)}"`;
-                        }
-                        
-                        // Escapar texto para CSV
-                        if (typeof value === 'string') {
-                            return `"${value.replace(/"/g, '""')}"`;
-                        }
-                        
-                        return value;
-                    }).join(';');
-                });
-                
-                return headerRow + '\n' + rows.join('\n');
+                try {
+                    // Coletar todos os cabeçalhos possíveis
+                    const headers = new Set();
+                    responses.forEach(response => {
+                        Object.keys(response).forEach(key => headers.add(key));
+                    });
+                    
+                    const headersArray = Array.from(headers);
+                    
+                    // Criar linha de cabeçalho com nomes amigáveis
+                    const headerRow = headersArray.map(header => getFieldLabel(header)).join(';');
+                    
+                    // Criar linhas de dados
+                    const rows = responses.map(response => {
+                        return headersArray.map(header => {
+                            const value = response[header];
+                            if (value === undefined || value === null) return '';
+                            
+                            // Lidar com arrays
+                            if (Array.isArray(value)) {
+                                return `"${value.join(' | ')}"`;
+                            }
+                            
+                            // Formatar tipo de formulário
+                            if (header === 'formType') {
+                                return `"${getFormTypeLabel(value)}"`;
+                            }
+                            
+                            // Formatar data
+                            if (header === 'submissionDate') {
+                                return `"${formatDate(value)}"`;
+                            }
+                            
+                            // Escapar texto para CSV
+                            if (typeof value === 'string') {
+                                return `"${value.replace(/"/g, '""')}"`;
+                            }
+                            
+                            return `"${value}"`;
+                        }).join(';');
+                    });
+                    
+                    return headerRow + '\r\n' + rows.join('\r\n');
+                } catch (error) {
+                    console.error('Erro ao converter para CSV:', error);
+                    throw new Error('Falha ao converter dados para CSV: ' + error.message);
+                }
             }
         });
     </script>

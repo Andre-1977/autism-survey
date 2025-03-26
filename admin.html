@@ -295,13 +295,29 @@
     </div>
 
     <div class="admin-container">
-        <h1>Administração da Pesquisa sobre Autismo</h1>
-        <div class="role-indicator">
-            <h2>Área Administrativa</h2>
-            <a href="index.html" class="back-link">← Voltar para a página inicial</a>
+        <div class="admin-header">
+            <div class="admin-title">
+                <h1>Administração da Pesquisa</h1>
+                <a href="index.html" class="btn btn-outline-secondary btn-sm">Voltar para Página Inicial</a>
+            </div>
+            <p class="text-muted">Gerencie e analise as respostas da pesquisa sobre educação e autismo</p>
+            
+            <div class="alert alert-info">
+                <h4 class="alert-heading">Sobre o sistema de armazenamento</h4>
+                <p>As respostas do formulário são enviadas para <strong>andre.scrummaster@gmail.com</strong> através do serviço <a href="https://formsubmit.co/" target="_blank">FormSubmit</a>. Este painel exibe apenas as respostas que foram armazenadas localmente no navegador do respondente como backup.</p>
+                <p>Para acessar todas as respostas, verifique o email <strong>andre.scrummaster@gmail.com</strong>. Você também pode exportar os dados deste painel em formato CSV ou JSON para análise.</p>
+            </div>
         </div>
         
         <div id="adminContent" style="display: none;">
+            <div class="data-source">
+                <h3>Respostas da Pesquisa</h3>
+                <div>
+                    <span id="localDataBadge" class="data-badge badge-local">Local</span>
+                    <span id="formsubmitBadge" class="data-badge badge-formsubmit">FormSubmit (via email)</span>
+                </div>
+            </div>
+            
             <div class="stats-container">
                 <div class="stat-card">
                     <div class="stat-label">Total de Respostas</div>

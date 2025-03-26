@@ -9,26 +9,29 @@ const CONFIG = {
     
     // Configurações do FormSubmit
     formSubmitConfig: {
-        template: 'table',
-        captcha: false,
-        subject: 'Nova resposta - Formulário de Pesquisa sobre Autismo',
-        autoresponse: 'Obrigado por participar da nossa pesquisa! Suas respostas foram recebidas com sucesso.',
-        cc: 'andre.scrummaster@gmail.com',
-        replyto: 'andre.scrummaster@gmail.com',
-        // Configurações específicas para garantir o funcionamento
-        honeypot: false,
-        disableCORS: true,
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        // Configurações adicionais
+        // Configurações básicas
         _next: 'agradecimento.html',
         _template: 'table',
+        _captcha: false,
         _subject: 'Nova resposta - Formulário de Pesquisa sobre Autismo',
         _cc: 'andre.scrummaster@gmail.com',
         _replyto: 'andre.scrummaster@gmail.com',
-        _autoresponse: 'Obrigado por participar da nossa pesquisa! Suas respostas foram recebidas com sucesso.'
+        _autoresponse: 'Obrigado por participar da nossa pesquisa! Suas respostas foram recebidas com sucesso.',
+        
+        // Configurações de segurança
+        _honeypot: false,
+        _disableCORS: true,
+        
+        // Headers para requisição
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        
+        // Configurações de retry
+        maxRetries: 3,
+        retryDelay: 2000
     },
     
     // Tempo máximo de tentativas de envio (em segundos)

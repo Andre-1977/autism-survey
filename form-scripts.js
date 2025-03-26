@@ -117,28 +117,14 @@ function setupEventListeners() {
                 // Salvar cópia local antes de enviar
                 saveLocalBackup(form);
                 
-                // Preparar dados do formulário
-                const formData = new FormData(form);
-                
                 // Enviar o formulário
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    console.log('Resposta do servidor:', response);
-                    if (response.ok) {
-                        // Redirecionar para a página de agradecimento
-                        const nextUrl = form.querySelector('input[name="_next"]').value;
-                        window.location.href = nextUrl;
-                    } else {
-                        throw new Error('Erro ao enviar formulário');
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro ao enviar formulário:', error);
-                    alert('Houve um erro ao enviar o formulário. Por favor, tente novamente.');
-                });
+                if (form && form.action) {
+                    console.log('Enviando formulário para:', form.action);
+                    form.submit();
+                } else {
+                    console.error('Formulário não encontrado ou sem action definido');
+                    alert('Erro ao enviar formulário. Por favor, tente novamente.');
+                }
             } else {
                 console.log('Validação falhou, não enviando formulário');
             }
